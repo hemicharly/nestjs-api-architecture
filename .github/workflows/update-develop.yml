@@ -25,6 +25,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           dev: develop
+          master: main
           label: gitflow
           auto-merge: true
           require-merge: false
