@@ -31,10 +31,46 @@ nas regras de negócios centrais.
 
 A divisão ocorre em três módulos principais, cada um com uma responsabilidade específica:
 
+```lua
+timesheet-in-transit/
+│-- app/
+│   │-- src/
+│   │   │-- app.module.ts
+│   │   │-- config.env.ts
+│   │   │-- database.module.ts
+│   │   │-- index.ts
+│   │   │-- main.ts
+│   │   │-- seed.module.ts
+│   │   │-- seed.ts
+│   │   │-- application/
+│   │   │   │-- config/
+│   │   │   │-- consumers/
+│   │   │   │-- web/
+│   │   │-- core/
+│   │   │   │-- domain/
+│   │   │   │   │-- entities/
+│   │   │   │   │-- enums/
+│   │   │   │   │-- exceptions/
+│   │   │   │-- providers/
+│   │   │   │   │-- integrations/
+│   │   │   │   │-- queue/
+│   │   │   │   │-- repositories/
+│   │   │   │-- usecases/
+│   │   │   │   │-- auth/
+│   │   │   │   │-- notification/
+│   │   │   │   │-- orders/
+│   │   │-- infrastructure/
+│   │   │   │-- integrations/
+│   │   │   │-- queue/
+│   │   │   │-- repositories/
+```
+
 ### **application**
 
 O módulo `application` é responsável pela gestão dos pontos de entrada da aplicação, como `web`, `jobs` e
-`queue consumers`. **Importante**: **não deve conter regras de negócio**. Este pode ter validações de entradas de dados
+`consumers`.
+
+**Importante**: **não deve conter regras de negócio**. Este pode ter validações de entradas de dados
 de objetos de requests.
 
 ### **core**
@@ -42,6 +78,7 @@ de objetos de requests.
 O módulo `core` gerencia todas as regras de negócio da aplicação. Algumas diretrizes importantes:
 
 - Este módulo deve ser **autônomo** e **sem dependências externas**.
+- Não use framework ou bibliotecas.
 - A pasta **domain** dentro do módulo contém as entidades e regras de negócio em nível mais granular.
 - **Comunicação de saída** para sistemas externos deve ser feita através das interfaces definidas no módulo `providers`.
 - **Comunicação de entrada** deve ocorrer através das interfaces do módulo `usecases`.

@@ -31,10 +31,45 @@ directly impacting core business rules.
 
 The division is organized into three main modules, each with a specific responsibility:
 
+```lua
+timesheet-in-transit/
+│-- app/
+│   │-- src/
+│   │   │-- app.module.ts
+│   │   │-- config.env.ts
+│   │   │-- database.module.ts
+│   │   │-- index.ts
+│   │   │-- main.ts
+│   │   │-- seed.module.ts
+│   │   │-- seed.ts
+│   │   │-- application/
+│   │   │   │-- config/
+│   │   │   │-- consumers/
+│   │   │   │-- web/
+│   │   │-- core/
+│   │   │   │-- domain/
+│   │   │   │   │-- entities/
+│   │   │   │   │-- enums/
+│   │   │   │   │-- exceptions/
+│   │   │   │-- providers/
+│   │   │   │   │-- integrations/
+│   │   │   │   │-- queue/
+│   │   │   │   │-- repositories/
+│   │   │   │-- usecases/
+│   │   │   │   │-- auth/
+│   │   │   │   │-- notification/
+│   │   │   │   │-- orders/
+│   │   │-- infrastructure/
+│   │   │   │-- integrations/
+│   │   │   │-- queue/
+│   │   │   │-- repositories/
+```
+
 ### **application**
 
 The `application` module is responsible for managing the application's entry points, such as `web`, `jobs`, and
-`queue consumers`.  
+`consumers`.
+
 **Important**: **It must not contain business logic**. This module may include input data validation for request
 objects.
 
@@ -43,6 +78,7 @@ objects.
 The `core` module manages all the application's business logic. Key guidelines include:
 
 - This module must be **autonomous** and **free of external dependencies**.
+- Do not use framework or libraries.
 - The **domain** folder within the module contains the entities and granular business logic.
 - **Outgoing communication** to external systems must be handled through interfaces defined in the `providers` module.
 - **Incoming communication** must occur through interfaces in the `usecases` module.
