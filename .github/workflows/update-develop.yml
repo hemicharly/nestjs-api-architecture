@@ -11,12 +11,12 @@ permissions:
 jobs:
   release:
     name: update-develop
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-16.04
     steps:
       - name: Update branch
-        uses: Logerfo/gitflow-action@0.0.4
+        uses: Logerfo/gitflow-action@0.0.5
         with:
-          github-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           dev: develop
           master: main
           label: gitflow
