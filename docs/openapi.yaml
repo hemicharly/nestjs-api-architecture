@@ -1,0 +1,597 @@
+openapi: 3.0.0
+paths:
+  /health:
+    get:
+      operationId: HealthController_getHealth
+      summary: Returns the health of the API.
+      description: Returns the health of the API.
+      parameters: []
+      responses:
+        '200':
+          description: Health was successful.
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - Health
+  /v1/orders:
+    post:
+      operationId: OrdersController_createOrder
+      summary: Register a new order.
+      description: Register a new order.
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderCreationRequest'
+      responses:
+        '201':
+          description: The order has been successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateOrderResponse'
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - Orders
+      security:
+        - X-Api-Key: []
+    get:
+      operationId: OrdersController_getFilter
+      summary: Order returned by query filter.
+      description: Order returned by query filter.
+      parameters:
+        - name: page
+          required: true
+          in: query
+          description: Page.
+          schema:
+            type: number
+        - name: pageSize
+          required: true
+          in: query
+          description: Page size.
+          schema:
+            type: number
+        - name: startDate
+          required: false
+          in: query
+          description: Order scheduling start date.
+          schema:
+            format: date
+            type: string
+        - name: endDate
+          required: false
+          in: query
+          description: Order scheduling end date.
+          schema:
+            format: date
+            type: string
+        - name: status
+          required: false
+          in: query
+          description: Order Service status.
+          example: OPEN
+          schema:
+            enum:
+              - OPEN
+              - IN_PROGRESS
+              - FINISHED
+            type: string
+      responses:
+        '200':
+          description: Order list returned successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderPaginationResponse'
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - Orders
+      security:
+        - X-Api-Key: []
+  /v1/orders/quantity:
+    get:
+      operationId: OrdersController_getQuantityStatus
+      summary: Order quantity returned by query filter.
+      description: Order returned by query filter.
+      parameters:
+        - name: startDate
+          required: true
+          in: query
+          description: Order scheduling start date.
+          schema:
+            format: date
+            type: string
+        - name: endDate
+          required: true
+          in: query
+          description: Order scheduling end date.
+          schema:
+            format: date
+            type: string
+        - name: groupingPeriod
+          required: false
+          in: query
+          description: Grouping by service order period.
+          example: WEEKLY
+          schema:
+            default: WEEKLY
+            enum:
+              - YEARLY
+              - MONTHLY
+              - WEEKLY
+              - DAILY
+            type: string
+        - name: status
+          required: false
+          in: query
+          description: Order Service status.
+          example: OPEN
+          schema:
+            enum:
+              - OPEN
+              - IN_PROGRESS
+              - FINISHED
+            type: string
+      responses:
+        '200':
+          description: Order quantity returned successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderQuantityStatusResponse'
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - Orders
+      security:
+        - X-Api-Key: []
+  /v1/orders/{id}:
+    get:
+      operationId: OrdersController_getOrderById
+      summary: Order returned by id.
+      description: Order returned by id.
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Order returned successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderItemsResponse'
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Resource not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - Orders
+      security:
+        - X-Api-Key: []
+  /v1/orders/{id}/start:
+    patch:
+      operationId: OrdersController_startOrder
+      summary: Register the start of the order.
+      description: Register the start of the order.<br><br>**It is necessary to send geolocation data correctly, with an accuracy of 200 meters.**
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderStartRequest'
+      responses:
+        '204':
+          description: The order has been successfully started.
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Resource not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - Orders
+      security:
+        - X-Api-Key: []
+  /v1/orders/{id}/end:
+    patch:
+      operationId: OrdersController_endOrder
+      summary: Register the end of the order.
+      description: Register the end of the order.<br><br>**It is necessary to send geolocation data correctly, with an accuracy of 200 meters.**
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderEndRequest'
+      responses:
+        '204':
+          description: The order has been successfully finished.
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Resource not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      tags:
+        - Orders
+      security:
+        - X-Api-Key: []
+info:
+  title: timesheet-in-transit-api
+  description: The timesheet-in-transit API.
+  version: 1.0.0
+  contact: {}
+tags: []
+servers:
+  - url: http://localhost:3000
+    description: localhost server
+components:
+  securitySchemes:
+    X-Api-Key:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+      description: api key
+  schemas:
+    ErrorItemResponse:
+      type: object
+      properties:
+        code:
+          type: string
+          example: Error code.
+        message:
+          type: string
+          example: Error message.
+      required:
+        - code
+        - message
+    ErrorResponse:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorItemResponse'
+      required:
+        - errors
+    OrderCreationRequest:
+      type: object
+      properties:
+        serviceDescription:
+          type: string
+          description: Order Service description.
+          example: Prestação de Serviços
+        companyName:
+          type: string
+          description: Name of the customer's.
+          example: Company
+        companyAddressLatitude:
+          type: number
+          description: Latitude of the customer's address.
+          example: '-22.897140306896276'
+        companyAddressLongitude:
+          type: number
+          description: Longitude of the customer's address.
+          example: '-47.06153484719727'
+        schedulingDate:
+          type: string
+          description: Order Service scheduling date.
+          format: date
+      required:
+        - serviceDescription
+        - companyName
+        - companyAddressLatitude
+        - companyAddressLongitude
+        - schedulingDate
+    CreateOrderResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Order ID.
+          example: 6661fcaf3b668d07251bbafa
+        employeeId:
+          type: string
+          description: Employee ID logged into the application.
+          format: uuid
+        status:
+          type: string
+          description: Order Service status.
+          example: OPEN
+        createdAt:
+          type: string
+          description: Order Service created date.
+          format: date-time
+      required:
+        - id
+        - employeeId
+        - status
+        - createdAt
+    PaginationResponse:
+      type: object
+      properties:
+        page:
+          type: number
+        pageSize:
+          type: number
+        total:
+          type: number
+      required:
+        - page
+        - pageSize
+        - total
+    OrderTotalHoursResponse:
+      type: object
+      properties:
+        hours:
+          type: number
+          description: Order total hours.
+        minutes:
+          type: number
+          description: Order total minutes.
+        seconds:
+          type: number
+          description: Order total seconds.
+      required:
+        - hours
+        - minutes
+        - seconds
+    OrderItemsResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Order ID.
+          example: 6661fcaf3b668d07251bbafa
+        employeeId:
+          type: string
+          description: Employee ID logged into the application.
+          format: uuid
+        serviceDescription:
+          type: string
+          description: Order Service description.
+          example: Prestação de Serviços
+        companyName:
+          type: string
+          description: Name of the customer's.
+          example: Company
+        schedulingDate:
+          type: string
+          description: Order Service scheduling date.
+          format: date
+        startDatetime:
+          type: string
+          description: Start date time of order.
+          format: date-time
+        endDatetime:
+          type: string
+          description: End date time of order.
+          format: date-time
+        endComment:
+          type: string
+          description: End comment of order.
+          example: Ocorreu tudo conforme o esperado
+        totalHours:
+          description: Shows the total calculation in hours, minutes and seconds.
+          allOf:
+            - $ref: '#/components/schemas/OrderTotalHoursResponse'
+        status:
+          type: string
+          description: Order Service status.
+          example: OPEN
+          enum:
+            - OPEN
+            - IN_PROGRESS
+            - FINISHED
+        updatedAt:
+          type: string
+          description: Order Service last update date.
+          format: date-time
+        createdAt:
+          type: string
+          description: Order Service created date.
+          format: date-time
+      required:
+        - id
+        - employeeId
+        - serviceDescription
+        - companyName
+        - schedulingDate
+        - totalHours
+        - status
+        - updatedAt
+        - createdAt
+    OrderPaginationResponse:
+      type: object
+      properties:
+        pagination:
+          description: Show pagination.
+          allOf:
+            - $ref: '#/components/schemas/PaginationResponse'
+        items:
+          description: Shows order items.
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItemsResponse'
+        totalHours:
+          description: Shows the total calculation in hours, minutes and seconds.
+          allOf:
+            - $ref: '#/components/schemas/OrderTotalHoursResponse'
+      required:
+        - pagination
+        - items
+        - totalHours
+    OrderQuantityStatusResponse:
+      type: object
+      properties:
+        quantity:
+          type: number
+          description: Quantity.
+          example: '10'
+        year:
+          type: number
+          description: Year.
+          example: '2024'
+        month:
+          type: number
+          description: Month.
+          example: '6'
+        week:
+          type: number
+          description: Week.
+          example: '23'
+        day:
+          type: number
+          description: Day.
+          example: '20'
+        status:
+          type: string
+          description: Order Service status.
+          example: OPEN
+          enum:
+            - OPEN
+            - IN_PROGRESS
+            - FINISHED
+      required:
+        - quantity
+        - year
+        - month
+        - week
+        - day
+        - status
+    OrderStartRequest:
+      type: object
+      properties:
+        startDatetime:
+          type: string
+          description: Start date time of order.
+          format: date-time
+        recordedLatitude:
+          type: number
+          description: Latitude recorded at customer address.
+          example: '-22.897140306896276'
+        recordedLongitude:
+          type: number
+          description: Longitude recorded at customer address.
+          example: '-47.06153484719727'
+      required:
+        - startDatetime
+        - recordedLatitude
+        - recordedLongitude
+    OrderEndRequest:
+      type: object
+      properties:
+        endDatetime:
+          type: string
+          description: End date time of order.
+          format: date-time
+        recordedLatitude:
+          type: number
+          description: Latitude recorded at customer address.
+          example: '-22.897140306896276'
+        recordedLongitude:
+          type: number
+          description: Longitude recorded at customer address.
+          example: '-47.06153484719727'
+        comment:
+          type: string
+          description: End comment of order.
+          example: Ocorreu tudo conforme o esperado
+      required:
+        - endDatetime
+        - recordedLatitude
+        - recordedLongitude

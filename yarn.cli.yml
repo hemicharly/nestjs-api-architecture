@@ -1,0 +1,18 @@
+services:
+  yarn:
+    image: local/timesheet-in-transit-api:latest
+    working_dir: /app
+    user: node
+    networks:
+      - app_network
+    environment:
+      NODE_ENV: development
+    env_file:
+      - .env
+    volumes:
+      - ./app:/app
+    entrypoint: yarn
+
+networks:
+  app_network:
+    external: true

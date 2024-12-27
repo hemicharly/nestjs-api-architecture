@@ -1,0 +1,317 @@
+@startuml
+
+title FLOW: timesheet-in-transit-api\n\n
+
+
+skinparam sequence {
+    ArrowColor DeepSkyBlue
+    ActorBorderColor DeepSkyBlue
+    LifeLineBackgroundColor #A9DCDF
+
+    ParticipantBorderColor DeepSkyBlue
+    ParticipantBackgroundColor DodgerBlue
+    ParticipantFontName Impact
+    ParticipantFontSize 17
+    ParticipantFontColor white
+
+    ActorBackgroundColor aqua
+    ActorFontColor DeepSkyBlueA9DCDF
+    ActorFontColor Black
+    ActorFontSize 17
+    ActorFontName Aapex
+}
+
+
+actor User
+
+box "\nAPP\n\n"
+    participant "Application" as app   #f3b33c
+end box
+
+box "\n TIMESHEET-IN-TRANSIT-API  \n\n"
+    participant "API" as api  #A04000
+    queue "Order Notification\nQueue" as orderNotificationQueue  #fcdb33
+end box
+
+participant "Webhook\nSite" as webhookApi
+
+group Creating a service order for testing purposes.
+    autonumber 1
+    User -> api++: POST /v1/orders
+    note right api #C2DCE3
+        **Header**: <<x-api-key>>
+        **Request Body**:
+        {
+          "serviceDescription": "Service Provision",
+          "companyName": "Company",
+          "companyAddressLatitude": -22.897140306896276,
+          "companyAddressLongitude": -47.06153484719727,
+          "schedulingDate": "2024-06-07"
+        }
+    end note
+
+    note right api #C2DCE3
+        **<color:red>NOTES</color>**:
+
+        * The **x-api-key** header is the **unique identifier** for each **employee** in the **API**.
+           It is necessary for the **application** to manage this by **linking to the authenticated user** in
+           the **APP** via **Google Auth**.
+           All actions performed on the API are linked to the **x-api-key**.
+
+        * The fields **companyAddressLatitude** and **companyAddressLongitude**
+           should be retrieved using **Google Maps** via **Geolocation**.
+           If these fields are incorrectly registered, the following steps cannot continue.
+    end note
+
+    api -> api: Inserts data into the database
+
+    api -> orderNotificationQueue++: Message producer in queue
+    orderNotificationQueue --> api: Return
+    deactivate orderNotificationQueue
+
+    api -[#green]-> User: Returns data
+    deactivate api
+
+    note right api #C2DCE3
+        **StatusCode**: 201
+        **Response Body**:
+        {
+          "id": "6661fcaf3b668d07251bbafa",
+          "employeeId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "status": "OPEN",
+          "createdAt": "2024-06-07T21:00:32.293Z"
+        }
+    end note
+end
+
+newpage FLOW: timesheet-in-transit-api\n\n
+
+group Listing the number of service orders for the user.
+    autonumber 1
+    app -> api++: GET /v1/orders/quantity
+    note right api #C2DCE3
+        **Header**: <<x-api-key>>
+        **Parameters**:
+        * startDate **<color:red><<required>></color>**
+        * endDate **<color:red><<required>></color>**
+        * groupingPeriod **<color:blue><<optional>></color>**
+        * status **<color:blue><<optional>></color>**
+    end note
+
+    api -> api: Retrieves data from the database
+    api -[#green]-> app: Returns data
+    deactivate api
+
+    note right api #C2DCE3
+        **StatusCode**: 200
+        **Response Body**:
+        [
+          {
+            "quantity": "10",
+            "year": "2024",
+            "month": "6",
+            "week": "23",
+            "day": "20",
+            "status": "OPEN"
+          }
+        ]
+    end note
+end
+
+newpage FLOW: timesheet-in-transit-api\n\n
+
+group Listing the service orders for the user.
+    autonumber 1
+    app -> api++: GET /v1/orders
+    note right api #C2DCE3
+        **Header**: <<x-api-key>>
+        **Parameters**:
+        * page **<color:red><<required>></color>**
+        * pageSize **<color:red><<required>></color>**
+        * startDate **<color:blue><<optional>></color>**
+        * endDate **<color:blue><<optional>></color>**
+        * status **<color:blue><<optional>></color>**
+    end note
+
+    api -> api: Retrieves data from the database
+    api -[#green]-> app: Returns data
+    deactivate api
+
+    note right api #C2DCE3
+        **StatusCode**: 200
+        **Response Body**:
+        {
+          "pagination": {
+            "page": 0,
+            "pageSize": 0,
+            "total": 0
+          },
+          "items": [
+            {
+              "id": "6661fcaf3b668d07251bbafa",
+              "employeeId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+              "serviceDescription": "Service Provision",
+              "companyName": "Company",
+              "schedulingDate": "2024-06-07",
+              "startDatetime": "2024-06-07T21:20:18.097Z",
+              "endDatetime": "2024-06-07T21:20:18.097Z",
+              "endComment": "Everything went as expected",
+              "totalHours": {
+                "hours": 0,
+                "minutes": 0,
+                "seconds": 0
+              },
+              "status": "OPEN",
+              "updatedAt": "2024-06-07T21:20:18.097Z",
+              "createdAt": "2024-06-07T21:20:18.097Z"
+            }
+          ],
+          "totalHours": {
+            "hours": 0,
+            "minutes": 0,
+            "seconds": 0
+          }
+        }
+    end note
+end
+
+
+newpage FLOW: timesheet-in-transit-api\n\n
+
+group Query by service order ID.
+    autonumber 1
+    app -> api++: GET /v1/orders/{id}
+    api -> api: Retrieves data from the database
+    api -[#green]-> app: Returns data
+    deactivate api
+
+    note right api #C2DCE3
+        **Header**: <<x-api-key>>
+    end note
+
+    note right api #C2DCE3
+        **StatusCode**: 200
+        **Response Body**:
+        {
+          "id": "6661fcaf3b668d07251bbafa",
+          "employeeId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "serviceDescription": "Service Provision",
+          "companyName": "Company",
+          "schedulingDate": "2024-06-07",
+          "startDatetime": "2024-06-07T21:28:31.585Z",
+          "endDatetime": "2024-06-07T21:28:31.585Z",
+          "endComment": "Everything went as expected",
+          "totalHours": {
+            "hours": 0,
+            "minutes": 0,
+            "seconds": 0
+          },
+          "status": "OPEN",
+          "updatedAt": "2024-06-07T21:28:31.585Z",
+          "createdAt": "2024-06-07T21:28:31.585Z"
+        }
+    end note
+end
+
+
+newpage FLOW: timesheet-in-transit-api\n\n
+
+group Registering the start of the service order.
+    autonumber 1
+    app -> api++: PATCH /v1/orders/{id}/start
+
+    note right api #C2DCE3
+        **Header**: <<x-api-key>>
+        **Request Body**:
+        {
+          "startDatetime": "2024-06-07T21:30:38.433Z",
+          "recordedLatitude": -22.897140306896276,
+          "recordedLongitude": -47.06153484719727
+        }
+    end note
+
+    note right api #C2DCE3
+        **<color:red>NOTES</color>**:
+
+        * The fields **recordedLatitude** and **recordedLongitude**
+           should be retrieved using **Google Maps** via **Geolocation**.
+           These details need to be approximately **200 meters** accurate.
+    end note
+
+    api -> api: Retrieves data from the database
+    api -> api: Update status in database
+
+    api -> orderNotificationQueue++: Message producer in queue
+    orderNotificationQueue --> api: Return
+    deactivate orderNotificationQueue
+
+    api -[#green]-> app: Returns data
+    deactivate api
+
+    note right api #C2DCE3
+        **StatusCode**: 204
+        **Response Body**: NO CONTENT
+    end note
+end
+
+newpage FLOW: timesheet-in-transit-api\n\n
+
+group Registering the END of the service order.
+    autonumber 1
+    app -> api++: PATCH /v1/orders/{id}/end
+
+    note right api #C2DCE3
+        **Header**: <<x-api-key>>
+        **Request Body**:
+        {
+          "endDatetime": "2024-06-07T21:30:38.433Z",
+          "endComment": "Everything went as expected",
+          "totalHours": {
+            "hours": 1,
+            "minutes": 15,
+            "seconds": 30
+          }
+        }
+    end note
+
+    api -> api: Retrieves data from the database
+    api -> api: Update status in database
+
+    api -> orderNotificationQueue++: Message producer in queue
+    orderNotificationQueue --> api: Return
+    deactivate orderNotificationQueue
+
+    api -[#green]-> app: Returns data
+    deactivate api
+
+    note right api #C2DCE3
+        **StatusCode**: 204
+        **Response Body**: NO CONTENT
+    end note
+end
+
+newpage FLOW: timesheet-in-transit-api\n\n
+
+group Send order notification webhook.
+    autonumber 1
+    orderNotificationQueue -> api: Consumer queue
+    activate api
+
+    api -> webhookApi++: POST /webhook.site
+        note left webhookApi #C2DCE3
+            **Request Body**:
+            {
+              "orderId": "676f105d3b300e49c8c372f4",
+              "employeeId": "a780e1d0-0b60-4a0f-b2a2-fda12ecb81af",
+              "companyName": "BHUT",
+              "status": "OPEN",
+              "message": "Uma nova ordem foi criada.",
+              "updatedAt": "2024-12-27T20:38:53.161Z"
+            }
+        end note
+    webhookApi -> api: Return
+    deactivate webhookApi
+    deactivate api
+end
+
+@enduml

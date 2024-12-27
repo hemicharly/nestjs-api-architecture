@@ -1,0 +1,30 @@
+name: CI-Update-Develop
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  release:
+    name: update-develop
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Set up Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 20
+
+      - name: 'Update branch'
+        uses: Logerfo/gitflow-action@0.0.4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          dev: develop
+          label: gitflow
+          auto-merge: true
+          require-merge: false

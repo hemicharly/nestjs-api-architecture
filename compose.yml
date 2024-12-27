@@ -1,0 +1,64 @@
+services:
+  mongodb:
+    container_name: mongodb
+    image: mongodb/mongodb-community-server:8.0.4-ubuntu2204
+    restart: always
+    networks:
+      - app_network
+    ports:
+      - '27017:27017'
+    environment:
+      MONGODB_INITDB_ROOT_USERNAME: user
+      MONGODB_INITDB_ROOT_PASSWORD: pass
+    volumes:
+      - mongo-data:/data/db
+
+
+  localstack-dev:
+    container_name: localstack-dev
+    image: localstack/localstack:stable
+    restart: always
+    networks:
+      - app_network
+    ports:
+      - "45667:4566"
+    environment:
+      SERVICES: sqs
+      AWS_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      EDGE_PORT: 4566
+      DEBUG: 1
+    volumes:
+      - localstack-data:/var/lib/localstack
+
+  app:
+    container_name: app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: local/timesheet-in-transit-api:latest
+    user: node
+    networks:
+      - app_network
+    ports:
+      - "3000:3000" # Port of app
+      - "9229:9229" # Port of debug
+    environment:
+      NODE_ENV: development
+      AWS_PROFILE: 99pay
+      AWS_REGION: us-east-1
+    env_file:
+      - .env
+    volumes:
+      - ./app:/app
+      - ~/.aws:/root/.aws:ro
+    command: [ "yarn", "start:debug" ]
+
+networks:
+  app_network:
+    external: true
+
+volumes:
+  mongo-data: ~
+  localstack-data: ~

@@ -1,0 +1,12 @@
+.idea
+
+/app/dist
+/app/build
+/app/node_modules
+/app/.DS_Store
+app/db.sqlite
+
+.env
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
