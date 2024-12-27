@@ -12,13 +12,7 @@ jobs:
   release:
     name: update-develop
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: app
     steps:
-      - name: Check out code
-        uses: actions/checkout@v3
-
       - name: Update branch
         uses: Logerfo/gitflow-action@0.0.5
         with:
