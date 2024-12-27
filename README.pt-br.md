@@ -21,6 +21,7 @@ Para rodar o projeto, você precisará dos seguintes requisitos:
 * **Docker Compose**: Instale o Docker Compose para orquestrar os containers.
 * **Makefile**: Certifique-se de ter o Makefile instalado para facilitar a execução de comandos.
 * **MongoDB**: Versão 8.x do MongoDB com container docker.
+* **NodeJs**: Versão 22.x do NodeJs com container docker.
 
 ## 1.1. Estrutura do Projeto
 

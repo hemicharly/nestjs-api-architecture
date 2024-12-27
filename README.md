@@ -21,6 +21,7 @@ To run the project, you will need the following requirements:
 * **Docker Compose**: Install Docker Compose to orchestrate containers.
 * **Makefile**: Ensure you have Makefile installed to simplify command execution.
 * **MongoDB**: Version 8.x of MongoDB running in a Docker container.
+* **NodeJs**: Version 22.x of NodeJs running in a Docker container.
 
 ## 1.1. Project Structure
 
