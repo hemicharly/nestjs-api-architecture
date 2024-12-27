@@ -21,7 +21,7 @@ export class OrderStartUsecaseImpl implements OrderStartUsecase {
 
     await this.repositoryProvider.updateStart(orderStartCoreEntity.id, orderStartCoreEntity);
 
-    const notificationOrderCoreEntity = NotificationOrderCoreEntity.fromOrderStartCoreEntity(orderStartCoreEntity, entityCore.companyName, 'A ordem foi iniciada.', entityCore.updatedAt);
+    const notificationOrderCoreEntity = NotificationOrderCoreEntity.fromOrderStartCoreEntity(orderStartCoreEntity, entityCore.companyName, 'A ordem foi iniciada.', orderStartCoreEntity.startDatetime);
     await this.notificationOrderRegisterUsecase.execute(notificationOrderCoreEntity);
   }
 }

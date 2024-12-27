@@ -15,7 +15,7 @@ export class OrderCreationUseCaseImpl implements OrderCreationUseCase {
     const orderCoreEntity = OrderCreationCoreEntity.toOrderCoreEntity(entityCore);
     const orderCoreEntitySaved = await this.repositoryProvider.save(orderCoreEntity);
 
-    const notificationOrderCoreEntity = NotificationOrderCoreEntity.fromOrderCoreEntity(orderCoreEntitySaved, 'Uma nova ordem foi criada.', orderCoreEntitySaved.updatedAt);
+    const notificationOrderCoreEntity = NotificationOrderCoreEntity.fromOrderCoreEntity(orderCoreEntitySaved, 'Uma nova ordem foi criada.', orderCoreEntitySaved.createdAt);
 
     await this.notificationOrderRegisterUsecase.execute(notificationOrderCoreEntity);
 

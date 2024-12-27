@@ -24,7 +24,7 @@ export class OrderEndUsecaseImpl implements OrderEndUsecase {
 
     await this.repositoryProvider.updateEnd(orderEndCoreEntity.id, orderEndCoreEntity);
 
-    const notificationOrderCoreEntity = NotificationOrderCoreEntity.fromOrderEndCoreEntity(orderEndCoreEntity, entityCore, 'A ordem foi finalizada.', entityCore.updatedAt);
+    const notificationOrderCoreEntity = NotificationOrderCoreEntity.fromOrderEndCoreEntity(orderEndCoreEntity, entityCore, 'A ordem foi finalizada.', orderEndCoreEntity.endDatetime);
     await this.notificationOrderRegisterUsecase.execute(notificationOrderCoreEntity);
   }
 }
