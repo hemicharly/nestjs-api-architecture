@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Update branch
-        uses: Logerfo/gitflow-action@0.0.5
+        uses: Logerfo/gitflow-action@0.0.4
         with:
           github-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           dev: develop
