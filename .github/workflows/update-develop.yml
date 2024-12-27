@@ -4,6 +4,11 @@ on:
   push:
     branches: [ main ]
 
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+
 jobs:
   release:
     name: update-develop
