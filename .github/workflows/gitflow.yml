@@ -27,14 +27,17 @@ jobs:
       - name: Create Pull Request for Main to Develop
         if: github.ref_name && github.ref_name == 'main'
         run: |
+          # Extract branch name
+          MAIN_BRANCH=$(echo "${{ github.ref }}" | sed 's|refs/heads/||')
+          
           # Check if PR already exists (open or closed)
-          if gh pr view --base develop --head "main" > /dev/null 2>&1; then
-            echo "PR from main to develop already exists (open, closed, or merged). Skipping."
+          if gh pr view --base develop --head "$MAIN_BRANCH" > /dev/null 2>&1; then
+            echo "PR from $MAIN_BRANCH to develop already exists (open, closed, or merged). Skipping."
           else
             gh pr create \
               --base develop \
-              --head main \
-              --title "Sync main to develop" \
+              --head "$MAIN_BRANCH" \
+              --title "Sync $MAIN_BRANCH to develop" \
               --body "Automated Pull Request to sync changes from 'main' to 'develop'."
           fi
 
