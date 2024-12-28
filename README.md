@@ -8,7 +8,7 @@
 ## Introduction
 
 This project was developed for educational purposes, aiming to explore and deepen knowledge of the **NestJS** framework.
-It serves as a practical study for the adaptation of concepts such as **Clean Architecture** and
+It serves as a practical study for the "adaptation" of concepts such as **Clean Architecture** and
 **Hexagonal Architecture**, with the goal of promoting the best software design practices, ensuring clear separation of
 responsibilities, and abstracting external dependencies.
 
@@ -43,10 +43,13 @@ timesheet-in-transit/
 │   │   │-- main.ts
 │   │   │-- seed.module.ts
 │   │   │-- seed.ts
-│   │   │-- application/
+│   │   │-- modules/
 │   │   │   │-- config/
 │   │   │   │-- consumers/
 │   │   │   │-- web/
+│   │   │   │   │-- common/
+│   │   │   │   │-- config/
+│   │   │   │   │-- rest/
 │   │   │-- core/
 │   │   │   │-- domain/
 │   │   │   │   │-- entities/
@@ -66,9 +69,9 @@ timesheet-in-transit/
 │   │   │   │-- repositories/
 ```
 
-### **application**
+### **modules**
 
-The `application` module is responsible for managing the application's entry points, such as `web`, `jobs`, and
+The `modules` module is responsible for managing the application's entry points, such as `web`, `jobs`, and
 `consumers`.
 
 **Important**: **It must not contain business logic**. This module may include input data validation for request
