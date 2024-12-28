@@ -35,21 +35,11 @@ jobs:
           if [ -n "$EXISTING_PR" ]; then
             echo "PR from $MAIN_BRANCH to develop already exists (open, closed, or merged). Skipping."
           else
-            # Create a new PR and capture the URL
-            PR_URL=$(gh pr create \
-             --base develop \
-             --head "$MAIN_BRANCH" \
-             --title "Sync $MAIN_BRANCH to develop" \
-             --body "Automated Pull Request to sync changes from 'main' to 'develop'." \
-             --quiet)
-            
-            echo "Pull Request created: $PR_URL"
-            
-            # Extract PR number from the URL
-            PR_NUMBER=$(basename "$PR_URL")
-            
-            # Attempt to merge the PR
-            gh pr merge $PR_NUMBER --merge --auto
+            gh pr create \
+              --base develop \
+              --head "$MAIN_BRANCH" \
+              --title "Sync $MAIN_BRANCH to develop" \
+              --body "Automated Pull Request to sync changes from 'main' to 'develop'." \
           fi
 
 
