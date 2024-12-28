@@ -29,9 +29,11 @@ jobs:
         run: |
           # Extract branch name
           MAIN_BRANCH=$(echo "${{ github.ref }}" | sed 's|refs/heads/||')
+               
+          # Check if PR already exists (open, closed, or merged)
+          EXISTING_PR=$(gh pr list --base develop --head "$MAIN_BRANCH" --json state --jq '.[] | select(.state == "OPEN" or .state == "MERGED" or .state == "CLOSED")')
           
-          # Check if PR already exists (open or closed)
-          if gh pr view --base develop --head "$MAIN_BRANCH" > /dev/null 2>&1; then
+          if [ -n "$EXISTING_PR" ]; then
             echo "PR from $MAIN_BRANCH to develop already exists (open, closed, or merged). Skipping."
           else
             gh pr create \
@@ -48,8 +50,10 @@ jobs:
           # Extract branch name
           FEATURE_BRANCH=$(echo "${{ github.ref }}" | sed 's|refs/heads/||')
           
-          # Check if PR already exists (open or closed)
-          if gh pr view --base develop --head "$FEATURE_BRANCH" > /dev/null 2>&1; then
+          # Check if PR already exists (open, closed, or merged)
+          EXISTING_PR=$(gh pr list --base develop --head "$FEATURE_BRANCH" --json state --jq '.[] | select(.state == "OPEN" or .state == "MERGED" or .state == "CLOSED")')
+          
+          if [ -n "$EXISTING_PR" ]; then
             echo "PR from $FEATURE_BRANCH to develop already exists (open, closed, or merged). Skipping."
           else
             gh pr create \
@@ -66,8 +70,10 @@ jobs:
           # Extract branch name
           HOTFIX_BRANCH=$(echo "${{ github.ref }}" | sed 's|refs/heads/||')
 
-          # Check if PR already exists (open or closed)
-          if gh pr view --base main --head "$HOTFIX_BRANCH" > /dev/null 2>&1; then
+          # Check if PR already exists (open, closed, or merged)
+          EXISTING_PR=$(gh pr list --base develop --head "$HOTFIX_BRANCH" --json state --jq '.[] | select(.state == "OPEN" or .state == "MERGED" or .state == "CLOSED")')
+          
+          if [ -n "$EXISTING_PR" ]; then
             echo "PR from $HOTFIX_BRANCH to main already exists (open, closed, or merged). Skipping."
           else
             gh pr create \
