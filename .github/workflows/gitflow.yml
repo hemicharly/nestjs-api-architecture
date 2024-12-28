@@ -1,4 +1,4 @@
-name: Gitflow Workflow
+name: Gitflow
 
 on:
   push:
@@ -64,7 +64,7 @@ jobs:
           RELEASE_BRANCH=$(echo "${{ github.ref }}" | sed 's|refs/heads/||')
           
           # Check if PR already exists (open, closed, or merged)
-          EXISTING_PR=$(gh pr list --base develop --head "$RELEASE_BRANCH" --json state --jq '.[] | select(.state == "OPEN" or .state == "MERGED" or .state == "CLOSED")')
+          EXISTING_PR=$(gh pr list --base main --head "$RELEASE_BRANCH" --json state --jq '.[] | select(.state == "OPEN" or .state == "MERGED" or .state == "CLOSED")')
           
           if [ -n "$EXISTING_PR" ]; then
             echo "PR from $RELEASE_BRANCH to develop already exists (open, closed, or merged). Skipping."
