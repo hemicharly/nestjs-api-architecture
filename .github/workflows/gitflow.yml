@@ -27,8 +27,8 @@ jobs:
       - name: Create Pull Request for Main to Develop
         if: startsWith(github.ref, 'refs/heads/main')
         run: |
-          if gh pr list --base develop --head ${{ github.ref_name }} --state open --json id | jq '.[].id' > /dev/null; then
-            echo "A Pull Request from '${{ github.ref_name }}' to 'develop' already exists. Skipping."
+          if gh pr list --base develop --head main --state open --json id | jq '.[].id' > /dev/null; then
+            echo "A Pull Request from 'main' to 'develop' already exists. Skipping."
           else
             gh pr create \
                --base develop \
