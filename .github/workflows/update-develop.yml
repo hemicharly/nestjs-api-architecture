@@ -1,4 +1,4 @@
-name: Sync Main to Develop
+name: Open Pull Request from Main to Develop
 
 on:
   push:
@@ -6,29 +6,22 @@ on:
       - main
 
 jobs:
-  sync:
+  create-pull-request:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout Main Branch
+      - name: Checkout code
         uses: actions/checkout@v3
-        with:
-          ref: main
 
-      - name: Setup Git
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Setup GitHub CLI
+        uses: docker://ghcr.io/cli/cli:latest
 
-      - name: Checkout Develop Branch
-        run: |
-          git fetch origin develop
-          git checkout develop
-
-      - name: Merge Main into Develop
-        run: |
-          git merge main --no-ff --no-edit
-
-      - name: Push Changes to Develop
-        run: git push origin develop
+      - name: Open Pull Request
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr create \
+            --base develop \
+            --head main \
+            --title "Sync main to develop" \
+            --body "This PR was created automatically to sync changes from main to develop."
