@@ -9,15 +9,15 @@
 
 Este projeto foi desenvolvido com fins didáticos, visando explorar e aprofundar o conhecimento no framework **NestJS**.
 Ele funciona como um estudo prático para a adaptação de conceitos como **Clean Architecture** e
-**Hexagonal Architecture**, com o objetivo de promover boas práticas de design de software, garantindo uma clara
+**Hexagonal Architecture**, visando promover boas práticas de design de software, garantindo uma clara
 separação de responsabilidadese a abstração de dependências externas.
 
 ## 1. Requisitos de Instalação
 
 Para rodar o projeto, você precisará dos seguintes requisitos:
 
-* **Sistema Operacional**: Linux
-* **Docker**: Certifique-se de ter o Docker instalado em sua máquina.
+* **Sistema Operacional**: Linux Ubuntu / Mint
+* **Docker**: Certifique-se de ter o Docker instalado na sua máquina.
 * **Docker Compose**: Instale o Docker Compose para orquestrar os containers.
 * **Makefile**: Certifique-se de ter o Makefile instalado para facilitar a execução de comandos.
 * **MongoDB**: Versão 8.x do MongoDB com container docker.
