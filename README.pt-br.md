@@ -33,7 +33,7 @@ nas regras de negócios centrais.
 A divisão ocorre em três módulos principais, cada um com uma responsabilidade específica:
 
 ```lua
-timesheet-in-transit/
+timesheet-in-transit-api/
 │-- app/
 │   │-- src/
 │   │   │-- app.module.ts
