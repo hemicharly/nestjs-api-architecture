@@ -21,8 +21,8 @@ jobs:
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          base: main
-          branch: develop
+          base: develop
+          branch: main
           title: "Sync main to develop"
           labels: GitFlow
           body: |
