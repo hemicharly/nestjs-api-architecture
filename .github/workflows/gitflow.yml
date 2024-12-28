@@ -25,40 +25,76 @@ jobs:
 
       # Sync main to develop
       - name: Create Pull Request for Main to Develop
-        if: startsWith(github.ref, 'refs/heads/main')
+        if: github.ref_name && github.ref_name == 'main'
         run: |
+          # Extract branch name
+          MAIN_BRANCH=$(echo "${{ github.ref }}" | sed 's|refs/heads/||')
+               
+          # Check if PR already exists (open, closed, or merged)
+          EXISTING_PR=$(gh pr list --base develop --head "$MAIN_BRANCH" --json state --jq '.[] | select(.state == "OPEN" or .state == "MERGED" or .state == "CLOSED")')
+          
+          if [ -n "$EXISTING_PR" ]; then
+            echo "PR from $MAIN_BRANCH to develop already exists (open, closed, or merged). Skipping."
+          else
             gh pr create \
-               --base develop \
-               --head main \
-               --title "Sync main to develop" \
-               --body "Automated Pull Request to sync changes from 'main' to 'develop'."
+              --base develop \
+              --head "$MAIN_BRANCH" \
+              --title "Sync $MAIN_BRANCH to develop" \
+              --body "Automated Pull Request to sync changes from 'main' to 'develop'."
+          fi
 
       # Feature to Develop
       - name: Create Pull Request for Feature to Develop
-        if: startsWith(github.ref, 'refs/heads/feature/')
+        if: github.ref_name && startsWith(github.ref, 'refs/heads/feature/')
         run: |
-          # Check if a PR already exists
-          gh pr create \
+          # Extract branch name
+          FEATURE_BRANCH=$(echo "${{ github.ref }}" | sed 's|refs/heads/||')
+          
+          # Check if PR already exists (open, closed, or merged)
+          EXISTING_PR=$(gh pr list --base develop --head "$FEATURE_BRANCH" --json state --jq '.[] | select(.state == "OPEN" or .state == "MERGED" or .state == "CLOSED")')
+          
+          if [ -n "$EXISTING_PR" ]; then
+            echo "PR from $FEATURE_BRANCH to develop already exists (open, closed, or merged). Skipping."
+          else
+            gh pr create \
               --base develop \
-              --head ${{ github.ref_name }} \
-              --title "Feature: Merge ${{ github.ref_name }} into Develop" \
-              --body "This Pull Request merges the feature branch '${{ github.ref_name }}' into 'develop'."
+              --head "$FEATURE_BRANCH" \
+              --title "Feature: Merge $FEATURE_BRANCH into Develop" \
+              --body "This Pull Request merges the feature branch '$FEATURE_BRANCH' into 'develop'."
+          fi
 
       # Hotfix to Main and Develop
-      - name: Create Pull Request for Hotfix
-        if: startsWith(github.ref, 'refs/heads/hotfix/')
+      - name: Create Pull Request for Hotfix to Main and Develop
+        if: github.ref_name && startsWith(github.ref, 'refs/heads/hotfix/')
         run: |
-          # PR for hotfix to main
-          gh pr create \
+          # Extract branch name
+          HOTFIX_BRANCH=$(echo "${{ github.ref }}" | sed 's|refs/heads/||')
+
+          # Check if PR already exists (open, closed, or merged)
+          EXISTING_PR=$(gh pr list --base develop --head "$HOTFIX_BRANCH" --json state --jq '.[] | select(.state == "OPEN" or .state == "MERGED" or .state == "CLOSED")')
+          
+          if [ -n "$EXISTING_PR" ]; then
+            echo "PR from $HOTFIX_BRANCH to main already exists (open, closed, or merged). Skipping."
+          else
+            gh pr create \
               --base main \
-              --head ${{ github.ref_name }} \
-              --title "Hotfix: Merge ${{ github.ref_name }} into Main" \
+              --head "$HOTFIX_BRANCH" \
+              --title "Hotfix: Merge $HOTFIX_BRANCH into Main" \
               --body "This PR fixes critical issues in production."
-        
+          fi
 
           # PR for hotfix to develop
-          gh pr create \
+          if gh pr list --base develop --head "$HOTFIX_BRANCH" --json id | grep -q id; then
+            echo "PR from $HOTFIX_BRANCH to develop already exists. Skipping."
+          else
+            gh pr create \
               --base develop \
-              --head ${{ github.ref_name }} \
-              --title "Hotfix: Sync ${{ github.ref_name }} with Develop" \
+              --head "$HOTFIX_BRANCH" \
+              --title "Hotfix: Sync $HOTFIX_BRANCH with Develop" \
               --body "This PR ensures hotfix changes are merged into 'develop'."
+          fi
+
+      # Notifications (Optional)
+      - name: Notify on Success
+        if: success()
+        run: echo "Gitflow automation completed successfully!"
