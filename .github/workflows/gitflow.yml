@@ -42,7 +42,7 @@ jobs:
         if: startsWith(github.ref, 'refs/heads/feature/')
         run: |
           # Check if a PR already exists
-          if gh pr list --base develop --head ${{ github.ref_name }} --json id | jq '.[].id' > /dev/null; then
+          if gh pr list --base develop --head ${{ github.ref_name }} --state open --json id | jq '.[].id' > /dev/null; then
             echo "A Pull Request from '${{ github.ref_name }}' to 'develop' already exists. Skipping."
           else
             gh pr create \
@@ -57,7 +57,7 @@ jobs:
         if: startsWith(github.ref, 'refs/heads/hotfix/')
         run: |
           # PR for hotfix to main
-          if gh pr list --base main --head ${{ github.ref_name }} --json id | jq '.[].id' > /dev/null; then
+          if gh pr list --base develop --head ${{ github.ref_name }} --state open --json id | jq '.[].id' > /dev/null; then
             echo "A Pull Request from '${{ github.ref_name }}' to 'main' already exists. Skipping."
           else
             gh pr create \
@@ -68,7 +68,7 @@ jobs:
           fi
 
           # PR for hotfix to develop
-          if gh pr list --base develop --head ${{ github.ref_name }} --json id | jq '.[].id' > /dev/null; then
+          if gh pr list --base develop --head ${{ github.ref_name }} --state open --json id | jq '.[].id' > /dev/null; then
             echo "A Pull Request from '${{ github.ref_name }}' to 'develop' already exists. Skipping."
           else
             gh pr create \
