@@ -20,11 +20,6 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js (if required)
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-
       - name: Authenticate GitHub CLI
         run: echo "${{ secrets.GH_PAT }}" | gh auth login --with-token
 
@@ -33,11 +28,16 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: |
           if gh branch list develop > /dev/null 2>&1; then
-            gh pr create \
-              --base develop \
-              --head main \
-              --title "Sync main to develop" \
-              --body "Automated Pull Request to sync changes from 'main' to 'develop'."
+            # Check if a PR already exists
+            if gh pr list --base develop --head main --json id | jq '.[].id' > /dev/null; then
+              echo "A Pull Request from 'main' to 'develop' already exists. Skipping."
+            else
+              gh pr create \
+                --base develop \
+                --head main \
+                --title "Sync main to develop" \
+                --body "Automated Pull Request to sync changes from 'main' to 'develop'."
+            fi
           else
             echo "Branch 'develop' does not exist. Skipping PR creation."
 
@@ -45,26 +45,39 @@ jobs:
       - name: Create Pull Request for Feature to Develop
         if: startsWith(github.ref, 'refs/heads/feature/')
         run: |
-          gh pr create \
-            --base develop \
-            --head ${{ github.ref_name }} \
-            --title "Feature: Merge ${{ github.ref_name }} into Develop" \
-            --body "This Pull Request merges the feature branch '${{ github.ref_name }}' into 'develop'."
+          # Check if a PR already exists
+          if gh pr list --base develop --head ${{ github.ref_name }} --json id | jq '.[].id' > /dev/null; then
+            echo "A Pull Request from '${{ github.ref_name }}' to 'develop' already exists. Skipping."
+          else
+            gh pr create \
+              --base develop \
+              --head ${{ github.ref_name }} \
+              --title "Feature: Merge ${{ github.ref_name }} into Develop" \
+              --body "This Pull Request merges the feature branch '${{ github.ref_name }}' into 'develop'."
+          fi
 
       # Hotfix to Main and Develop
       - name: Create Pull Request for Hotfix
         if: startsWith(github.ref, 'refs/heads/hotfix/')
         run: |
           # PR for hotfix to main
-          gh pr create \
-            --base main \
-            --head ${{ github.ref_name }} \
-            --title "Hotfix: Merge ${{ github.ref_name }} into Main" \
-            --body "This PR fixes critical issues in production."
+          if gh pr list --base main --head ${{ github.ref_name }} --json id | jq '.[].id' > /dev/null; then
+            echo "A Pull Request from '${{ github.ref_name }}' to 'main' already exists. Skipping."
+          else
+            gh pr create \
+              --base main \
+              --head ${{ github.ref_name }} \
+              --title "Hotfix: Merge ${{ github.ref_name }} into Main" \
+              --body "This PR fixes critical issues in production."
+          fi
 
           # PR for hotfix to develop
-          gh pr create \
-            --base develop \
-            --head ${{ github.ref_name }} \
-            --title "Hotfix: Sync ${{ github.ref_name }} with Develop" \
-            --body "This PR ensures hotfix changes are merged into 'develop'."
+          if gh pr list --base develop --head ${{ github.ref_name }} --json id | jq '.[].id' > /dev/null; then
+            echo "A Pull Request from '${{ github.ref_name }}' to 'develop' already exists. Skipping."
+          else
+            gh pr create \
+              --base develop \
+              --head ${{ github.ref_name }} \
+              --title "Hotfix: Sync ${{ github.ref_name }} with Develop" \
+              --body "This PR ensures hotfix changes are merged into 'develop'."
+          fi
