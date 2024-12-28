@@ -56,7 +56,7 @@ jobs:
 
           git checkout -B ${{ github.head_ref }} || git checkout -b ${{ github.head_ref }}
 
-          git add app/package.json
+          git add package.json
           git commit -m "chore: update version to '${{ env.TAG }}' in package.json"
 
           # Usar token para autenticação do git push
