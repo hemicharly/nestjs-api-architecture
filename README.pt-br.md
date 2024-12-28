@@ -105,26 +105,66 @@ Siga os passos abaixo para rodar o projeto em modo desenvolvimento.
 
 1. **Copiar o arquivo de configuração**:
     - Copie o arquivo `.env.dist` para `.env` com o comando:
-      ```bash
-      cp .env.dist .env
-      ```
+    ```bash
+    cp .env.dist .env
+    ```
 
-2. **Iniciar o projeto com Docker**:
-   Use os comandos do `Makefile` para facilitar o processo:
+2. **Iniciar o projeto com Docker usando os comandos**:
+   - Cria a rede Docker necessária para o projeto:
+   ```bash
+   make create-network
+   ```
 
-| COMANDO                   | DESCRIÇÃO                                    |
-|---------------------------|----------------------------------------------|
-| `make create-network`     | Cria a rede Docker necessária para o projeto |
-| `make build`              | Constrói as imagens Docker                   |
-| `make install`            | Instala as dependências do projeto           |
-| `make upgrade-lib`        | Atualiza as dependências do projeto          |
-| `make seed`               | Popula o banco de dados com dados iniciais   |
-| `make mongodb`            | Inicia container docker do mongodb           |
-| `make localstack-dev`     | Inicia container docker do localstack        |
-| `make create-queue-local` | Cria filas no localstack                     |
-| `make dev`                | Inicia a aplicação no modo desenvolvimento   |
-| `make lint-format`        | Executa lint e formatação do código          |
-| `make generate-index`     | Gera índices automaticamente (se necessário) |
+   - Constrói as imagens Docker:
+   ```bash
+   make build
+   ```
+
+   - Instala as dependências do projeto:
+   ```bash
+   make install
+   ```
+
+   - Atualiza as dependências do projeto:
+   ```bash
+   make upgrade-lib
+   ```
+
+   - Popula o banco de dados com dados iniciais:
+   ```bash
+   make seed
+   ```
+
+   - Inicia container docker do mongodb:
+   ```bash
+   make mongodb
+   ```
+
+   - Inicia container docker do localstack:
+   ```bash
+   make localstack-dev
+   ```
+
+   - Cria filas no localstack:
+   ```bash
+   make create-queue-local
+   ```
+
+   - Inicia a aplicação no modo desenvolvimento:
+   ```bash
+   make dev
+   ```
+
+   - Executa lint e formatação do código:
+   ```bash
+   make lint-format
+   ```
+
+   - Gera índices automaticamente (se necessário):
+   ```bash
+   make generate-index
+   ```
+
 
 ### 2.2. Documentação
 

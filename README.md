@@ -105,26 +105,65 @@ Follow the steps below to run the project in development mode.
 
 1. **Copy the configuration file**:
     - Copy the `.env.dist` file to `.env` using the command:
-      ```bash
-      cp .env.dist .env
-      ```
+    ```bash
+    cp .env.dist .env
+    ```
 
-2. **Start the project with Docker**:
-   Use the `Makefile` commands to simplify the process:
+2. **Start the project with Docker using the commands**:
+   - Creates the necessary Docker network:
+   ```bash
+   make create-network
+   ```
 
-| COMMAND                   | DESCRIPTION                                 |
-|---------------------------|---------------------------------------------|
-| `make create-network`     | Creates the necessary Docker network        |
-| `make build`              | Builds Docker images                        |
-| `make install`            | Installs project dependencies               |
-| `make upgrade-lib`        | Updates project dependencies                |
-| `make seed`               | Seeds the database with initial data        |
-| `make mongodb`            | Starts the MongoDB container                |
-| `make localstack-dev`     | Starts the LocalStack container             |
-| `make create-queue-local` | Creates queues in LocalStack                |
-| `make dev`                | Starts the application in development mode  |
-| `make lint-format`        | Runs lint and code formatting               |
-| `make generate-index`     | Automatically generates indices (if needed) |
+   - Builds Docker images:
+   ```bash
+   make build
+   ```
+
+   - Installs project dependencies:
+   ```bash
+   make install
+   ```
+
+   - Updates project dependencies:
+   ```bash
+   make upgrade-lib
+   ```
+
+   - Seeds the database with initial data:
+   ```bash
+   make seed
+   ```
+
+   - Starts the MongoDB container:
+   ```bash
+   make mongodb
+   ```
+
+   - Starts the LocalStack container:
+   ```bash
+   make localstack-dev
+   ```
+
+   - Creates queues in LocalStack:
+   ```bash
+   make create-queue-local
+   ```
+
+   - Starts the application in development mode:
+   ```bash
+   make dev
+   ```
+   
+   - Runs lint and code formatting:
+   ```bash
+   make lint-format
+   ```
+   
+   - Automatically generates indices (if needed):
+   ```bash
+   make generate-index
+   ```
 
 ### 2.2. Documentation
 
