@@ -25,28 +25,24 @@ jobs:
 
       # Sync main to develop
       - name: Create Pull Request for Main to Develop
-        if: github.ref == 'refs/heads/main'
+        if: startsWith(github.ref, 'refs/heads/main')
         run: |
-          if gh branch list develop > /dev/null 2>&1; then
-            # Check if a PR already exists
-            if gh pr list --base develop --head main --json id | jq '.[].id' > /dev/null; then
-              echo "A Pull Request from 'main' to 'develop' already exists. Skipping."
-            else
-              gh pr create \
-                --base develop \
-                --head main \
-                --title "Sync main to develop" \
-                --body "Automated Pull Request to sync changes from 'main' to 'develop'."
-            fi
+          if gh pr list --base develop --head ${{ github.ref_name }} --json id | jq '.[].id' > /dev/null; then
+            echo "A Pull Request from '${{ github.ref_name }}' to 'develop' already exists. Skipping."
           else
-            echo "Branch 'develop' does not exist. Skipping PR creation."
+            gh pr create \
+               --base develop \
+               --head main \
+               --title "Sync main to develop" \
+               --body "Automated Pull Request to sync changes from 'main' to 'develop'."
+          fi
 
       # Feature to Develop
       - name: Create Pull Request for Feature to Develop
         if: startsWith(github.ref, 'refs/heads/feature/')
         run: |
           # Check if a PR already exists
-          if gh pr list --base develop --head ${{ github.ref_name }} --json id | jq '.[].id' > /dev/null; then
+          if gh pr list --base develop --head ${{ github.ref_name }} --state open --json id | jq '.[].id' > /dev/null; then
             echo "A Pull Request from '${{ github.ref_name }}' to 'develop' already exists. Skipping."
           else
             gh pr create \
@@ -61,7 +57,7 @@ jobs:
         if: startsWith(github.ref, 'refs/heads/hotfix/')
         run: |
           # PR for hotfix to main
-          if gh pr list --base main --head ${{ github.ref_name }} --json id | jq '.[].id' > /dev/null; then
+          if gh pr list --base develop --head ${{ github.ref_name }} --state open --json id | jq '.[].id' > /dev/null; then
             echo "A Pull Request from '${{ github.ref_name }}' to 'main' already exists. Skipping."
           else
             gh pr create \
@@ -72,7 +68,7 @@ jobs:
           fi
 
           # PR for hotfix to develop
-          if gh pr list --base develop --head ${{ github.ref_name }} --json id | jq '.[].id' > /dev/null; then
+          if gh pr list --base develop --head ${{ github.ref_name }} --state open --json id | jq '.[].id' > /dev/null; then
             echo "A Pull Request from '${{ github.ref_name }}' to 'develop' already exists. Skipping."
           else
             gh pr create \
