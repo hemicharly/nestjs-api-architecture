@@ -28,8 +28,8 @@ jobs:
         run: |
           # Extract branch name
           MAIN_BRANCH=$(echo "${{ github.ref }}" | sed 's|refs/heads/||')
-               
-          # Check if PR already exists (open, closed, or merged)
+          
+          # Check if PR already exists
           EXISTING_PR=$(gh pr list --base develop --head "$MAIN_BRANCH" --json state --jq '.[] | select(.state == "OPEN" or .state == "MERGED" or .state == "CLOSED")')
           
           if [ -n "$EXISTING_PR" ]; then
@@ -41,6 +41,7 @@ jobs:
               --title "Sync $MAIN_BRANCH to develop" \
               --body "Automated Pull Request to sync changes from 'main' to 'develop'."
           fi
+
 
       # Feature to Develop
       - name: Create Pull Request for Feature to Develop
