@@ -103,67 +103,70 @@ The `infrastructure` module manages the application's external communication, su
 
 Follow the steps below to run the project in development mode.
 
-1. **Copy the configuration file**:
-    - Copy the `.env.dist` file to `.env` using the command:
-    ```bash
-    cp .env.dist .env
-    ```
+#### 2.1.1. **Copy the configuration file**:
 
-2. **Start the project with Docker using the commands**:
-   - Creates the necessary Docker network:
-   ```bash
-   make create-network
-   ```
+- Copy the `.env.dist` file to `.env` using the command:
 
-   - Builds Docker images:
-   ```bash
-   make build
-   ```
+```bash
+  cp .env.dist .env
+```
 
-   - Installs project dependencies:
-   ```bash
-   make install
-   ```
+#### 2.1.2. **Start the project with Docker using the commands**:
 
-   - Updates project dependencies:
-   ```bash
-   make upgrade-lib
-   ```
+- Creates the necessary Docker network:
+```bash
+  make create-network
+```
 
-   - Seeds the database with initial data:
-   ```bash
-   make seed
-   ```
+- Builds Docker images:
+```bash
+  make build
+```
 
-   - Starts the MongoDB container:
-   ```bash
-   make mongodb
-   ```
+- Installs project dependencies:
+```bash
+  make install
+```
 
-   - Starts the LocalStack container:
-   ```bash
-   make localstack-dev
-   ```
+- Updates project dependencies:
+```bash
+  make upgrade-lib
+```
 
-   - Creates queues in LocalStack:
-   ```bash
-   make create-queue-local
-   ```
+- Seeds the database with initial data:
+```bash
+  make seed
+```
 
-   - Starts the application in development mode:
-   ```bash
-   make dev
-   ```
-   
-   - Runs lint and code formatting:
-   ```bash
-   make lint-format
-   ```
-   
-   - Automatically generates indices (if needed):
-   ```bash
-   make generate-index
-   ```
+- Starts the MongoDB container:
+```bash
+  make mongodb
+```
+
+- Starts the LocalStack container:
+```bash
+  make localstack-dev
+```
+
+- Creates queues in LocalStack:
+```bash
+  make create-queue-local
+```
+
+- Starts the application in development mode:
+```bash
+  make dev
+```
+
+- Runs lint and code formatting:
+```bash
+  make lint-format
+```
+
+- Automatically generates indices (if needed):
+```bash
+  make generate-index
+```
 
 ### 2.2. Documentation
 
