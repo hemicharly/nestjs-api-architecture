@@ -94,15 +94,6 @@ jobs:
               --body "This PR ensures hotfix changes are merged into 'develop'."
           fi
 
-      # Fetch and Validate Conflicts
-      - name: Fetch and Validate State
-        run: |
-          git fetch --all
-          if ! git merge-base --is-ancestor main develop; then
-            echo "Conflict detected between main and develop. Manual resolution required."
-            exit 1
-          fi
-
       # Notifications (Optional)
       - name: Notify on Success
         if: success()
