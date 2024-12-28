@@ -52,26 +52,17 @@ jobs:
       - name: Create Pull Request for Hotfix
         if: startsWith(github.ref, 'refs/heads/hotfix/')
         run: |
-          BRANCH_NAME="${GITHUB_REF##refs/heads/}"
-          
           # PR for hotfix to main
-          if gh pr list --base develop --head "$BRANCH_NAME" --state open --json id | jq '.[].id' > /dev/null; then
-            echo "A Pull Request from '$BRANCH_NAME' to 'main' already exists. Skipping."
-          else
-            gh pr create \
+          gh pr create \
               --base main \
-              --head "$BRANCH_NAME" \
-              --title "Hotfix: Merge $BRANCH_NAME into Main" \
+              --head ${{ github.ref_name }} \
+              --title "Hotfix: Merge ${{ github.ref_name }} into Main" \
               --body "This PR fixes critical issues in production."
-          fi
+        
 
           # PR for hotfix to develop
-          if gh pr list --base develop --head "$BRANCH_NAME" --state open --json id | jq '.[].id' > /dev/null; then
-            echo "A Pull Request from '$BRANCH_NAME' to 'develop' already exists. Skipping."
-          else
-            gh pr create \
+          gh pr create \
               --base develop \
-              --head "$BRANCH_NAME" \
-              --title "Hotfix: Sync $BRANCH_NAME with Develop" \
+              --head ${{ github.ref_name }} \
+              --title "Hotfix: Sync ${{ github.ref_name }} with Develop" \
               --body "This PR ensures hotfix changes are merged into 'develop'."
-          fi
