@@ -6,7 +6,6 @@ on:
       - main
       - develop
       - "feature/*"
-      - "release/*"
       - "hotfix/*"
 
 permissions:
@@ -26,40 +25,46 @@ jobs:
         with:
           node-version: 22
 
+      - name: Authenticate GitHub CLI
+        run: echo "${{ secrets.GH_PAT }}" | gh auth login --with-token
+
+      # Sync main to develop
       - name: Create Pull Request for Main to Develop
         if: github.ref == 'refs/heads/main'
-        uses: peter-evans/create-pull-request@v7
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: develop
-          labels: GitFlow
-          title: "Sync main to develop"
-          body: |
-            Automated Pull Request to sync changes from `main` to `develop`.
+        run: |
+          if gh branch list develop > /dev/null 2>&1; then
+            gh pr create \
+              --base develop \
+              --head main \
+              --title "Sync main to develop" \
+              --body "Automated Pull Request to sync changes from 'main' to 'develop'."
+          else
+            echo "Branch 'develop' does not exist. Skipping PR creation."
 
+      # Feature to Develop
       - name: Create Pull Request for Feature to Develop
         if: startsWith(github.ref, 'refs/heads/feature/')
         run: |
-          gh auth login --with-token <<< "${{ secrets.GH_PAT }}"
           gh pr create \
             --base develop \
             --head ${{ github.ref_name }} \
             --title "Feature: Merge ${{ github.ref_name }} into Develop" \
-            --body "This Pull Request merges the feature branch `${{ github.ref_name }}` into `develop`."
+            --body "This Pull Request merges the feature branch '${{ github.ref_name }}' into 'develop'."
 
-      - name: Create Pull Request for Hotfix to Main
+      # Hotfix to Main and Develop
+      - name: Create Pull Request for Hotfix
         if: startsWith(github.ref, 'refs/heads/hotfix/')
         run: |
-          gh auth login --with-token <<< "${{ secrets.GH_PAT }}"
+          # PR for hotfix to main
           gh pr create \
             --base main \
             --head ${{ github.ref_name }} \
             --title "Hotfix: Merge ${{ github.ref_name }} into Main" \
             --body "This PR fixes critical issues in production."
-          
-          # Create PR for hotfix to develop
+
+          # PR for hotfix to develop
           gh pr create \
             --base develop \
             --head ${{ github.ref_name }} \
             --title "Hotfix: Sync ${{ github.ref_name }} with Develop" \
-            --body "This PR ensures hotfix changes are merged into `develop`."
+            --body "This PR ensures hotfix changes are merged into 'develop'."
