@@ -23,7 +23,7 @@ jobs:
         run: echo "${{ secrets.GH_PAT }}" | gh auth login --with-token
 
       # Sync main to develop
-      - name: Create Pull Request for Main to Develop
+      - name: Create and Merge Pull Request for Main to Develop
         if: github.ref_name && github.ref_name == 'main'
         run: |
           # Extract branch name
@@ -35,12 +35,19 @@ jobs:
           if [ -n "$EXISTING_PR" ]; then
             echo "PR from $MAIN_BRANCH to develop already exists (open, closed, or merged). Skipping."
           else
-            gh pr create \
+            # Create the pull request
+            PR_URL=$(gh pr create \
               --label "GitFlow" \
               --base develop \
               --head "$MAIN_BRANCH" \
               --title "Sync $MAIN_BRANCH to develop" \
-              --body "Automated Pull Request to sync changes from 'main' to 'develop'."
+              --body "Automated Pull Request to sync changes from 'main' to 'develop'.")
+
+            # Extract PR number from URL
+            PR_NUMBER=$(echo $PR_URL | sed 's/.*#\([0-9]*\)$/\1/')
+
+            # Wait for the PR to be created and then merge it
+            gh pr merge "$PR_NUMBER" --merge --auto --admin
           fi
 
 
