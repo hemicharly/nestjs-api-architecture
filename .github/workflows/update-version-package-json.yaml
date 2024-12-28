@@ -1,4 +1,4 @@
-name: CI - Update Version Package.json
+name: Update Version Package.json
 
 on:
   pull_request:
