@@ -103,67 +103,69 @@ O módulo `infrastructure` gerencia a comunicação externa da aplicação, como
 
 Siga os passos abaixo para rodar o projeto em modo desenvolvimento.
 
-1. **Copiar o arquivo de configuração**:
-    - Copie o arquivo `.env.dist` para `.env` com o comando:
-    ```bash
-    cp .env.dist .env
-    ```
+#### 2.1.1. **Copiar o arquivo de configuração**:
 
-2. **Iniciar o projeto com Docker usando os comandos**:
-   - Cria a rede Docker necessária para o projeto:
-   ```bash
-   make create-network
-   ```
+- Copie o arquivo `.env.dist` para `.env` com o comando:
+```bash
+  cp .env.dist .env
+```
 
-   - Constrói as imagens Docker:
-   ```bash
-   make build
-   ```
+#### 2.1.2. **Iniciar o projeto com Docker usando os comandos**:
 
-   - Instala as dependências do projeto:
-   ```bash
-   make install
-   ```
+- Cria a rede Docker necessária para o projeto:
+```bash
+  make create-network
+```
 
-   - Atualiza as dependências do projeto:
-   ```bash
-   make upgrade-lib
-   ```
+- Constrói as imagens Docker:
+```bash
+  make build
+```
 
-   - Popula o banco de dados com dados iniciais:
-   ```bash
-   make seed
-   ```
+- Instala as dependências do projeto:
+```bash
+  make install
+```
 
-   - Inicia container docker do mongodb:
-   ```bash
-   make mongodb
-   ```
+- Atualiza as dependências do projeto:
+```bash
+  make upgrade-lib
+```
 
-   - Inicia container docker do localstack:
-   ```bash
-   make localstack-dev
-   ```
+- Popula o banco de dados com dados iniciais:
+```bash
+  make seed
+```
 
-   - Cria filas no localstack:
-   ```bash
-   make create-queue-local
-   ```
+- Inicia container docker do mongodb:
+```bash
+  make mongodb
+```
 
-   - Inicia a aplicação no modo desenvolvimento:
-   ```bash
-   make dev
-   ```
+- Inicia container docker do localstack:
+```bash
+  make localstack-dev
+```
 
-   - Executa lint e formatação do código:
-   ```bash
-   make lint-format
-   ```
+- Cria filas no localstack:
+```bash
+  make create-queue-local
+```
 
-   - Gera índices automaticamente (se necessário):
-   ```bash
-   make generate-index
-   ```
+- Inicia a aplicação no modo desenvolvimento:
+```bash
+  make dev
+```
+
+- Executa lint e formatação do código:
+```bash
+  make lint-format
+```
+
+- Gera índices automaticamente (se necessário):
+```bash
+  make generate-index
+```
 
 
 ### 2.2. Documentação
