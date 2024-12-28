@@ -10,6 +10,8 @@ jobs:
       run:
         working-directory: app
 
+    if: ${{ github.event.pull_request.base.ref != 'develop' || github.event.pull_request.head.ref != 'main' }}
+
     steps:
       - name: Check out code
         uses: actions/checkout@v4
