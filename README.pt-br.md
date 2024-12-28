@@ -8,7 +8,7 @@
 ## Introdução
 
 Este projeto foi desenvolvido com fins didáticos, visando explorar e aprofundar o conhecimento no framework **NestJS**.
-Ele funciona como um estudo prático para a adaptação de conceitos como **Clean Architecture** e
+Ele funciona como um estudo prático para a "adaptação" de conceitos como **Clean Architecture** e
 **Hexagonal Architecture**, visando promover boas práticas de design de software, garantindo uma clara
 separação de responsabilidadese a abstração de dependências externas.
 
@@ -43,10 +43,13 @@ timesheet-in-transit/
 │   │   │-- main.ts
 │   │   │-- seed.module.ts
 │   │   │-- seed.ts
-│   │   │-- application/
+│   │   │-- modules/
 │   │   │   │-- config/
 │   │   │   │-- consumers/
 │   │   │   │-- web/
+│   │   │   │   │-- common/
+│   │   │   │   │-- config/
+│   │   │   │   │-- rest/
 │   │   │-- core/
 │   │   │   │-- domain/
 │   │   │   │   │-- entities/
@@ -66,9 +69,9 @@ timesheet-in-transit/
 │   │   │   │-- repositories/
 ```
 
-### **application**
+### **modules**
 
-O módulo `application` é responsável pela gestão dos pontos de entrada da aplicação, como `web`, `jobs` e
+O módulo `modules` é responsável pela gestão dos pontos de entrada da aplicação, como `web`, `jobs` e
 `consumers`.
 
 **Importante**: **não deve conter regras de negócio**. Este pode ter validações de entradas de dados

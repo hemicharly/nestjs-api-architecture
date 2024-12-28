@@ -20,7 +20,7 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@application/*": [
-        "src/application/*"
+        "src/modules/*"
       ],
       "@core/*": [
         "src/core/*"
