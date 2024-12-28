@@ -33,7 +33,7 @@ directly impacting core business rules.
 The division is organized into three main modules, each with a specific responsibility:
 
 ```lua
-timesheet-in-transit/
+timesheet-in-transit-api/
 │-- app/
 │   │-- src/
 │   │   │-- app.module.ts
