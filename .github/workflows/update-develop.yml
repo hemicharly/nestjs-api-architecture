@@ -26,7 +26,9 @@ jobs:
 
       - name: Merge Main into Develop
         run: |
-          git merge main --no-ff --no-edit
+          git merge main --no-ff --no-edit --allow-unrelated-histories
+
+        
 
       - name: Push Changes to Develop
         run: git push origin develop
