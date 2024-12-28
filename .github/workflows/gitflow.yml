@@ -30,7 +30,7 @@ jobs:
           MAIN_BRANCH=$(echo "${{ github.ref }}" | sed 's|refs/heads/||')
           
           # Check if PR already exists
-          EXISTING_PR=$(gh pr list --base develop --head "$MAIN_BRANCH" --state all --limit 1)
+          EXISTING_PR=$(gh pr list --base develop --head "$MAIN_BRANCH" --json state --jq '.[] | select(.state == "OPEN" or .state == "MERGED" or .state == "CLOSED")')
           
           if [ -n "$EXISTING_PR" ]; then
             echo "PR from $MAIN_BRANCH to develop already exists (open, closed, or merged). Skipping."
