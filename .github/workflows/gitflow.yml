@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - "release/*"
       - "feature/*"
       - "hotfix/*"
 
@@ -51,6 +52,26 @@ jobs:
             gh pr merge "$PR_NUMBER" --merge --auto
           fi
 
+      # Release to Main
+      - name: Create Pull Request for Release to Main
+        if: github.ref_name && startsWith(github.ref, 'refs/heads/release/')
+        run: |
+          # Extract branch name
+          RELEASE_BRANCH=$(echo "${{ github.ref }}" | sed 's|refs/heads/||')
+          
+          # Check if PR already exists (open, closed, or merged)
+          EXISTING_PR=$(gh pr list --base develop --head "$RELEASE_BRANCH" --json state --jq '.[] | select(.state == "OPEN" or .state == "MERGED" or .state == "CLOSED")')
+          
+          if [ -n "$EXISTING_PR" ]; then
+            echo "PR from $RELEASE_BRANCH to develop already exists (open, closed, or merged). Skipping."
+          else
+            gh pr create \
+              --label "GitFlow" \
+              --base main \
+              --head "$RELEASE_BRANCH" \
+              --title "Merge $RELEASE_BRANCH into Main" \
+              --body "This Pull Request merges the release branch '$RELEASE_BRANCH' into 'main'."
+          fi
 
       # Feature to Develop
       - name: Create Pull Request for Feature to Develop
