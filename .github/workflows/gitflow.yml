@@ -30,17 +30,28 @@ jobs:
           MAIN_BRANCH=$(echo "${{ github.ref }}" | sed 's|refs/heads/||')
                
           # Check if PR already exists (open, closed, or merged)
-          EXISTING_PR=$(gh pr list --base develop --head "$MAIN_BRANCH" --json state --jq '.[] | select(.state == "OPEN" or .state == "MERGED" or .state == "CLOSED")')
+          EXISTING_PR=$(gh pr list --base develop --head "$MAIN_BRANCH" --json number,state --jq '.[] | select(.state == "OPEN" or .state == "MERGED" or .state == "CLOSED") | .number')
           
           if [ -n "$EXISTING_PR" ]; then
             echo "PR from $MAIN_BRANCH to develop already exists (open, closed, or merged). Skipping."
           else
-            gh pr create \
+            # Create a new PR
+            NEW_PR_URL=$(gh pr create \
               --base develop \
               --head "$MAIN_BRANCH" \
               --title "Sync $MAIN_BRANCH to develop" \
-              --body "Automated Pull Request to sync changes from 'main' to 'develop'."
+              --body "Automated Pull Request to sync changes from 'main' to 'develop'." \
+              --json url --jq '.url')
+
+            echo "Pull Request created: $NEW_PR_URL"
+
+            # Extract PR number
+            PR_NUMBER=$(gh pr view "$NEW_PR_URL" --json number --jq '.number')
+
+            # Attempt to merge the PR
+            gh pr merge $PR_NUMBER --merge --auto
           fi
+
 
       # Feature to Develop
       - name: Create Pull Request for Feature to Develop
