@@ -113,7 +113,7 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
         ReceiptHandle: receiptHandle,
       });
       await this.sqsClient.send(command);
-      this.logger.debug(`Message deleted from queue: ${queueUrl}`);
+      this.logger.debug(`Message deleted from queue: ${queueUrl}.`);
     } catch (error) {
       this.logger.error(`Error deleting message from queue: ${queueUrl}, Error: ${error.message}`);
     }
