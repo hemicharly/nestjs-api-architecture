@@ -1,17 +1,11 @@
 import { Controller, Get, HttpCode } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { ErrorResponse } from '@application/web/response/error/error.response';
+import { ApiTags } from '@nestjs/swagger';
 import { HealthCheck, HealthCheckService, TypeOrmHealthIndicator } from '@nestjs/terminus';
 import { ApiDocGenericGet } from '@application/web/config/swagger/decorators';
 import { HealthCheckResultResponse } from '@application/web/response/health';
 import { HealthCheckResultMapper } from '@application/web/mappers/health/health.check.result.mapper';
 
 @ApiTags('Health')
-@ApiResponse({
-  status: 500,
-  description: 'Internal server error',
-  type: ErrorResponse,
-})
 @Controller('health')
 export class HealthController {
   constructor(
