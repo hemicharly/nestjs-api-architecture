@@ -10,20 +10,23 @@ permissions:
   pull-requests: write
 
 jobs:
-  create-pull-request:
+  update-branch:
+    name: update-branch
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
 
     steps:
-      - name: Checkout code
+      - name: Check out code
         uses: actions/checkout@v4
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7
+      - name: Update branch
+        uses: Logerfo/gitflow-action@0.0.5
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          base: develop
-          branch: main
-          title: "Sync main to develop"
-          labels: GitFlow
-          body: |
-            This Pull Request was created automatically to sync changes from the `main` branch to the `develop` branch.
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          dev: develop
+          master: main
+          label: GitFlow
+          auto-merge: true
+          require-merge: false
