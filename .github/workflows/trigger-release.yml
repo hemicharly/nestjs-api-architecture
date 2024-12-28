@@ -1,4 +1,4 @@
-name: CI - Trigger Release
+name: Trigger Release
 
 on:
   release:

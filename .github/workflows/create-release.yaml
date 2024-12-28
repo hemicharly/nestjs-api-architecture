@@ -1,4 +1,4 @@
-name: CI - Create Release
+name: Create Release
 
 on:
   pull_request:
@@ -28,7 +28,7 @@ jobs:
       - tag
     runs-on: ubuntu-latest
     env:
-      TAG: ${{ needs.TAG.outputs.tag }}
+      TAG: ${{ needs.tag.outputs.tag }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
