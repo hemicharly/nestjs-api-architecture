@@ -38,15 +38,16 @@ jobs:
 
       - name: Create Pull Request for Feature to Develop
         if: startsWith(github.ref, 'refs/heads/feature/')
-        uses: peter-evans/create-pull-request@v7
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref_name }}
-          title: "Feature: Merge ${{ github.ref_name }} into Develop"
-          body: |
-            This Pull Request merges the feature branch `${{ github.ref_name }}` into `develop`.
+        run: |
+          gh auth login --with-token <<< "${{ secrets.GH_PAT }}"
+          gh pr create \
+            --base develop \
+            --head ${{ github.ref_name }} \
+            --title "Feature: Merge ${{ github.ref_name }} into Develop" \
+            --body "This Pull Request merges the feature branch `${{ github.ref_name }}` into `develop`."
 
       - name: Create Pull Request for Hotfix to Main
+        if: startsWith(github.ref, 'refs/heads/hotfix/')
         run: |
           gh auth login --with-token <<< "${{ secrets.GH_PAT }}"
           gh pr create \
