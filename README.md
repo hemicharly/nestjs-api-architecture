@@ -16,7 +16,7 @@ responsibilities, and abstracting external dependencies.
 
 To run the project, you will need the following requirements:
 
-* **Operating System**: Linux
+* **Operating System**: Linux Ubuntu / Mint
 * **Docker**: Ensure Docker is installed on your machine.
 * **Docker Compose**: Install Docker Compose to orchestrate containers.
 * **Makefile**: Ensure you have Makefile installed to simplify command execution.
