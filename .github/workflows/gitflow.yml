@@ -1,0 +1,67 @@
+name: Gitflow Workflow
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - "feature/*"
+      - "release/*"
+      - "hotfix/*"
+      - "bugfix/*"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  gitflow:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js (if required)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Create Pull Request for Main to Develop
+        if: github.ref == 'refs/heads/main'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: develop
+          branch: main
+          title: "Sync main to develop"
+          body: |
+            Automated Pull Request to sync changes from `main` to `develop`.
+
+      - name: Create Pull Request for Feature to Develop
+        if: startsWith(github.ref, 'refs/heads/feature/')
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          base: develop
+          branch: ${{ github.ref_name }}
+          title: "Feature: Merge ${{ github.ref_name }} into Develop"
+          body: |
+            This Pull Request merges the feature branch `${{ github.ref_name }}` into `develop`.
+
+      - name: Create Pull Request for Hotfix to Main and Develop
+        if: startsWith(github.ref, 'refs/heads/hotfix/')
+        run: |
+          # Create PR for hotfix to main
+          gh pr create \
+            --base main \
+            --head ${{ github.ref_name }} \
+            --title "Hotfix: Merge ${{ github.ref_name }} into Main" \
+            --body "This PR fixes critical issues in production."
+          
+          # Create PR for hotfix to develop
+          gh pr create \
+            --base develop \
+            --head ${{ github.ref_name }} \
+            --title "Hotfix: Sync ${{ github.ref_name }} with Develop" \
+            --body "This PR ensures hotfix changes are merged into `develop`."
