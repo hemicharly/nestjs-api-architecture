@@ -19,6 +19,8 @@ jobs:
 
       - name: Update branch
         uses: Logerfo/gitflow-action@0.0.4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           dev: develop
