@@ -36,6 +36,7 @@ jobs:
             echo "PR from $MAIN_BRANCH to develop already exists (open, closed, or merged). Skipping."
           else
             gh pr create \
+              --label "GitFlow" \
               --base develop \
               --head "$MAIN_BRANCH" \
               --title "Sync $MAIN_BRANCH to develop" \
@@ -57,6 +58,7 @@ jobs:
             echo "PR from $FEATURE_BRANCH to develop already exists (open, closed, or merged). Skipping."
           else
             gh pr create \
+              --label "GitFlow" \
               --base develop \
               --head "$FEATURE_BRANCH" \
               --title "Feature: Merge $FEATURE_BRANCH into Develop" \
@@ -77,6 +79,7 @@ jobs:
             echo "PR from $HOTFIX_BRANCH to main already exists (open, closed, or merged). Skipping."
           else
             gh pr create \
+              --label "GitFlow" \
               --base main \
               --head "$HOTFIX_BRANCH" \
               --title "Hotfix: Merge $HOTFIX_BRANCH into Main" \
@@ -88,6 +91,7 @@ jobs:
             echo "PR from $HOTFIX_BRANCH to develop already exists. Skipping."
           else
             gh pr create \
+              --label "GitFlow" \
               --base develop \
               --head "$HOTFIX_BRANCH" \
               --title "Hotfix: Sync $HOTFIX_BRANCH with Develop" \
