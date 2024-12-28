@@ -1,25 +1,34 @@
-name: CI-Update-Develop
+name: Sync Main to Develop
 
 on:
   push:
-    branches: [ main ]
-
-permissions:
-  contents: write
-  pull-requests: write
-  actions: write
+    branches:
+      - main
 
 jobs:
-  release:
-    name: update-develop
-    runs-on: ubuntu-22.04
+  sync:
+    runs-on: ubuntu-latest
     steps:
-      - name: Update branch
-        uses: Logerfo/gitflow-action@0.0.5
+      - name: Checkout Main Branch
+        uses: actions/checkout@v3
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          dev: develop
-          master: main
-          label: gitflow
-          auto-merge: true
-          require-merge: false
+          ref: main
+
+      - name: Setup Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Checkout Develop Branch
+        run: |
+          git fetch origin develop
+          git checkout develop
+
+      - name: Merge Main into Develop
+        run: |
+          git merge main --no-ff --no-edit
+
+      - name: Push Changes to Develop
+        run: git push origin develop
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
