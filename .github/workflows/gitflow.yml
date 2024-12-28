@@ -47,6 +47,8 @@ jobs:
             This Pull Request merges the feature branch `${{ github.ref_name }}` into `develop`.
 
       - name: Create Pull Request for Hotfix to Main and Develop
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: startsWith(github.ref, 'refs/heads/hotfix/')
         run: |
           # Create PR for hotfix to main
