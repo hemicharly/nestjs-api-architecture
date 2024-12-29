@@ -44,7 +44,7 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
     this.logger.log('Shutting down sqs consumer...');
     this.stopAllPolling();
 
-    await Promise.all([...this.pollingIntervals.values()].map(interval => clearTimeout(interval)));
+    await Promise.all([...this.pollingIntervals.values()].map((interval) => clearTimeout(interval)));
     this.logger.log('All polling operations stopped.');
   }
 

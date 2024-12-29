@@ -13,7 +13,6 @@ import { WebhookIntegrationClientModule } from 'src/infrastructure/integrations/
   providers: [SqsConsumerQueueProviderImpl, UsecaseProviderConfig(NotificationSendWebhookUsecaseImpl, [WebhookIntegrationClientProviderImpl])],
 })
 export class NotificationOrderConsumerModule implements OnModuleInit {
-
   private readonly logger = new Logger(SqsConsumerQueueProviderImpl.name);
 
   @Inject(NotificationSendWebhookUsecaseImpl.name)
