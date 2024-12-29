@@ -1,4 +1,4 @@
-export abstract class LoggerBaseDto {
+export class WebLoggerDto {
   readonly timestamp: string;
   readonly application: string;
   readonly ip: string;
@@ -12,18 +12,9 @@ export abstract class LoggerBaseDto {
   duration: number;
   startTime?: [number, number];
 
-  protected constructor(
-    startTime: [number, number],
-    application: string,
-    ip: string,
-    useId: string,
-    endpoint: string,
-    headers: Record<string, any> = {},
-    queryParameters: Record<string, any> = {},
-    requestBody: Record<string, any> = {},
-  ) {
+  constructor(startTime: [number, number], ip: string, useId: string, endpoint: string, headers: any, queryParameters: any, requestBody: any) {
     this.timestamp = new Date().toJSON();
-    this.application = application;
+    this.application = 'timesheet-in-transit-api';
     this.ip = ip;
     this.useId = useId;
     this.endpoint = endpoint;

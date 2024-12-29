@@ -4,9 +4,9 @@ import { configEnv } from '@src/config.env';
 import { Message } from '@aws-sdk/client-sqs';
 import { NotificationSendWebhookUsecaseImpl } from '@core/usecases/notification/impl';
 import { NotificationSendWebhookUsecase } from '@core/usecases/notification';
-import { WebhookIntegrationClientProviderImpl } from '@infrastructure/integrations/integration-client/impl';
+import { WebhookIntegrationClientProviderImpl } from '@infrastructure/integrations/webhook-client/impl';
 import { UsecaseProviderConfig } from '@src/modules/config/usecases/abstract';
-import { WebhookIntegrationClientModule } from '@infrastructure/integrations/integration-client';
+import { WebhookIntegrationClientModule } from 'src/infrastructure/integrations/webhook-client';
 
 @Module({
   imports: [WebhookIntegrationClientModule],
