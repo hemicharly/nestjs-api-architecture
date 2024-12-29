@@ -1,5 +1,4 @@
-import { OrderStatus } from '@core/domain/enums/order-status.enum';
-import { PeriodGroup } from '@core/domain/enums/period-group.enum';
+import { OrderStatus, PeriodGroup } from '@core/domain/enums';
 
 export class OrderQueryQuantityStatusCoreEntity {
   status?: OrderStatus;

@@ -1,10 +1,32 @@
-import { OrderCoreEntity } from '@core/domain/entities/orders/order-core.entity';
+import { OrderCoreEntity } from '@core/domain/entities/orders';
 
+/**
+ * Represents an entity that calculates and stores the total time difference between two dates
+ * or the total accumulated time from a list of OrderCoreEntity instances in hours, minutes, and seconds.
+ * Provides methods to calculate time differences, as well as aggregate time from multiple order entities.
+ */
 export class OrderTotalHoursCoreEntity {
+  /**
+   * The total number of hours in the time difference or accumulated time.
+   * Initialized to 0 by default.
+   */
   hours: number;
+
+  /**
+   * The total number of minutes in the time difference or accumulated time.
+   * Initialized to 0 by default.
+   */
   minutes: number;
+
+  /**
+   * The total number of seconds in the time difference or accumulated time.
+   * Initialized to 0 by default.
+   */
   seconds: number;
 
+  /**
+   * Initializes the OrderTotalHoursCoreEntity instance with default values (0 hours, 0 minutes, and 0 seconds).
+   */
   constructor() {
     this.hours = 0;
     this.minutes = 0;
@@ -12,12 +34,13 @@ export class OrderTotalHoursCoreEntity {
   }
 
   /**
-   * Calcula a diferença de tempo entre duas datas e retorna uma nova instância de OrderTotalHoursCoreEntity
-   * contendo a diferença em horas, minutos e segundos.
+   * Calculates the time difference between two dates and returns a new instance of OrderTotalHoursCoreEntity
+   * containing the difference in hours, minutes, and seconds.
    *
-   * @param {string} startDatetime - A data/hora de início no formato ISO 8601.
-   * @param {string} endDatetime - A data/hora de término no formato ISO 8601.
-   * @returns {OrderTotalHoursCoreEntity} - Uma instância contendo a diferença de tempo em horas, minutos e segundos.
+   * @param {string} startDatetime - The start date/time in ISO 8601 format (e.g., '2024-12-29T08:00:00Z').
+   * @param {string} endDatetime - The end date/time in ISO 8601 format (e.g., '2024-12-29T12:45:30Z').
+   * @returns {OrderTotalHoursCoreEntity} - An instance containing the time difference in hours, minutes, and seconds.
+   * @throws {Error} - Throws an error if the date format is invalid.
    */
   public static calculate(startDatetime: string, endDatetime: string): OrderTotalHoursCoreEntity {
     const entity = new OrderTotalHoursCoreEntity();
@@ -36,10 +59,11 @@ export class OrderTotalHoursCoreEntity {
   }
 
   /**
-   * Calcula o total de horas, minutos e segundos a partir de uma lista de entidades OrderCoreEntity.
+   * Calculates the total hours, minutes, and seconds from a list of OrderCoreEntity instances.
+   * It aggregates the total time across all items in the list.
    *
-   * @param {OrderCoreEntity[]} items - Uma lista de instâncias de OrderCoreEntity.
-   * @returns {OrderTotalHoursCoreEntity} - Uma instância contendo o tempo total acumulado em horas, minutos e segundos.
+   * @param {OrderCoreEntity[]} items - A list of OrderCoreEntity instances, each containing a 'totalHours' field.
+   * @returns {OrderTotalHoursCoreEntity} - An instance containing the total accumulated time in hours, minutes, and seconds.
    */
   public static calculateTotal(items: OrderCoreEntity[]): OrderTotalHoursCoreEntity {
     if (!items || items.length === 0) {
@@ -52,28 +76,38 @@ export class OrderTotalHoursCoreEntity {
   }
 
   /**
-   * Calcula a diferença em segundos entre duas datas.
+   * Calculates the difference in seconds between two dates.
+   * This is a helper method used by `calculate` to determine the total time difference.
    *
-   * @param {Date} start - Data de início.
-   * @param {Date} end - Data de término.
-   * @returns {number} - Diferença em segundos.
+   * @param {Date} start - The start date.
+   * @param {Date} end - The end date.
+   * @returns {number} - The difference in seconds.
    */
   private static calculateSecondsDiff(start: Date, end: Date): number {
     return Math.floor((end.getTime() - start.getTime()) / 1000);
   }
 
   /**
-   * Converte segundos em uma instância de OrderTotalHoursCoreEntity contendo horas, minutos e segundos.
+   * Converts a total number of seconds into an instance of OrderTotalHoursCoreEntity containing hours, minutes, and seconds.
    *
-   * @param {number} totalSeconds - O total de segundos a ser convertido.
-   * @returns {OrderTotalHoursCoreEntity} - Uma instância contendo horas, minutos e segundos.
+   * @param {number} totalSeconds - The total number of seconds to convert.
+   * @returns {OrderTotalHoursCoreEntity} - An instance containing the converted hours, minutes, and seconds.
+   * @throws {Error} - Throws an error if the totalSeconds is negative or not a valid number.
    */
   private static secondsToHoursMinutesSeconds(totalSeconds: number): OrderTotalHoursCoreEntity {
+    if (isNaN(totalSeconds) || totalSeconds < 0) {
+      throw new Error('Invalid totalSeconds value. It must be a non-negative number.');
+    }
+
+    const hours = Math.floor(totalSeconds / 3600); // Calculate full hours
+    const remainingSecondsAfterHours = totalSeconds % 3600; // Remaining seconds after hours
+    const minutes = Math.floor(remainingSecondsAfterHours / 60); // Calculate full minutes
+    const seconds = remainingSecondsAfterHours % 60; // Remaining seconds after minutes
+
     const entity = new OrderTotalHoursCoreEntity();
-    entity.hours = Math.floor(totalSeconds / 3600);
-    totalSeconds %= 3600;
-    entity.minutes = Math.floor(totalSeconds / 60);
-    entity.seconds = totalSeconds % 60;
+    entity.hours = hours;
+    entity.minutes = minutes;
+    entity.seconds = seconds;
     return entity;
   }
 }

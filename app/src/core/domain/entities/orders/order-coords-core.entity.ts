@@ -1,13 +1,18 @@
 import { CustomBusinessException } from '@core/domain/exceptions';
 import { CodeError } from '@core/domain/exceptions/error';
 
+/**
+ * A utility class for validating and processing geographical coordinates related to orders.
+ * Includes methods to validate latitude, longitude, and calculate distances between geographical points.
+ */
 export class OrderCoordsCoreEntity {
   /**
-   * Valida as coordenadas de latitude e longitude.
-   * Lança uma exceção se a latitude ou longitude forem inválidas.
-   * @param latitude Latitude a ser validada.
-   * @param longitude Longitude a ser validada.
-   * @throws CustomBusinessException Exceção lançada se a latitude ou longitude forem inválidas.
+   * Validates latitude and longitude coordinates.
+   * Ensures that the latitude is between -90 and 90, and the longitude is between -180 and 180.
+   *
+   * @param {string} latitude - The latitude value to validate.
+   * @param {string} longitude - The longitude value to validate.
+   * @throws {CustomBusinessException} - Thrown if the latitude or longitude is invalid.
    */
   public static validateCoordinates(latitude: string, longitude: string): void {
     if (!(this.isValidLatitude(parseFloat(latitude)) && this.isValidLongitude(parseFloat(longitude)))) {
@@ -16,13 +21,14 @@ export class OrderCoordsCoreEntity {
   }
 
   /**
-   * Calcula a distância entre dois pontos geográficos utilizando a fórmula de Haversine.
-   * Se a distância entre os pontos for maior que 200 metros, lança uma exceção.
-   * @param latitude1 Latitude do primeiro ponto.
-   * @param longitude1 Longitude do primeiro ponto.
-   * @param latitude2 Latitude do segundo ponto.
-   * @param longitude2 Longitude do segundo ponto.
-   * @throws CustomBusinessException Exceção lançada se a distância entre os pontos for maior que 200 metros.
+   * Validates the distance between two geographical points using the Haversine formula.
+   * If the calculated distance exceeds 200 meters, an exception is thrown.
+   *
+   * @param {string} latitude1 - Latitude of the first point.
+   * @param {string} longitude1 - Longitude of the first point.
+   * @param {string} latitude2 - Latitude of the second point.
+   * @param {string} longitude2 - Longitude of the second point.
+   * @throws {CustomBusinessException} - Thrown if the distance between the points exceeds 200 meters.
    */
   public static validateDistance(latitude1: string, longitude1: string, latitude2: string, longitude2: string): void {
     const lat1 = parseFloat(latitude1);
@@ -45,14 +51,34 @@ export class OrderCoordsCoreEntity {
     }
   }
 
-  private static degreesToRadians(degrees: number) {
+  /**
+   * Converts a value from degrees to radians.
+   *
+   * @param {number} degrees - The value in degrees to convert.
+   * @returns {number} - The equivalent value in radians.
+   */
+  private static degreesToRadians(degrees: number): number {
     return (degrees * Math.PI) / 180;
   }
 
+  /**
+   * Checks if a latitude value is valid.
+   * A valid latitude is a number between -90 and 90.
+   *
+   * @param {number} lat - The latitude value to validate.
+   * @returns {boolean} - `true` if the latitude is valid, otherwise `false`.
+   */
   private static isValidLatitude(lat: number): boolean {
     return !isNaN(lat) && lat >= -90 && lat <= 90;
   }
 
+  /**
+   * Checks if a longitude value is valid.
+   * A valid longitude is a number between -180 and 180.
+   *
+   * @param {number} lon - The longitude value to validate.
+   * @returns {boolean} - `true` if the longitude is valid, otherwise `false`.
+   */
   private static isValidLongitude(lon: number): boolean {
     return !isNaN(lon) && lon >= -180 && lon <= 180;
   }

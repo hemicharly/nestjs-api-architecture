@@ -1,5 +1,5 @@
-import { PaginationCoreEntity } from '@core/domain/entities/common/pagination-core.entity';
-import { OrderStatus } from '@core/domain/enums/order-status.enum';
+import { PaginationCoreEntity } from '@core/domain/entities/common';
+import { OrderStatus } from '@core/domain/enums';
 
 export class OrderQueryCoreEntity {
   status?: OrderStatus;
