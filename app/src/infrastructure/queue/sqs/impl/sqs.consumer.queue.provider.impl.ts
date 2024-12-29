@@ -45,7 +45,6 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
 
   private registerHandlers() {
     const providers = this.discoveryService.getProviders();
-
     for (const provider of providers) {
       const { instance } = provider;
       if (!instance) {
@@ -53,8 +52,8 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
       }
 
       const prototype = Object.getPrototypeOf(instance);
-
-      this.metadataScanner.scanFromPrototype(instance, prototype, (methodName) => {
+      const methodNames = this.metadataScanner.getAllMethodNames(prototype);
+      for (const methodName of methodNames) {
         const method = prototype[methodName];
         const metadata = Reflect.getMetadata(SQS_HANDLER_METADATA, method);
         if (metadata) {
@@ -70,7 +69,7 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
             method.bind(instance),
           );
         }
-      });
+      }
     }
   }
 
