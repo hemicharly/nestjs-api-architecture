@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ErrorItemResponse } from '@application/web/common/response/error/error-item.response';
+import { ErrorItemResponse } from '@application/web/shared/response/error/error-item.response';
 
 export class ErrorResponse {
   @ApiProperty({ type: ErrorItemResponse, isArray: true })

@@ -16,7 +16,7 @@ import { Provider, Type } from '@nestjs/common';
  * Usage example:
  *
  * ```typescript
- * import { Module, Provider } from '@nestjs/common';
+ * import { Module, Provider } from '@nestjs/shared';
  * import { RepositoryInfraModule } from '@infrastructure/repositories';
  * import { AuthAppModule } from '@modules/web/middleware/apikey';
  * import { OrdersController } from '@modules/web/controllers/orders';

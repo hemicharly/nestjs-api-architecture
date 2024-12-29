@@ -9,7 +9,7 @@ import { DynamicModule, Module, Type } from '@nestjs/common';
  * @example
  *
  * ```typescript
- import { Module } from '@nestjs/common';
+ import { Module } from '@nestjs/shared';
  import { SqsProducerQueueProviderImpl } from '@infrastructure/queue/sqs/impl/send.queue.provider.impl';
  import { QueueConfigModule } from '@infrastructure/queue/abstract';
 

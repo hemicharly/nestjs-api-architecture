@@ -37,7 +37,6 @@ timesheet-in-transit-api/
 │-- app/
 │   │-- src/
 │   │   │-- app.module.ts
-│   │   │-- config.env.ts
 │   │   │-- database.module.ts
 │   │   │-- index.ts
 │   │   │-- main.ts
@@ -47,7 +46,7 @@ timesheet-in-transit-api/
 │   │   │   │-- config/
 │   │   │   │-- consumers/
 │   │   │   │-- web/
-│   │   │   │   │-- common/
+│   │   │   │   │-- shared/
 │   │   │   │   │-- config/
 │   │   │   │   │-- rest/
 │   │   │-- core/
@@ -67,6 +66,9 @@ timesheet-in-transit-api/
 │   │   │   │-- integrations/
 │   │   │   │-- queue/
 │   │   │   │-- repositories/
+│   │   │-- shared/
+│   │   │   │-- audit/
+│   │   │   │-- config/
 ```
 
 ### **modules**

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { PaginationResponse } from '@application/web/common/response/pagination/pagination.response';
+import { PaginationResponse } from '@application/web/shared/response/pagination/pagination.response';
 import { OrderItemsResponse } from '@src/modules/web/rest/orders/response/order-items.response';
 import { OrderTotalHoursResponse } from '@src/modules/web/rest/orders/response/order-total-hours.response';
 

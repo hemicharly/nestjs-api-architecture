@@ -11,7 +11,7 @@ import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-clas
  * @example
  *
  * ```typescript
- * import { Module } from '@nestjs/common';
+ * import { Module } from '@nestjs/shared';
  * import { OrderEntity } from '@infrastructure/repositories/orders/entity';
  * import { OrderRepositoryProviderImpl } from '@infrastructure/repositories/orders/impl';
  * import { RepositoryConfigModule } from '@infrastructure/repositories/abstract/repository.config.module';

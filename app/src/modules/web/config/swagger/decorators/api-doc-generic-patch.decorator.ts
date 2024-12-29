@@ -9,7 +9,7 @@ import {
   ApiOperation,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { ErrorResponse } from '@application/web/common/response/error';
+import { ErrorResponse } from '@application/web/shared/response/error';
 
 export function ApiDocGenericPatch(value: string, description?: string, modelType?: Type) {
   return applyDecorators(

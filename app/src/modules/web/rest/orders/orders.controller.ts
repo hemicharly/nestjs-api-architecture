@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpCode, Inject, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
 import { OrderCreationUseCase, OrderEndUsecase, OrderFindByIdUsecase, OrderQueryQuantityStatusUsecase, OrderQueryUsecase, OrderStartUsecase } from '@core/usecases/orders';
-import { ApiKeyGuard } from 'src/modules/web/common/middleware/apikey';
+import { ApiKeyGuard } from '@application/web/shared/middleware/apikey';
 import { OrderCreateResponse, OrderPaginationResponse, OrderQuantityStatusResponse, OrderItemsResponse } from '@src/modules/web/rest/orders/response';
 import { OrderQueryRequest, OrderCreationRequest, OrderStartRequest, OrderEndRequest, OrderQueryQuantityStatusRequest } from '@src/modules/web/rest/orders/request';
 import { ApiDocGenericGetAll, ApiDocGenericGetOne, ApiDocGenericGetPagination, ApiDocGenericPatch, ApiDocGenericPost } from '@src/modules/web/config/swagger/decorators';
