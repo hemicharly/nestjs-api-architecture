@@ -1,7 +1,8 @@
 import { HttpService } from '@nestjs/axios';
 import { Logger } from '@nestjs/common';
 import { AxiosError, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
-import { IntegrationLoggerDto } from '@infrastructure/integrations/common/audit';
+import { IntegrationLoggerDto } from '@infrastructure/integrations/shared/audit';
+import { TracerContextAudit } from '@shared/audit';
 
 /**
  * Class responsible for managing API integration audit logs.
@@ -11,10 +12,10 @@ import { IntegrationLoggerDto } from '@infrastructure/integrations/common/audit'
  *
  * ```typescript
  * import { WebhookIntegrationClientProvider } from '@core/providers/integrations';
- * import { Injectable, Logger } from '@nestjs/common';
+ * import { Injectable, Logger } from '@nestjs/shared';
  * import { firstValueFrom } from 'rxjs';
  * import { HttpService } from '@nestjs/axios';
- * import { IntegrationAuditCommon } from '@infrastructure/integrations/common/audit';
+ * import { IntegrationAuditCommon } from '@infrastructure/integrations/shared/audit';
  *
  * @Injectable()
  * export class WebhookIntegrationClientProviderImpl implements WebhookIntegrationClientProvider {
@@ -83,6 +84,7 @@ export class IntegrationAuditCommon {
       config.headers = {};
     }
     config.headers['request-start-time'] = process.hrtime();
+    config.headers['x-tracer-id'] = TracerContextAudit.getContextTracerId();
     return config;
   }
 
@@ -126,7 +128,7 @@ export class IntegrationAuditCommon {
    */
   private logAudit(config: AxiosRequestConfig, responseData: any, status: number, startTime: [number, number], isError: boolean = false): void {
     const integrationLoggerDto = this.createIntegrationLoggerDto(config, responseData, status, startTime);
-    const logMessage = `[AUDIT LOG] ${JSON.stringify(integrationLoggerDto)}`;
+    const logMessage = JSON.stringify(integrationLoggerDto);
     if (isError) {
       this.logger.error(logMessage);
       return;
@@ -144,8 +146,9 @@ export class IntegrationAuditCommon {
    * @returns An `IntegrationLoggerDto` object containing the audit information.
    */
   private createIntegrationLoggerDto(config: AxiosRequestConfig, responseData: any, status: number, startTime: [number, number]): IntegrationLoggerDto {
+    const tracerId = <string>config.headers['x-tracer-id'];
     const method = `${config.method?.toUpperCase()} ${config.url}`;
-    return new IntegrationLoggerDto(this.application, method, config.headers, config.params, config.data, responseData, status, startTime);
+    return new IntegrationLoggerDto(tracerId, this.application, method, config.headers, config.params, config.data, responseData, status, startTime);
   }
 
   /**

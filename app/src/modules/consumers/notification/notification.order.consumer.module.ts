@@ -1,6 +1,6 @@
 import { Inject, Module, OnModuleInit } from '@nestjs/common';
 import { SqsConsumerQueueProviderImpl } from '@infrastructure/queue/sqs/impl';
-import { configEnv } from '@src/config.env';
+import { configEnv } from '@src/shared/config';
 import { Message } from '@aws-sdk/client-sqs';
 import { NotificationSendWebhookUsecaseImpl } from '@core/usecases/notification/impl';
 import { NotificationSendWebhookUsecase } from '@core/usecases/notification';
@@ -19,11 +19,10 @@ export class NotificationOrderConsumerModule implements OnModuleInit {
   constructor(private readonly sqsConsumerQueueProvider: SqsConsumerQueueProviderImpl) {}
 
   onModuleInit() {
-    const queueName = configEnv.aws.sqs.queues.queueNotificationOrder;
     this.sqsConsumerQueueProvider.registerQueueHandler(
       {
-        name: queueName,
-        url: configEnv.aws.sqs.queueUrl(queueName),
+        name: configEnv.aws.sqs.queues.queueNotificationOrder,
+        url: configEnv.aws.sqs.queueUrl(configEnv.aws.sqs.queues.queueNotificationOrder),
         waitTimeSeconds: 5,
         batchSize: 10,
         visibilityTimeout: 60,

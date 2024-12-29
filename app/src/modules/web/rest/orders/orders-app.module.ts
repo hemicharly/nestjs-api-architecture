@@ -1,6 +1,6 @@
 import { Module, Provider } from '@nestjs/common';
 import { RepositoryInfraModule } from '@infrastructure/repositories';
-import { AuthAppModule } from 'src/modules/web/common/middleware/apikey';
+import { AuthAppModule } from '@application/web/shared/middleware/apikey';
 import { OrdersController } from '@src/modules/web/rest/orders';
 import { UsecaseProviderConfig } from '@src/modules/config/usecases/abstract';
 import { NotificationOrderRegisterUsecaseImpl } from '@core/usecases/notification/impl';

@@ -1,4 +1,5 @@
 export class WebLoggerDto {
+  readonly tracerId: string;
   readonly timestamp: string;
   readonly application: string;
   readonly ip: string;
@@ -12,7 +13,8 @@ export class WebLoggerDto {
   duration: number;
   startTime?: [number, number];
 
-  constructor(startTime: [number, number], ip: string, useId: string, endpoint: string, headers: any, queryParameters: any, requestBody: any) {
+  constructor(tracerId: string, startTime: [number, number], ip: string, useId: string, endpoint: string, headers: any, queryParameters: any, requestBody: any) {
+    this.tracerId = tracerId;
     this.timestamp = new Date().toJSON();
     this.application = 'timesheet-in-transit-api';
     this.ip = ip;

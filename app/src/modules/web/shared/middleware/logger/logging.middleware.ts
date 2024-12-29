@@ -1,6 +1,8 @@
 import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
-import { WebLoggerDto } from '@application/web/common/middleware/logger';
+import { WebLoggerDto } from '@application/web/shared/middleware/logger';
+import { TracerContextAudit } from '@shared/audit';
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class LoggingMiddleware implements NestMiddleware {
@@ -8,6 +10,7 @@ export class LoggingMiddleware implements NestMiddleware {
   private readonly logger = new Logger(LoggingMiddleware.name);
 
   public use(req: Request, res: Response, next: NextFunction): void {
+    TracerContextAudit.setContextTracerId(uuid());
     if (!this.shouldIgnoreRoute(req.originalUrl)) {
       const startTime: [number, number] = process.hrtime();
       this.attachResponseHandlers(req, res, startTime);
@@ -54,7 +57,8 @@ export class LoggingMiddleware implements NestMiddleware {
   }
 
   private createLogEntry(startTime: [number, number], req: Request, res: Response, responseBody: any, isCloseRequest: boolean): WebLoggerDto {
-    const loggerInternal = new WebLoggerDto(startTime, req.ip, req.userId, `${req.method} ${req.originalUrl}`, req.headers, req.query, req.body);
+    const tracerId = TracerContextAudit.getContextTracerId();
+    const loggerInternal = new WebLoggerDto(tracerId, startTime, req.ip, req.userId, `${req.method} ${req.originalUrl}`, req.headers, req.query, req.body);
     loggerInternal.duration = this.elapsedTime(startTime);
     loggerInternal.startTime = undefined;
     loggerInternal.statusCode = isCloseRequest ? res.statusCode : 499;

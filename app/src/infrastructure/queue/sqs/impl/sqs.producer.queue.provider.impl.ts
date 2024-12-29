@@ -1,8 +1,9 @@
 import { ProducerQueueProvider } from '@core/providers/queue';
 import { Injectable, Logger } from '@nestjs/common';
 import { SendMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
-import { configEnv } from '@src/config.env';
+import { configEnv } from '@src/shared/config';
 import { SQSClientConfig } from '@aws-sdk/client-sqs/dist-types/SQSClient';
+import { TracerContextAudit } from '@shared/audit';
 
 @Injectable()
 export class SqsProducerQueueProviderImpl implements ProducerQueueProvider {
@@ -25,6 +26,12 @@ export class SqsProducerQueueProviderImpl implements ProducerQueueProvider {
       const sendMessageCommand = new SendMessageCommand({
         MessageBody: message,
         QueueUrl: `${configEnv.aws.sqs.queueUrl(queueName)}`,
+        MessageAttributes: {
+          TracerId: {
+            DataType: 'String',
+            StringValue: TracerContextAudit.getContextTracerId(),
+          },
+        },
       });
       this.logger.log(`[QueueName: ${queueName}] Send message to SQS.`);
       await this.sqsClient.send(sendMessageCommand);
@@ -39,6 +46,10 @@ export class SqsProducerQueueProviderImpl implements ProducerQueueProvider {
       const sendMessageCommand = new SendMessageCommand({
         MessageBody: message,
         MessageAttributes: {
+          TracerId: {
+            DataType: 'String',
+            StringValue: TracerContextAudit.getContextTracerId(),
+          },
           AttemptCount: {
             DataType: 'String',
             StringValue: String(attempt),

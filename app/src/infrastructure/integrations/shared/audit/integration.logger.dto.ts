@@ -26,6 +26,8 @@ const SENSITIVE_FIELDS = new Set([
  * @class IntegrationLoggerDto
  */
 export class IntegrationLoggerDto {
+  readonly tracerId: string;
+
   /**
    * Date and time when the log was created.
    * @type {string}
@@ -84,6 +86,7 @@ export class IntegrationLoggerDto {
    * Constructor for the `IntegrationLoggerDto` class.
    * Initializes the properties and masks sensitive fields from the provided data.
    *
+   * @param {string} tracerId The tracer id log.
    * @param {string} application The name of the application generating the log.
    * @param {string} endpoint The API endpoint called.
    * @param {any} headers The request headers.
@@ -93,7 +96,8 @@ export class IntegrationLoggerDto {
    * @param {number} statusCode The HTTP status code of the response.
    * @param {[number, number]} startTime The start time of the request for calculating duration.
    */
-  constructor(application: string, endpoint: string, headers: any, queryParameters: any, requestBody: any, responseBody: any, statusCode: number, startTime: [number, number]) {
+  constructor(tracerId: string, application: string, endpoint: string, headers: any, queryParameters: any, requestBody: any, responseBody: any, statusCode: number, startTime: [number, number]) {
+    this.tracerId = tracerId; // Sets the tracerId
     this.timestamp = new Date().toJSON(); // Marks the timestamp of the log
     this.application = application; // Sets the application name
     this.endpoint = endpoint; // Sets the accessed endpoint

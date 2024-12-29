@@ -3,7 +3,7 @@ import { OrderPaginationCoreEntity, OrderQueryCoreEntity } from '@core/domain/en
 import { PaginationCoreEntity } from '@core/domain/entities/common';
 import { OrderQueryRequest } from '@src/modules/web/rest/orders/request';
 import { OrderPaginationResponse, OrderTotalHoursResponse } from '@src/modules/web/rest/orders/response';
-import { PaginationResponse } from '@application/web/common/response/pagination';
+import { PaginationResponse } from '@application/web/shared/response/pagination';
 
 export class OrderQueryAppMapper {
   public static fromApi(object: OrderQueryRequest, { userId }: Request): OrderQueryCoreEntity {

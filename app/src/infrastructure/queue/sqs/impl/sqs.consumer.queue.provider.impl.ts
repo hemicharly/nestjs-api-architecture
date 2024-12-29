@@ -1,7 +1,8 @@
 import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { ChangeMessageVisibilityCommand, DeleteMessageCommand, Message, ReceiveMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
 import { SQSClientConfig } from '@aws-sdk/client-sqs/dist-types/SQSClient';
-import { configEnv } from '@src/config.env';
+import { configEnv } from '@src/shared/config';
+import { TracerContextAudit } from '@shared/audit';
 
 interface SqsHandler {
   (message: Message): Promise<void>;
@@ -68,6 +69,7 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
           MaxNumberOfMessages: queueConfig.batchSize || 10,
           WaitTimeSeconds: queueConfig.waitTimeSeconds || 20,
           VisibilityTimeout: queueConfig.visibilityTimeout || 30,
+          MessageAttributeNames: ['All'],
         });
 
         const response = await this.sqsClient.send(command);
@@ -81,6 +83,7 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
               if (!handler) {
                 throw new Error(`No handler registered for queue ${name}`);
               }
+              TracerContextAudit.setContextTracerId(message?.MessageAttributes?.TracerId?.StringValue);
               await handler(message);
               await this.deleteMessage(url, message.ReceiptHandle!);
             } catch (error) {
