@@ -10,7 +10,8 @@ export class LoggingMiddleware implements NestMiddleware {
   private readonly logger = new Logger(LoggingMiddleware.name);
 
   public use(req: Request, res: Response, next: NextFunction): void {
-    TracerContextAudit.setContextTracerId(uuid());
+    const tracerId = <string>req.headers['x-tracer-id'] || <string>req.headers['tracer-id'] ||  uuid();
+    TracerContextAudit.setContextTracerId(tracerId);
     if (!this.shouldIgnoreRoute(req.originalUrl)) {
       const startTime: [number, number] = process.hrtime();
       this.attachResponseHandlers(req, res, startTime);
