@@ -1,1 +1,1 @@
-export * from './notification.order.consumer.module';
+export * from './notification.order.consumer.service';
