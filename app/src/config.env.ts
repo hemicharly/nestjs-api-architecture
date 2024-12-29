@@ -30,7 +30,8 @@ export const configEnv = {
   },
   integrationsApi: {
     webhook: {
-      baseUrl: process.env.WEBHOOK_URL || 'https://webhook.site/210433f3-e36e-45c2-9c12-b99105df7ed5',
+      // baseUrl: process.env.WEBHOOK_URL || 'https://webhook.site/210433f3-e36e-45c2-9c12-b99105df7ed5',
+      baseUrl: process.env.WEBHOOK_URL || 'https://eos130y6dydmmz2.m.pipedream.net',
     },
   },
 };
