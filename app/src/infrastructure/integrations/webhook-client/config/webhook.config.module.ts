@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
-import { configEnv } from '@src/config.env';
+import { configEnv } from '@src/shared/config';
 
 @Module({
   imports: [

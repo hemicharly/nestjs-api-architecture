@@ -1,7 +1,8 @@
 import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { ChangeMessageVisibilityCommand, DeleteMessageCommand, Message, ReceiveMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
 import { SQSClientConfig } from '@aws-sdk/client-sqs/dist-types/SQSClient';
-import { configEnv } from '@src/config.env';
+import { configEnv } from '@src/shared/config';
+import { TracerContextAudit } from '@shared/audit';
 
 interface SqsHandler {
   (message: Message): Promise<void>;
@@ -35,13 +36,16 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
   }
 
   async onModuleInit() {
-    this.logger.log('SqsConsumerQueueProviderImpl initialized.');
+    this.logger.log('SQS Consumer initialized.');
   }
 
   async onModuleDestroy() {
     this.isShuttingDown = true;
-    this.logger.log('Shutting down SqsConsumerQueueProviderImpl...');
+    this.logger.log('Shutting down sqs consumer...');
     this.stopAllPolling();
+
+    await Promise.all([...this.pollingIntervals.values()].map(interval => clearTimeout(interval)));
+    this.logger.log('All polling operations stopped.');
   }
 
   registerQueueHandler(queueConfig: QueueConfig, handler: SqsHandler) {
@@ -68,6 +72,7 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
           MaxNumberOfMessages: queueConfig.batchSize || 10,
           WaitTimeSeconds: queueConfig.waitTimeSeconds || 20,
           VisibilityTimeout: queueConfig.visibilityTimeout || 30,
+          MessageAttributeNames: ['All'],
         });
 
         const response = await this.sqsClient.send(command);
@@ -81,17 +86,18 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
               if (!handler) {
                 throw new Error(`No handler registered for queue ${name}`);
               }
+              TracerContextAudit.setContextTracerId(message?.MessageAttributes?.TracerId?.StringValue);
               await handler(message);
               await this.deleteMessage(url, message.ReceiptHandle!);
             } catch (error) {
-              this.logger.error(`[${name}] Error processing message: ${error.message}`);
+              this.logger.error(`[${name}] Error processing message: ${error.message}`, error.stack);
               await this.extendVisibilityTimeout(url, message.ReceiptHandle!, queueConfig.visibilityTimeout || 30);
             }
           }
           backoffTime = 1000;
         }
       } catch (error) {
-        this.logger.error(`[${name}] Error receiving messages: ${error.message}`);
+        this.logger.error(`[${name}] Unhandled error: ${error.message}`, error.stack);
       } finally {
         if (!this.isShuttingDown) {
           backoffTime = Math.min(backoffTime * 2, maxBackoffTime);
@@ -107,6 +113,11 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
   }
 
   private async deleteMessage(queueUrl: string, receiptHandle: string) {
+    if (!receiptHandle) {
+      this.logger.warn(`Invalid receipt handle for queue: ${queueUrl}`);
+      return;
+    }
+
     try {
       const command = new DeleteMessageCommand({
         QueueUrl: queueUrl,
@@ -120,6 +131,11 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
   }
 
   private async extendVisibilityTimeout(queueUrl: string, receiptHandle: string, visibilityTimeout: number) {
+    if (!receiptHandle) {
+      this.logger.warn(`Invalid receipt handle for queue: ${queueUrl}`);
+      return;
+    }
+
     try {
       const command = new ChangeMessageVisibilityCommand({
         QueueUrl: queueUrl,
@@ -129,7 +145,7 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
       await this.sqsClient.send(command);
       this.logger.debug(`Extended visibility timeout for message in queue: ${queueUrl}`);
     } catch (error) {
-      this.logger.error(`Error extending visibility timeout for queue: ${queueUrl}, Error: ${error.message}`);
+      this.logger.error(`Error extending visibility timeout for queue: ${queueUrl}, Error: ${error.message}`, error.stack);
     }
   }
 

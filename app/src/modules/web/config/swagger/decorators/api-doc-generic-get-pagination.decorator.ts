@@ -1,6 +1,6 @@
 import { applyDecorators, Type } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiInternalServerErrorResponse, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { ErrorResponse } from '@application/web/common/response/error';
+import { ErrorResponse } from '@application/web/shared/response/error';
 
 export function ApiDocGenericGetPagination(value: string, modelType: Type) {
   return applyDecorators(

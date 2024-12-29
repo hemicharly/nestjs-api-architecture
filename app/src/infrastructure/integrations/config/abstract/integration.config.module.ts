@@ -9,7 +9,7 @@ import { DynamicModule, Module, Type } from '@nestjs/common';
  * @example
  *
  * ```typescript
- * import { Module } from '@nestjs/common';
+ * import { Module } from '@nestjs/shared';
  * import { WebhookIntegrationClientProviderImpl } from '@infrastructure/integrations/webhook-client/impl';
  * import { IntegrationConfigModule } from 'src/infrastructure/integrations/config/abstract';
  * import { WebhookConfigModule } from '@infrastructure/integrations/webhook-client/config';
