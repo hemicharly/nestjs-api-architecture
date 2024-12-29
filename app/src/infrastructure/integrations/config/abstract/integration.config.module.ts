@@ -9,13 +9,15 @@ import { DynamicModule, Module, Type } from '@nestjs/common';
  * @example
  *
  * ```typescript
- * import { Module } from '@nestjs/abstract';
- * import { WebhookIntegrationClientProviderImpl } from '@infrastructure/integrations/integration-client/impl/integration-client.provider.impl';
- * import { IntegrationConfigModule } from '@infrastructure/integrations/abstract/abstract.integration.module';
+ * import { Module } from '@nestjs/common';
+ * import { WebhookIntegrationClientProviderImpl } from '@infrastructure/integrations/webhook-client/impl';
+ * import { IntegrationConfigModule } from 'src/infrastructure/integrations/config/abstract';
+ * import { WebhookConfigModule } from '@infrastructure/integrations/webhook-client/config';
  *
  * const integrationConfigModule = IntegrationConfigModule.forFeature(WebhookIntegrationClientProviderImpl);
  *
  * @Module({
+ *   imports: [WebhookConfigModule],
  *   providers: integrationConfigModule.providers,
  *   exports: integrationConfigModule.exports,
  * })

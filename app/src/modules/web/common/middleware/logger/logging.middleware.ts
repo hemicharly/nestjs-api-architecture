@@ -1,6 +1,6 @@
 import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
-import { LoggerInternalDto } from '@application/web/common/middleware/logger/dto';
+import { WebLoggerDto } from '@application/web/common/middleware/logger';
 
 @Injectable()
 export class LoggingMiddleware implements NestMiddleware {
@@ -53,8 +53,8 @@ export class LoggingMiddleware implements NestMiddleware {
     this.logger.log(JSON.stringify(logEntry));
   }
 
-  private createLogEntry(startTime: [number, number], req: Request, res: Response, responseBody: any, isCloseRequest: boolean): LoggerInternalDto {
-    const loggerInternal = new LoggerInternalDto(startTime, req.ip, req.userId, `${req.method} ${req.originalUrl}`, req.headers, req.query, req.body);
+  private createLogEntry(startTime: [number, number], req: Request, res: Response, responseBody: any, isCloseRequest: boolean): WebLoggerDto {
+    const loggerInternal = new WebLoggerDto(startTime, req.ip, req.userId, `${req.method} ${req.originalUrl}`, req.headers, req.query, req.body);
     loggerInternal.duration = this.elapsedTime(startTime);
     loggerInternal.startTime = undefined;
     loggerInternal.statusCode = isCloseRequest ? res.statusCode : 499;
