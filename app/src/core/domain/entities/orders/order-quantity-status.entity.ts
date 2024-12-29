@@ -1,4 +1,4 @@
-import { OrderStatus } from '@core/domain/enums/order-status.enum';
+import { OrderStatus } from '@core/domain/enums';
 
 export class OrderQuantityStatusEntity {
   constructor(

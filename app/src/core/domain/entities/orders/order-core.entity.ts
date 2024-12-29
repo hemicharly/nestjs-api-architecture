@@ -1,5 +1,5 @@
-import { OrderStatus } from '@core/domain/enums/order-status.enum';
-import { OrderTotalHoursCoreEntity } from '@core/domain/entities/orders/order-total-hours-core.entity';
+import { OrderStatus } from '@core/domain/enums';
+import { OrderTotalHoursCoreEntity } from '@core/domain/entities/orders';
 
 export class OrderCoreEntity {
   id: string;

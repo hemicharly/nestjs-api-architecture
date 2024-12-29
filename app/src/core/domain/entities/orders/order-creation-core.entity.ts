@@ -1,5 +1,5 @@
-import { OrderStatus } from '@core/domain/enums/order-status.enum';
-import { OrderCoreEntity } from '@core/domain/entities/orders/order-core.entity';
+import { OrderStatus } from '@core/domain/enums';
+import { OrderCoreEntity } from '@core/domain/entities/orders';
 
 export class OrderCreationCoreEntity {
   serviceDescription: string;

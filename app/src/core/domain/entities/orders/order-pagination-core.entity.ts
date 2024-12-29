@@ -1,7 +1,5 @@
-import { OrderTotalHoursCoreEntity } from '@core/domain/entities/orders/order-total-hours-core.entity';
-import { GenericPaginationCoreEntity } from '@core/domain/entities/common/generic-pagination-core.entity';
-import { OrderCoreEntity } from '@core/domain/entities/orders/order-core.entity';
-import { PaginationCoreEntity } from '@core/domain/entities/common/pagination-core.entity';
+import { OrderTotalHoursCoreEntity, OrderCoreEntity } from '@core/domain/entities/orders';
+import { GenericPaginationCoreEntity, PaginationCoreEntity } from '@core/domain/entities/common';
 
 export class OrderPaginationCoreEntity extends GenericPaginationCoreEntity<OrderCoreEntity> {
   readonly totalHours: OrderTotalHoursCoreEntity;
