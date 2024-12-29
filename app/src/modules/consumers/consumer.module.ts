@@ -7,8 +7,10 @@ import { WebhookIntegrationClientProviderImpl } from '@infrastructure/integratio
 import { NotificationOrderConsumerService } from '@application/consumers/notification';
 import { DiscoveryModule } from '@nestjs/core';
 
+const notificationProvider = [UsecaseProviderConfig(NotificationSendWebhookUsecaseImpl, [WebhookIntegrationClientProviderImpl]), NotificationOrderConsumerService];
+
 @Module({
   imports: [DiscoveryModule, WebhookIntegrationClientModule],
-  providers: [SqsConsumerQueueProviderImpl, UsecaseProviderConfig(NotificationSendWebhookUsecaseImpl, [WebhookIntegrationClientProviderImpl]), NotificationOrderConsumerService],
+  providers: [SqsConsumerQueueProviderImpl, ...notificationProvider],
 })
 export class ConsumerModule {}
