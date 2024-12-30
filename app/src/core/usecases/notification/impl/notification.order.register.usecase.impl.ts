@@ -1,4 +1,4 @@
-import { NotificationOrderCoreEntity } from 'src/core/domain/entities/notifications';
+import { NotificationOrderCoreEntity } from '@core/domain/entities/notifications';
 import { NotificationOrderRegisterUsecase } from '@core/usecases/notification';
 import { ProducerQueueProvider } from '@core/providers/queue';
 import { configEnv } from '@shared/config';

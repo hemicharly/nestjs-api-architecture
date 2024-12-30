@@ -14,7 +14,7 @@ import {
 } from '@core/domain/entities/orders';
 import { MongoRepository } from 'typeorm/repository/MongoRepository';
 import { OrderEntity } from '@infrastructure/repositories/orders/entity';
-import { OrderInfraMapper } from 'src/infrastructure/repositories/orders/mappers';
+import { OrderInfraMapper } from '@infrastructure/repositories/orders/mappers';
 import { OrderAggregationResult } from '@infrastructure/repositories/orders/types';
 
 @Injectable()

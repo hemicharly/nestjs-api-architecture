@@ -180,6 +180,16 @@ Siga os passos abaixo para rodar o projeto em modo desenvolvimento.
   make generate-index
 ```
 
+- Executa testes:
+```bash
+  make test
+```
+
+- Executa testes de cobertura:
+```bash
+  make test-coverage
+```
+
 
 ### 2.2. Documentação
 
