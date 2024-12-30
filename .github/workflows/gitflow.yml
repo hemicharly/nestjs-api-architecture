@@ -67,7 +67,7 @@ jobs:
 
           PR_DESCRIPTION="This Pull Request merges the release branch '$RELEASE_BRANCH' into 'main'."
           PR_BODY=$(cat .github/PULL_REQUEST_TEMPLATE/release.md)
-          PR_BODY=$(echo "$PR_BODY" | sed "s/\$PR_DESCRIPTION/$PR_DESCRIPTION/g")
+          PR_BODY=$(echo "$PR_BODY" | sed "s|\$PR_DESCRIPTION|$PR_DESCRIPTION|g")
           
           # Check if PR already exists (open, closed, or merged)
           EXISTING_PR=$(gh pr list --base main --head "$RELEASE_BRANCH" --json state --jq '.[] | select(.state == "OPEN" or .state == "MERGED" or .state == "CLOSED")')
@@ -92,7 +92,7 @@ jobs:
           
           PR_DESCRIPTION="This Pull Request merges the feature branch '$FEATURE_BRANCH' into 'develop'."
           PR_BODY=$(cat .github/PULL_REQUEST_TEMPLATE/feature.md)
-          PR_BODY=$(echo "$PR_BODY" | sed "s/\$PR_DESCRIPTION/$PR_DESCRIPTION/g")
+          PR_BODY=$(echo "$PR_BODY" | sed "s|\$PR_DESCRIPTION|$PR_DESCRIPTION|g")
           
           # Check if PR already exists (open, closed, or merged)
           EXISTING_PR=$(gh pr list --base develop --head "$FEATURE_BRANCH" --json state --jq '.[] | select(.state == "OPEN" or .state == "MERGED" or .state == "CLOSED")')
