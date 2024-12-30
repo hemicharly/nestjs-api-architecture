@@ -44,7 +44,7 @@ timesheet-in-transit-api/
 │   │   │-- main.ts
 │   │   │-- seed.module.ts
 │   │   │-- seed.ts
-│   │   │-- entrypoint/
+│   │   │-- entrypoints/
 │   │   │   │-- config/
 │   │   │   │-- consumers/
 │   │   │   │-- web/
