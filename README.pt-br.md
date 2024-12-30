@@ -75,6 +75,10 @@ timesheet-in-transit-api/
 │   │   │-- shared/
 │   │   │   │-- audit/
 │   │   │   │-- config/
+│   │-- test/
+│   │   │-- entrypoints/
+│   │   │   │-- web/
+│   │   │   │   │-- rest/
 ```
 
 ### **entrypoints**

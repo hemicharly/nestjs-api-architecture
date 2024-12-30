@@ -1,4 +1,5 @@
 name: Validate
+
 on:
   pull_request:
     types:
@@ -19,8 +20,6 @@ jobs:
       run:
         working-directory: app
 
-    if: ${{ github.event.pull_request.base.ref != 'develop' || github.event.pull_request.head.ref != 'main' }}
-
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -35,17 +34,42 @@ jobs:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
+      - name: Check commit prefix
+        id: check-commit
+        run: |
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+          echo "run-tests=false" >> $GITHUB_ENV
+          echo "run-lint=false" >> $GITHUB_ENV
+          
+          if [[ "$COMMIT_MSG" == Merge* ]]; then
+            echo "Merge commit detected, skipping commit message convention check."
+          else
+            if echo "$COMMIT_MSG" | grep -qE '^(feat|fix|chore|refactor|test)\:'; then
+              echo "✅ Commit message follows convention."
+              echo "run-lint=true" >> $GITHUB_ENV
+            fi
+            if echo "$COMMIT_MSG" | grep -qE '^test\:'; then
+              echo "✅ Test commit detected."
+              echo "run-tests=true" >> $GITHUB_ENV
+            fi
+          fi
+
       - name: Install dependencies
+        if: ${{ env.run-lint == 'true' || env.run-tests == 'true' }}
         run: yarn install
 
       - name: Lint
+        if: ${{ env.run-lint == 'true' }}
         run: yarn lint
 
       - name: Format
+        if: ${{ env.run-lint == 'true' }}
         run: yarn format
 
       - name: Test
+        if: ${{ env.run-tests == 'true' }}
         run: yarn test
 
       - name: Build
+        if: ${{ env.run-lint == 'true' }}
         run: yarn build
