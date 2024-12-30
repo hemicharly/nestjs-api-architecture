@@ -99,6 +99,11 @@ The `infrastructure` module manages the application's external communication, su
 
 **Important**: The `infrastructure` module **must not contain business logic**.
 
+### **shared**
+
+The `shared` module is used to share common functionality/utilities.
+
+
 ## 2. Steps to Run the Project
 
 ### 2.1. Starting the Project in Development Mode

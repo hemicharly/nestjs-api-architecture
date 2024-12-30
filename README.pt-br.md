@@ -99,6 +99,11 @@ O módulo `infrastructure` gerencia a comunicação externa da aplicação, como
 
 **Importante**: O módulo `infrastructure` **não deve conter regras de negócio**.
 
+### **shared**
+
+O módulo `shared` é usado para compartilhar funcionalidades/utilitários comuns.
+
+
 ## 2. Passos para Rodar o Projeto
 
 ### 2.1. Iniciando o Projeto em Modo Desenvolvimento
