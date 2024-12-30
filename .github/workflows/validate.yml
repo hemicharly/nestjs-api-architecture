@@ -1,7 +1,12 @@
 name: Validate
 on:
   pull_request:
-    branches: [ main, release, develop ]
+    types:
+      - opened
+    branches:
+      - main
+      - develop
+      - "release/*"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
