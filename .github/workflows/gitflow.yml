@@ -90,7 +90,7 @@ jobs:
           # Extract branch name
           FEATURE_BRANCH=$(echo "${{ github.ref }}" | sed 's|refs/heads/||')
           
-          PR_DESCRIPTION="This Pull Request merges the feature branch '$FEATURE_BRANCH' into 'develop'."
+          PR_DESCRIPTION="This Pull Request merges the feature branch '$FEATURE_BRANCH' into 'develop'. It has implementations and functionality improvements."
           PR_BODY=$(cat .github/PULL_REQUEST_TEMPLATE/feature.md)
           PR_BODY=$(echo "$PR_BODY" | sed "s|\$PR_DESCRIPTION|$PR_DESCRIPTION|g")
           
