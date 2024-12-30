@@ -4,7 +4,7 @@ import { DynamicModule, Module, Type } from '@nestjs/common';
  * A module utility in NestJS that simplifies the registration of providers dynamically.
  *
  * This class provides a static `forFeature` method, which allows registering a provider dynamically
- * for use in a specific feature/module. The registered provider can then be exported for use in other modules.
+ * for use in a specific feature/module. The registered provider can then be exported for use in other entrypoints.
  *
  * @example
  *
@@ -29,7 +29,7 @@ import { DynamicModule, Module, Type } from '@nestjs/common';
 @Module({})
 export class IntegrationConfigModule {
   /**
-   * Registers a provider dynamically and exports it for use in other modules.
+   * Registers a provider dynamically and exports it for use in other entrypoints.
    *
    * @param integrationClientProviderImpl - The class type to be registered as a provider.
    * @returns {DynamicModule} - A dynamically configured module containing the provider and its export.
@@ -37,7 +37,7 @@ export class IntegrationConfigModule {
    * Structure of the returned module:
    * - `module`: The `IntegrationConfigModule` itself.
    * - `providers`: An array containing the dynamically registered provider.
-   * - `exports`: An array exporting the token of the registered provider, making it available in other modules.
+   * - `exports`: An array exporting the token of the registered provider, making it available in other entrypoints.
    */
   static forFeature<T>(integrationClientProviderImpl: Type<T>): DynamicModule {
     const token = integrationClientProviderImpl.name;

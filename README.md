@@ -12,6 +12,8 @@ It serves as a practical study for the "adaptation" of concepts such as **Clean 
 **Hexagonal Architecture**, with the goal of promoting the best software design practices, ensuring clear separation of
 responsibilities, and abstracting external dependencies.
 
+![architecture-timesheet-in-transit-api](diagram/architecture-timesheet-in-transit-api.png)
+
 ## 1. Installation Requirements
 
 To run the project, you will need the following requirements:
@@ -42,7 +44,7 @@ timesheet-in-transit-api/
 │   │   │-- main.ts
 │   │   │-- seed.module.ts
 │   │   │-- seed.ts
-│   │   │-- modules/
+│   │   │-- entrypoint/
 │   │   │   │-- config/
 │   │   │   │-- consumers/
 │   │   │   │-- web/
@@ -71,9 +73,9 @@ timesheet-in-transit-api/
 │   │   │   │-- config/
 ```
 
-### **modules**
+### **entrypoints**
 
-The `modules` module is responsible for managing the application's entry points, such as `web`, `jobs`, and
+The `entrypoints` module is responsible for managing the application's entry points, such as `web`, `jobs`, and
 `consumers`.
 
 **Important**: **It must not contain business logic**. This module may include input data validation for request

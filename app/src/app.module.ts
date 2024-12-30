@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { WebModule } from '@application/web';
-import { ConsumerModule } from '@src/modules/consumers';
+import { WebModule } from '@entrypoints/web';
+import { ConsumerModule } from '@src/entrypoints/consumers';
 
 @Module({
   imports: [WebModule, ConsumerModule],
