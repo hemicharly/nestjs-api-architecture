@@ -1,0 +1,43 @@
+name: PR Validation
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  pr-validation:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout o código
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check commit message convention
+        run: |
+          if git log -1 --pretty=%B | grep -Eq '^(feat|fix|docs|chore|style|refactor|perf|test)\(:\)'; then
+            echo "Commit message follows convention."
+          else
+            echo "ERROR: Commit message does not follow convention. Use 'feat:', 'fix:', etc."
+            exit 1
+          fi
+
+      - name: Ensure PR body has template content
+        run: |
+          PR_BODY=$(curl -s -H "Authorization: token ${{secrets.GH_PAT}}" \
+                          https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }})
+          
+          if [[ "$PR_BODY" != *"## Tipo de Mudança"* ]]; then
+            echo "ERROR: PR body does not contain the required template content."
+            exit 1
+          else
+            echo "PR body contains template."
+          fi
