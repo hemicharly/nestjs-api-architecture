@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "husky": "^9.1.7"
+  }
+}
