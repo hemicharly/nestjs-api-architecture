@@ -6,7 +6,7 @@ import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-clas
  * A module utility in NestJS that simplifies the registration of providers dynamically.
  *
  * This class provides a static `forFeature` method, which allows registering a provider dynamically
- * for use in a specific feature/module. The registered provider can then be exported for use in other modules.
+ * for use in a specific feature/module. The registered provider can then be exported for use in other entrypoints.
  *
  * @example
  *
@@ -32,7 +32,7 @@ import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-clas
 @Module({})
 export class RepositoryConfigModule {
   /**
-   * Registers a provider dynamically and exports it for use in other modules.
+   * Registers a provider dynamically and exports it for use in other entrypoints.
    *
    * @param entity - The class type to be registered an entity database.
    * @param repositoryProviderImpl - The class type to be registered as a provider.
@@ -41,7 +41,7 @@ export class RepositoryConfigModule {
    * Structure of the returned module:
    * - `module`: The `RepositoryConfigModule` itself.
    * - `providers`: An array containing the dynamically registered provider.
-   * - `exports`: An array exporting the token of the registered provider, making it available in other modules.
+   * - `exports`: An array exporting the token of the registered provider, making it available in other entrypoints.
    */
   static forFeature<T>(entity: EntityClassOrSchema[], repositoryProviderImpl: Type<T>): DynamicModule {
     const token = repositoryProviderImpl.name;
