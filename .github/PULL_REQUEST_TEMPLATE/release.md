@@ -4,13 +4,13 @@
 $PR_DESCRIPTION
 
 ## Change Type
-- [x] New Feature
+- [ ] New Feature
 - [ ] Hot Fix or Bug Fix
 - [ ] Branch synchronization
-- [ ] New Release
+- [x] New Release
 
 ## Checklist
 - [x] Code follows defined style standards.
 - [x] New or updated tests added.
 - [x] Test coverage remains acceptable.
-- [ ] Documentation has been updated, if applicable.
+- [x] Documentation has been updated, if applicable.
