@@ -63,6 +63,7 @@ jobs:
         run: yarn lint
 
       - name: Format
+        if: ${{ env.run-lint == 'true' }}
         run: yarn format
 
       - name: Test
