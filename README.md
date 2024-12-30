@@ -1,9 +1,14 @@
-# timesheet-in-transit-api
+# timesheet-in-transit-api (NestJs)
 
-## Documentation available in languages
+<p align="center">
+  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+</p>
+
+### Documentation available in languages
 
 [![en](https://img.shields.io/badge/lang-en-blue.svg)](README.md)
 [![pt-br](https://img.shields.io/badge/lang-pt--br-green.svg)](README.pt-br.md)
+
 
 ## Introduction
 
