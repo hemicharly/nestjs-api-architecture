@@ -1,18 +1,16 @@
 ## Description
 <!-- Briefly explain what was done in this PR. -->
 
+$PR_DESCRIPTION
+
 ## Change Type
-- [ ] New Feature
-- [ ] Bug Fix
-- [ ] Refactoring
-- [ ] Documentation
-- [ ] Maintenance Task
+- [x] New Feature
+- [ ] Hot Fix or Bug Fix
+- [ ] Branch synchronization
+- [ ] New Release
 
 ## Checklist
-- [ ] Code follows defined style standards.
-- [ ] New or updated tests added.
-- [ ] Test coverage remains acceptable.
+- [x] Code follows defined style standards.
+- [x] New or updated tests added.
+- [x] Test coverage remains acceptable.
 - [ ] Documentation has been updated, if applicable.
-
-## Related to
-<!-- Reference issues or other PRs. -->

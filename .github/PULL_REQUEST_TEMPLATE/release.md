@@ -1,13 +1,13 @@
 ## Description
 <!-- Briefly explain what was done in this PR. -->
 
-This Pull Request syncs changes from the 'main' branch to the 'develop' branch.
+$PR_DESCRIPTION
 
 ## Change Type
 - [ ] New Feature
 - [ ] Hot Fix or Bug Fix
-- [x] Branch synchronization
-- [ ] New Release
+- [ ] Branch synchronization
+- [x] New Release
 
 ## Checklist
 - [x] Code follows defined style standards.
