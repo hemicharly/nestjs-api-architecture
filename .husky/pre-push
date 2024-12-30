@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+
+echo "Shell used: $SHELL"
+
 BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
 
 # shellcheck disable=SC3010
