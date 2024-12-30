@@ -9,9 +9,9 @@ import {
   OrderStartUsecaseImpl
 } from '@core/usecases/orders/impl';
 import {
-  OrderCreationRequest,
+  OrderCreationRequest, OrderEndRequest,
   OrderQueryQuantityStatusRequest,
-  OrderQueryRequest
+  OrderQueryRequest, OrderStartRequest
 } from '@entrypoints/web/rest/orders/request';
 import {
   OrderCreateResponse,
@@ -139,6 +139,29 @@ describe('OrdersController', () => {
     const result = await controller.getOrderById(mockRequest, mockDto);
     expect(mockOrderFindByIdUsecase.execute).toHaveBeenCalledWith(expect.anything());
     expect(result).toEqual(expect.anything());
+  });
+
+  it('should call OrderStartUsecase.execute with correct parameters', async () => {
+    const mockRequest = { headers: {'x-api-key': '8c2e7d525bd34adfb52bb1fb24357a2d'}, body: {} } as any;
+    const mockDto: OrderStartRequest = {
+      startDatetime: "2024-12-29T22:59:41.255Z",
+      recordedLatitude: 13.174342,
+      recordedLongitude: 101.215167
+    }
+    await controller.startOrder(mockRequest, '6773205c93b1daa335239f03', mockDto);
+    expect(mockOrderStartUsecase.execute).toHaveBeenCalledWith(expect.anything());
+  });
+
+  it('should call OrderEndUsecase.execute with correct parameters', async () => {
+    const mockRequest = { headers: {'x-api-key': '8c2e7d525bd34adfb52bb1fb24357a2d'}, body: {} } as any;
+    const mockDto: OrderEndRequest = {
+      endDatetime: "2024-12-29T23:59:41.255Z",
+      recordedLatitude: 13.174342,
+      recordedLongitude: 101.215167,
+      comment: 'Finished'
+    }
+    await controller.endOrder(mockRequest, '6773205c93b1daa335239f03', mockDto);
+    expect(mockOrderEndUsecase.execute).toHaveBeenCalledWith(expect.anything());
   });
 
 });
