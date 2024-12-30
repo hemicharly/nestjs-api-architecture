@@ -16,9 +16,9 @@ npm run format:fix
 cd ..
 
 if [ -n "$(git status --porcelain)" ]; then
-  echo "Changes detected after formatting, adding to commit"
+  echo "✅ Changes detected after formatting, adding to commit"
   git add .
-  echo "Changes added to the commit"
+  echo "✅ Changes added to the commit"
 else
-  echo "No changes to add"
+  echo "✅ No changes to add"
 fi
