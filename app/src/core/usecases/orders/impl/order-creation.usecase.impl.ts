@@ -2,7 +2,7 @@ import { OrderCreationCoreEntity, OrderCoreEntity, OrderCoordsCoreEntity } from 
 import { OrderCreationUseCase } from '@core/usecases/orders';
 import { OrderRepositoryProvider } from '@core/providers/repositories';
 import { NotificationOrderRegisterUsecase } from '@core/usecases/notification';
-import { NotificationOrderCoreEntity } from 'src/core/domain/entities/notifications';
+import { NotificationOrderCoreEntity } from '@core/domain/entities/notifications';
 
 export class OrderCreationUseCaseImpl implements OrderCreationUseCase {
   constructor(

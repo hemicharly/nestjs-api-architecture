@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { WebhookIntegrationClientModule } from 'src/infrastructure/integrations/webhook-client';
-import { IntegrationInfraConfigModule } from 'src/infrastructure/integrations/config/abstract';
+import { WebhookIntegrationClientModule } from '@infrastructure/integrations/webhook-client';
+import { IntegrationInfraConfigModule } from '@infrastructure/integrations/config/abstract';
 
 const integrationInfraConfigModule = IntegrationInfraConfigModule.forModules([WebhookIntegrationClientModule]);
 
