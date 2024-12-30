@@ -4,6 +4,7 @@ on:
   pull_request:
     types:
       - opened
+      - synchronize
     branches:
       - main
       - develop
@@ -41,17 +42,13 @@ jobs:
           echo "run-tests=false" >> $GITHUB_ENV
           echo "run-lint=false" >> $GITHUB_ENV
           
-          if [[ "$COMMIT_MSG" == Merge* ]]; then
-            echo "Merge commit detected, skipping commit message convention check."
-          else
-            if echo "$COMMIT_MSG" | grep -qE '^(feat|fix|chore|refactor|test)\:'; then
-              echo "✅ Commit message follows convention."
-              echo "run-lint=true" >> $GITHUB_ENV
-            fi
-            if echo "$COMMIT_MSG" | grep -qE '^test\:'; then
-              echo "✅ Test commit detected."
-              echo "run-tests=true" >> $GITHUB_ENV
-            fi
+          if echo "$COMMIT_MSG" | grep -qE '^(feat|fix|chore|refactor|test)\:'; then
+            echo "✅ Commit message follows convention."
+            echo "run-lint=true" >> $GITHUB_ENV
+          fi
+          if echo "$COMMIT_MSG" | grep -qE '^test\:'; then
+            echo "✅ Test commit detected."
+            echo "run-tests=true" >> $GITHUB_ENV
           fi
 
       - name: Install dependencies
