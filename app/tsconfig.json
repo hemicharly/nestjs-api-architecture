@@ -19,8 +19,8 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@application/*": [
-        "src/modules/*"
+      "@entrypoints/*": [
+        "src/entrypoints/*"
       ],
       "@core/*": [
         "src/core/*"

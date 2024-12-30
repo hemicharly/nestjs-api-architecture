@@ -42,7 +42,7 @@ timesheet-in-transit-api/
 │   │   │-- main.ts
 │   │   │-- seed.module.ts
 │   │   │-- seed.ts
-│   │   │-- modules/
+│   │   │-- entrypoint/
 │   │   │   │-- config/
 │   │   │   │-- consumers/
 │   │   │   │-- web/
@@ -71,9 +71,9 @@ timesheet-in-transit-api/
 │   │   │   │-- config/
 ```
 
-### **modules**
+### **entrypoints**
 
-The `modules` module is responsible for managing the application's entry points, such as `web`, `jobs`, and
+The `entrypoints` module is responsible for managing the application's entry points, such as `web`, `jobs`, and
 `consumers`.
 
 **Important**: **It must not contain business logic**. This module may include input data validation for request
