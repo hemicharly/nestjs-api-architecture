@@ -17,12 +17,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout o código
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Check commit message convention
         run: |
+          echo "Listing recent commits:"
+          git log --oneline --max-count=10
+          
           if git log -1 --pretty=%B | grep -Eq '^(feat|fix|docs|chore|style|refactor|perf|test)\(:\)'; then
             echo "Commit message follows convention."
           else
@@ -35,7 +37,7 @@ jobs:
           PR_BODY=$(curl -s -H "Authorization: token ${{secrets.GH_PAT}}" \
                           https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }})
           
-          if [[ "$PR_BODY" != *"## Tipo de Mudança"* ]]; then
+          if [[ "$PR_BODY" != *"## Change Type"* ]]; then
             echo "ERROR: PR body does not contain the required template content."
             exit 1
           else
