@@ -1,0 +1,19 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "Running pre-commit"
+
+cd app
+
+npm run lint:fix
+npm run format:fix
+
+cd ..
+
+if [ -n "$(git status --porcelain)" ]; then
+  echo "Changes detected after formatting, adding to commit"
+  git add .
+  echo "Changes added to the commit"
+else
+  echo "No changes to add"
+fi
