@@ -1,13 +1,18 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-echo "Running pre-commit"
+echo "Running pre-commit..."
 
+# shellcheck disable=SC2164
 cd app
 
+echo "Running lint fix..."
 npm run lint:fix
+
+echo "Running format fix..."
 npm run format:fix
 
+# shellcheck disable=SC2103
 cd ..
 
 if [ -n "$(git status --porcelain)" ]; then
