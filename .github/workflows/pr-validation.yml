@@ -22,14 +22,21 @@ jobs:
 
       - name: Check commit message convention
         run: |
+          # Obtém a mensagem do último commit, ignorando merges
           COMMIT_MSG=$(git log -1 --pretty=%B)
 
-          if echo "$COMMIT_MSG" | grep -qE '^(feat|fix|docs|chore|style|refactor|test)\:(.*)+$'; then
-            echo "Commit message follows convention."
+          # Verifica se o commit é um merge
+          if [[ "$COMMIT_MSG" == Merge* ]]; then
+            echo "Merge commit detected, skipping commit message convention check."
           else
-            echo "🚫 ERROR: Commit message '$COMMIT_MSG' does not follow convention. Use 'feat:', 'fix:', etc."
-            echo "chore: description your commit"
-            exit 1
+            # Verifica se a mensagem do commit segue a convenção
+            if echo "$COMMIT_MSG" | grep -qE '^(feat|fix|docs|chore|style|refactor|test)\:(.*)+$'; then
+              echo "✅ Commit message follows convention."
+            else
+              echo "🚫 Commit message '$COMMIT_MSG' does not follow convention. Use 'feat:', 'fix:', etc."
+              echo "chore: description your commit"
+              exit 1
+            fi
           fi
 
       - name: Ensure PR body has template content
