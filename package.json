@@ -1,8 +1,16 @@
 {
-  "dependencies": {
-    "husky": "^9.1.7"
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*": "cd app && npm run lint:fix && npm run format:fix"
   },
   "scripts": {
     "prepare": "husky"
+  },
+  "dependencies": {
+    "husky": "^9.1.7"
   }
 }
