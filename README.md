@@ -12,6 +12,8 @@ It serves as a practical study for the "adaptation" of concepts such as **Clean 
 **Hexagonal Architecture**, with the goal of promoting the best software design practices, ensuring clear separation of
 responsibilities, and abstracting external dependencies.
 
+![architecture-timesheet-in-transit-api](diagram/architecture-timesheet-in-transit-api.png)
+
 ## 1. Installation Requirements
 
 To run the project, you will need the following requirements:
