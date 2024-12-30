@@ -37,7 +37,6 @@ jobs:
         uses: mathieudutour/github-tag-action@v6.2
         with:
           github_token: ${{ secrets.GH_PAT }}
-          custom_tag: v${{ env.TAG }}
           default_bump:  false
           default_prerelease_bump:  false
 
