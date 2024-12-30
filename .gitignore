@@ -1,5 +1,7 @@
 .idea
 
+/node_modules
+
 /app/dist
 /app/build
 /app/node_modules
