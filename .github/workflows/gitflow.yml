@@ -114,6 +114,10 @@ jobs:
         run: |
           # Extract branch name
           HOTFIX_BRANCH=$(echo "${{ github.ref }}" | sed 's|refs/heads/||')
+          
+          PR_DESCRIPTION="This Pull Request merges the hotfix branch '$HOTFIX_BRANCH' into 'main'. Fixes critical issues in **production**."
+          PR_BODY=$(cat .github/PULL_REQUEST_TEMPLATE/hotfix.md)
+          PR_BODY=$(echo "$PR_BODY" | sed "s|\$PR_DESCRIPTION|$PR_DESCRIPTION|g")
 
           # Check if PR already exists (open, closed, or merged)
           EXISTING_PR=$(gh pr list --base develop --head "$HOTFIX_BRANCH" --json state --jq '.[] | select(.state == "OPEN" or .state == "MERGED" or .state == "CLOSED")')
@@ -126,8 +130,12 @@ jobs:
               --base main \
               --head "$HOTFIX_BRANCH" \
               --title "Hotfix: Merge $HOTFIX_BRANCH into Main" \
-              --body "This PR fixes critical issues in production."
+              --body "$PR_BODY"
           fi
+          
+          PR_DESCRIPTION="This Pull Request merges the hotfix branch '$HOTFIX_BRANCH' into 'develop'. Fixes critical issues in **production**."
+          PR_BODY=$(cat .github/PULL_REQUEST_TEMPLATE/hotfix.md)
+          PR_BODY=$(echo "$PR_BODY" | sed "s|\$PR_DESCRIPTION|$PR_DESCRIPTION|g")
 
           # PR for hotfix to develop
           if gh pr list --base develop --head "$HOTFIX_BRANCH" --json id | grep -q id; then
@@ -138,7 +146,7 @@ jobs:
               --base develop \
               --head "$HOTFIX_BRANCH" \
               --title "Hotfix: Sync $HOTFIX_BRANCH with Develop" \
-              --body "This PR ensures hotfix changes are merged into 'develop'."
+              --body "$PR_BODY"
           fi
 
       # Notifications (Optional)
