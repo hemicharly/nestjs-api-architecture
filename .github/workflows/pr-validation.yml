@@ -22,10 +22,7 @@ jobs:
 
       - name: Check commit message convention
         run: |
-          echo "Listing recent commits:"
-          git log --oneline --max-count=10
-          
-          if git log -1 --pretty=%B | grep -Eq '^(feat|fix|docs|chore|style|refactor|perf|test)\(:\)'; then
+          if git log -1 --pretty=%B | grep -Eq '^(feat|fix|docs|chore|style|refactor|test)\:(.*)+$'; then
             echo "Commit message follows convention."
           else
             echo "ERROR: Commit message does not follow convention. Use 'feat:', 'fix:', etc."

@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+COMMIT_MSG=$(git log -1 --pretty=%B)
+
+if echo "$COMMIT_MSG" | grep -qE '^(feat|fix|docs|chore|style|refactor|test)\:(.*)+$'; then
+  echo "Valid commit: $COMMIT_MSG"
+else
+  echo "🚫 The commit '$COMMIT_MSG' does not follow the Gitflow standard."
+  echo "chore: feature/new-functionality"
+  exit 1
+fi
