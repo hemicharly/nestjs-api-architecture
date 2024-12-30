@@ -39,6 +39,8 @@ jobs:
         id: check-commit
         run: |
           COMMIT_MSG=$(git log -1 --pretty=%B)
+          echo "Commit message: $COMMIT_MSG"
+          
           echo "run-tests=false" >> $GITHUB_ENV
           echo "run-lint=false" >> $GITHUB_ENV
           
