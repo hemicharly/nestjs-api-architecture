@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+echo "Checking commit pattern..."
+npx --no-install commitlint --edit "$1"
