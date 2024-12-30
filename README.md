@@ -182,6 +182,17 @@ Follow the steps below to run the project in development mode.
   make generate-index
 ```
 
+- Runs test:
+```bash
+  make test
+```
+
+- Runs test with coverage:
+```bash
+  make test-coverage
+```
+
+
 ### 2.2. Documentation
 
 The project includes several forms of documentation accessible locally:

@@ -1,7 +1,7 @@
 import { CheckApiKeyUsecase } from '@core/usecases/auth';
 import { ApiKeyApplicationRepositoryProvider } from '@core/providers/repositories';
 import { ApikeyApplicationCoreEntity } from '@core/domain/entities/auth';
-import { CustomUnauthorizedException } from 'src/core/domain/exceptions';
+import { CustomUnauthorizedException } from '@core/domain/exceptions';
 
 export class CheckApiKeyUsecaseImpl implements CheckApiKeyUsecase {
   constructor(private readonly repositoryProvider: ApiKeyApplicationRepositoryProvider) {}
