@@ -36,14 +36,14 @@ jobs:
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
 
-      - name: Fetch all branches
-        run: git fetch --all
+      - name: Fetch the reference branch
+        run: git fetch origin ${{ github.ref }}
 
       - name: Get pull request commits
         id: pr-commits
         run: |
           # Obter a lista de commits do pull request
-          PR_COMMITS=$(git log --no-merges origin/${{ github.event.pull_request.base.ref }}..HEAD --oneline)
+          PR_COMMITS=$(git log --no-merges origin/${{ github.ref }}..HEAD --oneline)
           echo "Commits in the PR: $PR_COMMITS"
           echo "PR_COMMITS=$PR_COMMITS" >> $GITHUB_ENV
 
