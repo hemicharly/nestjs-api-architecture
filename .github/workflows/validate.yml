@@ -43,7 +43,7 @@ jobs:
         id: pr-commits
         run: |
           # Obter a lista de commits do pull request
-          PR_COMMITS=$(git log origin/${{ github.event.pull_request.base.ref }}..HEAD --oneline)
+          PR_COMMITS=$(git log --no-merges origin/${{ github.event.pull_request.base.ref }}..HEAD --oneline)
           echo "Commits in the PR: $PR_COMMITS"
           echo "PR_COMMITS=$PR_COMMITS" >> $GITHUB_ENV
 
