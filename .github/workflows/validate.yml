@@ -4,15 +4,10 @@ on:
   pull_request:
     types:
       - opened
-      - synchronize
     branches:
       - main
       - develop
       - "release/*"
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 
 jobs:
   validate:
@@ -25,33 +20,33 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v4
 
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-
-      - uses: actions/cache@v3
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Get pull request commits
+        id: pr-commits
+        run: |
+          # Obter a lista de commits do pull request
+          PR_COMMITS=$(git log origin/${{ github.event.pull_request.base.ref }}..HEAD --oneline)
+          echo "Commits in the PR: $PR_COMMITS"
+          echo "PR_COMMITS=$PR_COMMITS" >> $GITHUB_ENV
 
       - name: Check commit prefix
         id: check-commit
         run: |
-          COMMIT_MSG=$(git log -1 --pretty=%B)
+          COMMIT_MSG=$PR_COMMITS
           echo "Commit message: $COMMIT_MSG"
-          
           echo "run-tests=false" >> $GITHUB_ENV
           echo "run-lint=false" >> $GITHUB_ENV
-          
-          if echo "$COMMIT_MSG" | grep -qE '^(feat|fix|chore|refactor|test|Merge)'; then
-            echo "✅ Commit message follows convention."
-            echo "run-lint=true" >> $GITHUB_ENV
-          fi
-          if echo "$COMMIT_MSG" | grep -qE '^test\:'; then
-            echo "✅ Test commit detected."
-            echo "run-tests=true" >> $GITHUB_ENV
-          fi
+    
+          while IFS= read -r COMMIT; do
+            echo "Checking commit: $COMMIT"
+            if echo "$COMMIT" | grep -qE '^(feat|fix|chore|refactor|test)\:'; then
+              echo "✅ Commit message follows convention."
+              echo "run-lint=true" >> $GITHUB_ENV
+            fi
+            if echo "$COMMIT" | grep -qE '^test\:'; then
+              echo "✅ Test commit detected."
+              echo "run-tests=true" >> $GITHUB_ENV
+            fi
+          done <<< "$PR_COMMITS"
 
       - name: Install dependencies
         if: ${{ env.run-lint == 'true' || env.run-tests == 'true' }}
