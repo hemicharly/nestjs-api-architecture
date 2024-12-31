@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { WebhookIntegrationClientModule } from '@infrastructure/integrations/webhook-client';
-import { DynamicConfigModule } from '@shared/config/abstract';
+import { DynamicConfigModule } from '@shared/config';
 
 @Module({
   ...DynamicConfigModule.forModules([WebhookIntegrationClientModule]),

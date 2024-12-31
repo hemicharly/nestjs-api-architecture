@@ -1,5 +1,4 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { configEnv } from '@src/shared/config';
 import { Message } from '@aws-sdk/client-sqs';
 import { NotificationSendWebhookUsecaseImpl } from '@core/usecases/notification/impl';
 import { NotificationSendWebhookUsecase } from '@core/usecases/notification';
@@ -12,12 +11,8 @@ export class NotificationOrderConsumerService {
   @Inject(NotificationSendWebhookUsecaseImpl.name)
   private readonly notificationSendWebhookUsecase: NotificationSendWebhookUsecase;
 
-  @SqsMessageHandler({ queueName: configEnv.aws.sqs.queueNames.queueNotificationOrder, waitTimeSeconds: 5, batchSize: 10 })
+  @SqsMessageHandler({ queueNameEnv: 'QUEUE_NOTIFICATION_ORDER', waitTimeSeconds: 5, batchSize: 10 })
   async handleMessage(message: Message) {
-    if (!message || !message.Body) {
-      this.logger.warn(`[QueueName: ${configEnv.aws.sqs.queueNames.queueNotificationOrder}] Empty message body received in queue.`);
-      return;
-    }
     await this.notificationSendWebhookUsecase.execute(message.Body);
   }
 }

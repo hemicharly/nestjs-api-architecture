@@ -87,10 +87,10 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
         const method = prototype[methodName];
         const metadata = Reflect.getMetadata(SQS_HANDLER_METADATA, method);
         if (metadata) {
-          const { queueName, batchSize, waitTimeSeconds, visibilityTimeout, enabledVisibilityTimeout } = metadata;
+          const { queueNameEnv, batchSize, waitTimeSeconds, visibilityTimeout, enabledVisibilityTimeout } = metadata;
           this.handlers.set(
             {
-              queueName,
+              queueNameEnv,
               batchSize,
               waitTimeSeconds,
               visibilityTimeout,
@@ -114,7 +114,8 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
     const poll = async () => {
       if (this.isShuttingDown) return;
 
-      for (const [{ queueName, batchSize, waitTimeSeconds, visibilityTimeout, enabledVisibilityTimeout }, handler] of this.handlers.entries()) {
+      for (const [{ queueNameEnv, batchSize, waitTimeSeconds, visibilityTimeout, enabledVisibilityTimeout }, handler] of this.handlers.entries()) {
+        const queueName = this.configEnvProvider.getString(queueNameEnv);
         const queueUrl = SqsBuilderConfig.builderQueueUrl(queueName, this.configEnvProvider);
         try {
           const command = new ReceiveMessageCommand({
