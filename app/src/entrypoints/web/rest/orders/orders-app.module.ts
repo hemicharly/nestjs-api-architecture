@@ -8,6 +8,9 @@ import { SqsQueueInfraModule } from '@infrastructure/queue/sqs';
 import { OrderCreationUseCaseImpl, OrderEndUsecaseImpl, OrderFindByIdUsecaseImpl, OrderQueryQuantityStatusUsecaseImpl, OrderQueryUsecaseImpl, OrderStartUsecaseImpl } from '@core/usecases/orders/impl';
 import { OrderRepositoryProviderImpl } from '@infrastructure/repositories/orders/impl';
 import { UsecaseProviderConfig } from '@shared/config/abstract';
+import { ConfigEnvProvider } from '@core/providers/config-env';
+import { ConfigEnvProviderImpl } from '@infrastructure/config-env/impl';
+import { ConfigEnvModule } from '@infrastructure/config-env';
 
 const usecaseProvidersConfig: Provider[] = [
   UsecaseProviderConfig(OrderCreationUseCaseImpl, [OrderRepositoryProviderImpl, NotificationOrderRegisterUsecaseImpl]),
@@ -16,11 +19,11 @@ const usecaseProvidersConfig: Provider[] = [
   UsecaseProviderConfig(OrderFindByIdUsecaseImpl, [OrderRepositoryProviderImpl]),
   UsecaseProviderConfig(OrderEndUsecaseImpl, [OrderRepositoryProviderImpl, NotificationOrderRegisterUsecaseImpl]),
   UsecaseProviderConfig(OrderStartUsecaseImpl, [OrderRepositoryProviderImpl, NotificationOrderRegisterUsecaseImpl]),
-  UsecaseProviderConfig(NotificationOrderRegisterUsecaseImpl, [SqsProducerQueueProviderImpl]),
+  UsecaseProviderConfig(NotificationOrderRegisterUsecaseImpl, [SqsProducerQueueProviderImpl, ConfigEnvProviderImpl]),
 ];
 
 @Module({
-  imports: [RepositoryInfraModule, AuthAppModule, SqsQueueInfraModule],
+  imports: [RepositoryInfraModule, AuthAppModule, SqsQueueInfraModule, ConfigEnvModule],
   controllers: [OrdersController],
   providers: usecaseProvidersConfig,
 })

@@ -14,7 +14,7 @@ export const configEnv = {
       endpoint: AWS_SQS_ENDPOINT,
       queueUrl: (queueName: string) => `${AWS_SQS_ENDPOINT}/${AWS_ACCOUNT_ID}/${queueName}`,
       queueNames: {
-        queueNotificationOrder: process.env.SQS_QUENAME_NOTIFICATION_ORDER || 'queue_notification_order',
+        queueNotificationOrder: process.env.QUEUE_NOTIFICATION_ORDER || 'queue_notification_order',
       },
     },
   },
