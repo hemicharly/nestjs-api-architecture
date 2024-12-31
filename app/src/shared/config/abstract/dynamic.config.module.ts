@@ -86,7 +86,6 @@ export class DynamicConfigModule {
    */
   static forModules(modules: Type[]): Partial<DynamicModule> {
     return {
-      module: DynamicConfigModule,
       imports: modules,
       exports: modules,
     };
