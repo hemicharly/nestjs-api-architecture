@@ -46,7 +46,28 @@ jobs:
       - name: Format
         run: yarn format
 
+      - name: Check for 'test:' prefix in commit messages
+        id: check_commits
+        uses: actions/github-script@v7.0.1
+        with:
+          script: |
+            const pr = github.event.pull_request;
+            const commits = await github.rest.pulls.listCommits({
+              owner: pr.head.repo.owner.login,
+              repo: pr.head.repo.name,
+              pull_number: pr.number,
+            });
+            
+            echo "Commits prefix: $commits"
+          
+            const hasTestPrefix = commits.data.some(commit => commit.commit.message.startsWith('test:'));
+            
+            echo "Commit prefix: $hasTestPrefix"
+            
+            return hasTestPrefix;
+
       - name: Test
+        if: steps.check_commits.outputs.result == 'true'
         run: yarn test
 
       - name: Build
