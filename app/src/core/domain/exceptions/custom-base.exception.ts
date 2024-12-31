@@ -1,4 +1,4 @@
-import { ErrorItemCoreEntity } from '@core/domain/entities/common';
+import { ErrorItemCoreEntity } from '@core/domain/entities/shared';
 
 export abstract class CustomBaseException extends Error {
   protected constructor(

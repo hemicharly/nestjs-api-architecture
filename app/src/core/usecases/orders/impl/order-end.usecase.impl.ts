@@ -1,6 +1,6 @@
 import { OrderRepositoryProvider } from '@core/providers/repositories';
 import { OrderCoordsCoreEntity, OrderEndCoreEntity } from '@core/domain/entities/orders';
-import { ValidateDatesCoreEntity } from '@core/domain/entities/common';
+import { ValidateDatesCoreEntity } from '@core/domain/entities/shared';
 import { OrderEndUsecase } from '@core/usecases/orders';
 import { NotificationOrderRegisterUsecase } from '@core/usecases/notification';
 import { NotificationOrderCoreEntity } from '@core/domain/entities/notifications';

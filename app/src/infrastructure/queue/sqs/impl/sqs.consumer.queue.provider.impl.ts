@@ -1,11 +1,12 @@
-import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { ChangeMessageVisibilityCommand, DeleteMessageCommand, ReceiveMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
 import { DiscoveryService, MetadataScanner } from '@nestjs/core';
-import { SQSClientConfig } from '@aws-sdk/client-sqs/dist-types/SQSClient';
-import { configEnv } from '@shared/config';
 import { SQS_HANDLER_METADATA } from '@infrastructure/queue/sqs/config/decorators';
 import { SqsDecoratorsTypes } from '@infrastructure/queue/sqs/config/decorators/types';
 import { TracerContextAudit } from '@shared/audit';
+import { ConfigEnvProvider } from '@core/providers/config-env';
+import { ConfigEnvProviderImpl } from '@infrastructure/config-env/impl';
+import { SqsBuilderConfig } from '@infrastructure/queue/sqs/config';
 
 @Injectable()
 export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestroy {
@@ -38,15 +39,10 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
   constructor(
     private readonly discoveryService: DiscoveryService,
     private readonly metadataScanner: MetadataScanner,
+    @Inject(ConfigEnvProviderImpl.name)
+    private readonly configEnvProvider: ConfigEnvProvider,
   ) {
-    const config: SQSClientConfig = {
-      region: configEnv.aws.region,
-    };
-    if (configEnv.nodeEnv === 'development') {
-      config.credentials = { accessKeyId: 'test', secretAccessKey: 'test' };
-      config.endpoint = configEnv.aws.sqs.endpoint;
-    }
-    this.sqsClient = new SQSClient(config);
+    this.sqsClient = SqsBuilderConfig.builderClient(this.configEnvProvider);
   }
 
   /**
@@ -91,8 +87,17 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
         const method = prototype[methodName];
         const metadata = Reflect.getMetadata(SQS_HANDLER_METADATA, method);
         if (metadata) {
-          const { queueName, batchSize, waitTimeSeconds, visibilityTimeout, enabledVisibilityTimeout } = metadata;
-          this.handlers.set({ queueName, batchSize, waitTimeSeconds, visibilityTimeout, enabledVisibilityTimeout }, method.bind(instance));
+          const { queueNameEnv, batchSize, waitTimeSeconds, visibilityTimeout, enabledVisibilityTimeout } = metadata;
+          this.handlers.set(
+            {
+              queueNameEnv,
+              batchSize,
+              waitTimeSeconds,
+              visibilityTimeout,
+              enabledVisibilityTimeout,
+            },
+            method.bind(instance),
+          );
         }
       }
     }
@@ -109,8 +114,9 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
     const poll = async () => {
       if (this.isShuttingDown) return;
 
-      for (const [{ queueName, batchSize, waitTimeSeconds, visibilityTimeout, enabledVisibilityTimeout }, handler] of this.handlers.entries()) {
-        const queueUrl = configEnv.aws.sqs.queueUrl(queueName);
+      for (const [{ queueNameEnv, batchSize, waitTimeSeconds, visibilityTimeout, enabledVisibilityTimeout }, handler] of this.handlers.entries()) {
+        const queueName = this.configEnvProvider.getString(queueNameEnv);
+        const queueUrl = SqsBuilderConfig.builderQueueUrl(queueName, this.configEnvProvider);
         try {
           const command = new ReceiveMessageCommand({
             QueueUrl: queueUrl,

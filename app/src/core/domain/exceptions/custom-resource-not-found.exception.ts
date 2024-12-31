@@ -1,5 +1,5 @@
 import { CustomBaseException } from '@core/domain/exceptions';
-import { ErrorItemCoreEntity } from '@core/domain/entities/common';
+import { ErrorItemCoreEntity } from '@core/domain/entities/shared';
 
 export class CustomResourceNotFoundException extends CustomBaseException {
   constructor(protected readonly error: ErrorItemCoreEntity) {

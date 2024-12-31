@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Logger } from '@nestjs/common';
 import { AxiosError, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
-import { IntegrationLoggerDto } from '@infrastructure/integrations/shared/audit';
+import { IntegrationLoggerDto } from '@shared/audit/integrations/index';
 import { TracerContextAudit } from '@shared/audit';
 
 /**
@@ -12,10 +12,10 @@ import { TracerContextAudit } from '@shared/audit';
  *
  * ```typescript
  * import { WebhookIntegrationClientProvider } from '@core/providers/integrations';
- * import { Injectable, Logger } from '@nestjs/shared';
+ * import { Injectable, Logger } from '@nestjs/common';
  * import { firstValueFrom } from 'rxjs';
  * import { HttpService } from '@nestjs/axios';
- * import { IntegrationAuditCommon } from '@infrastructure/integrations/shared/audit';
+ * import { IntegrationAuditCommon } from '@shared/audit/integrations';
  *
  * @Injectable()
  * export class WebhookIntegrationClientProviderImpl implements WebhookIntegrationClientProvider {

@@ -1,31 +1,29 @@
 import { ProducerQueueProvider } from '@core/providers/queue';
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { SendMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
-import { configEnv } from '@src/shared/config';
-import { SQSClientConfig } from '@aws-sdk/client-sqs/dist-types/SQSClient';
 import { TracerContextAudit } from '@shared/audit';
+import { SqsBuilderConfig } from '@infrastructure/queue/sqs/config';
+import { ConfigEnvProviderImpl } from '@infrastructure/config-env/impl';
+import { ConfigEnvProvider } from '@core/providers/config-env';
 
 @Injectable()
 export class SqsProducerQueueProviderImpl implements ProducerQueueProvider {
   private readonly logger = new Logger(SqsProducerQueueProviderImpl.name);
   private readonly sqsClient: SQSClient;
 
-  constructor() {
-    const config: SQSClientConfig = {
-      region: configEnv.aws.region,
-    };
-    if (configEnv.nodeEnv === 'development') {
-      config.credentials = { accessKeyId: 'test', secretAccessKey: 'test' };
-      config.endpoint = configEnv.aws.sqs.endpoint;
-    }
-    this.sqsClient = new SQSClient(config);
+  constructor(
+    @Inject(ConfigEnvProviderImpl.name)
+    private readonly configEnvProvider: ConfigEnvProvider,
+  ) {
+    this.sqsClient = SqsBuilderConfig.builderClient(this.configEnvProvider);
   }
 
   public async sendMessage(queueName: string, message: string): Promise<void> {
     try {
+      const queueUrl = SqsBuilderConfig.builderQueueUrl(queueName, this.configEnvProvider);
       const sendMessageCommand = new SendMessageCommand({
         MessageBody: message,
-        QueueUrl: `${configEnv.aws.sqs.queueUrl(queueName)}`,
+        QueueUrl: queueUrl,
         MessageAttributes: {
           TracerId: {
             DataType: 'String',
@@ -43,6 +41,7 @@ export class SqsProducerQueueProviderImpl implements ProducerQueueProvider {
 
   public async sendMessageWithDelayAndAttempt(queueName: string, message: string, delaySeconds: number, attempt: number): Promise<void> {
     try {
+      const queueUrl = SqsBuilderConfig.builderQueueUrl(queueName, this.configEnvProvider);
       const sendMessageCommand = new SendMessageCommand({
         MessageBody: message,
         MessageAttributes: {
@@ -55,7 +54,7 @@ export class SqsProducerQueueProviderImpl implements ProducerQueueProvider {
             StringValue: String(attempt),
           },
         },
-        QueueUrl: `${configEnv.aws.sqs.queueUrl(queueName)}`,
+        QueueUrl: queueUrl,
         DelaySeconds: delaySeconds || 0,
       });
       this.logger.log(`[QueueName: ${queueName}] Send message to SQS with delay and attempt.`);
