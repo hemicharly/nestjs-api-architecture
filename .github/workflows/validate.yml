@@ -44,7 +44,7 @@ jobs:
           echo "run-tests=false" >> $GITHUB_ENV
           echo "run-lint=false" >> $GITHUB_ENV
           
-          if echo "$COMMIT_MSG" | grep -qE '^(feat|fix|chore|refactor|test)\:'; then
+          if echo "$COMMIT_MSG" | grep -qE '^(feat|fix|chore|refactor|test|Merge)'; then
             echo "✅ Commit message follows convention."
             echo "run-lint=true" >> $GITHUB_ENV
           fi
