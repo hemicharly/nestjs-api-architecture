@@ -1,4 +1,4 @@
-import { DynamicModule, Module, Type } from '@nestjs/common';
+import { DynamicModule, Module, Provider, Type } from '@nestjs/common';
 
 /**
  * A module utility in NestJS that simplifies the registration of providers dynamically.
@@ -23,7 +23,7 @@ export class DynamicConfigModule {
    * @returns {DynamicModule} - A dynamically configured module containing the provider and its export.
    *
    * Structure of the returned module:
-   * - `module`: The `IntegrationConfigModule` itself.
+   * - `module`: The `DynamicConfigModule` itself.
    * - `providers`: An array containing the dynamically registered provider.
    * - `exports`: An array exporting the token of the registered provider, making it available in other entrypoints.
    */
@@ -36,6 +36,24 @@ export class DynamicConfigModule {
       exports: providersImpl.map((p) => p.name),
     };
   }
+
+  /**
+   * Registers a provider dynamically and exports it for use in other entrypoints.
+   *
+   * @param providerImpl - The class type to be registered as a provider.
+   * @param injectsImpl - The class type to be registered injects of provider.
+   * @returns {Provider} - A dynamically configured module containing the provider and its export.
+   *
+   * Structure of the returned module:
+   * - `module`: The `DynamicConfigModule` itself.
+   * - `providers`: An array containing the dynamically registered provider.
+   * - `exports`: An array exporting the token of the registered provider, making it available in other entrypoints.
+   */
+  static forProvider = (providerImpl: Type, injectsImpl?: Type[]): Provider => ({
+    provide: providerImpl.name,
+    useFactory: (...args: any[]) => new providerImpl(...args),
+    inject: injectsImpl?.map((m) => m.name) || [],
+  });
 
   /**
    * Registers a modules dynamically and exports it for use in other entrypoints.

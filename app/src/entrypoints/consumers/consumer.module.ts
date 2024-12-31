@@ -3,11 +3,11 @@ import { WebhookIntegrationClientModule } from '@infrastructure/integrations/web
 import { NotificationSendWebhookUsecaseImpl } from '@core/usecases/notification/impl';
 import { WebhookIntegrationClientProviderImpl } from '@infrastructure/integrations/webhook-client/impl';
 import { NotificationOrderConsumerService } from '@entrypoints/consumers/notification';
-import { UsecaseProviderConfig } from '@shared/config/abstract';
+import { DynamicConfigModule } from '@shared/config/abstract';
 import { SqsQueueInfraModule } from '@infrastructure/queue/sqs';
 
 @Module({
   imports: [SqsQueueInfraModule, WebhookIntegrationClientModule],
-  providers: [UsecaseProviderConfig(NotificationSendWebhookUsecaseImpl, [WebhookIntegrationClientProviderImpl]), NotificationOrderConsumerService],
+  providers: [DynamicConfigModule.forProvider(NotificationSendWebhookUsecaseImpl, [WebhookIntegrationClientProviderImpl]), NotificationOrderConsumerService],
 })
 export class ConsumerModule {}
