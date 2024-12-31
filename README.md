@@ -50,18 +50,18 @@ timesheet-in-transit-api/
 │   │   │-- seed.module.ts
 │   │   │-- seed.ts
 │   │   │-- entrypoints/
-│   │   │   │-- config/
 │   │   │   │-- consumers/
 │   │   │   │-- web/
-│   │   │   │   │-- shared/
 │   │   │   │   │-- config/
 │   │   │   │   │-- rest/
+│   │   │   │   │-- shared/
 │   │   │-- core/
 │   │   │   │-- domain/
 │   │   │   │   │-- entities/
 │   │   │   │   │-- enums/
 │   │   │   │   │-- exceptions/
 │   │   │   │-- providers/
+│   │   │   │   │-- config-env/
 │   │   │   │   │-- integrations/
 │   │   │   │   │-- queue/
 │   │   │   │   │-- repositories/
@@ -70,6 +70,7 @@ timesheet-in-transit-api/
 │   │   │   │   │-- notification/
 │   │   │   │   │-- orders/
 │   │   │-- infrastructure/
+│   │   │   │-- config-env/
 │   │   │   │-- integrations/
 │   │   │   │-- queue/
 │   │   │   │-- repositories/

@@ -1,1 +1,1 @@
-export * from './config.env';
+export * from './dynamic.config.module';

@@ -1,13 +1,10 @@
 import { Module } from '@nestjs/common';
 import { WebhookIntegrationClientProviderImpl } from '@infrastructure/integrations/webhook-client/impl';
-import { IntegrationConfigModule } from '@infrastructure/integrations/config/abstract';
 import { WebhookConfigModule } from '@infrastructure/integrations/webhook-client/config';
-
-const integrationConfigModule = IntegrationConfigModule.forFeature(WebhookIntegrationClientProviderImpl);
+import { DynamicConfigModule } from '@shared/config';
 
 @Module({
   imports: [WebhookConfigModule],
-  providers: integrationConfigModule.providers,
-  exports: integrationConfigModule.exports,
+  ...DynamicConfigModule.forFeature([WebhookIntegrationClientProviderImpl]),
 })
 export class WebhookIntegrationClientModule {}

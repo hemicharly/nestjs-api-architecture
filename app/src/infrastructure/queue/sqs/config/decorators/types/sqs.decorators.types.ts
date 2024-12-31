@@ -1,10 +1,10 @@
 export interface SqsDecoratorsTypes {
   /**
-   * The name of the SQS queue to be used.
+   * The environment variable name of the SQS queue to use.
    * - Required.
    * - Must be unique within the AWS Account and region context.
    */
-  queueName: string;
+  queueNameEnv: string;
 
   /**
    * Indicates whether the visibility timeout is enabled.

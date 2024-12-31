@@ -1,6 +1,6 @@
 import { OrderRepositoryProvider } from '@core/providers/repositories';
 import { OrderPaginationCoreEntity, OrderQueryCoreEntity } from '@core/domain/entities/orders';
-import { ValidateDatesCoreEntity } from '@core/domain/entities/common';
+import { ValidateDatesCoreEntity } from '@core/domain/entities/shared';
 import { OrderQueryUsecase } from '@core/usecases/orders';
 
 export class OrderQueryUsecaseImpl implements OrderQueryUsecase {

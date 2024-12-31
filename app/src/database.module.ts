@@ -1,15 +1,21 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { configEnv } from '@src/shared/config';
+import { ConfigEnvModule } from '@infrastructure/config-env';
+import { ConfigEnvProvider } from '@core/providers/config-env';
+import { ConfigEnvProviderImpl } from '@infrastructure/config-env/impl';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mongodb',
-      url: configEnv.database.mongodb.url,
-      entities: [__dirname + '/infrastructure/repositories/**/*.entity{.ts,.js}'],
-      synchronize: configEnv.database.mongodb.synchronize,
-      logging: false,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigEnvModule],
+      useFactory: async (configEnvProvider: ConfigEnvProvider) => ({
+        type: 'mongodb',
+        url: configEnvProvider.getString('MONGODB_URL'),
+        entities: [__dirname + '/infrastructure/repositories/**/*.entity{.ts,.js}'],
+        synchronize: configEnvProvider.getBoolean('TYPER_ORM_SYNCHRONIZE', false),
+        logging: false,
+      }),
+      inject: [ConfigEnvProviderImpl.name],
     }),
   ],
 })

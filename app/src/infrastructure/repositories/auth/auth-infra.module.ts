@@ -2,13 +2,14 @@ import { Module } from '@nestjs/common';
 import { ApiKeyApplication } from '@infrastructure/repositories/auth/entity';
 import { ApiKeyApplicationSeed } from '@infrastructure/repositories/auth/seeds';
 import { ApiKeyApplicationRepositoryProviderImpl } from '@infrastructure/repositories/auth/impl';
-import { RepositoryConfigModule } from '@infrastructure/repositories/abstract/repository.config.module';
+import { DynamicConfigModule } from '@shared/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
-const commonRepositoryModule = RepositoryConfigModule.forFeature([ApiKeyApplication], ApiKeyApplicationRepositoryProviderImpl);
+const dynamicFeature = DynamicConfigModule.forFeature([ApiKeyApplicationRepositoryProviderImpl]);
 
 @Module({
-  imports: commonRepositoryModule.imports,
-  providers: [ApiKeyApplicationSeed, ...commonRepositoryModule.providers],
-  exports: [...commonRepositoryModule.exports, ApiKeyApplicationSeed],
+  imports: [TypeOrmModule.forFeature([ApiKeyApplication])],
+  providers: [ApiKeyApplicationSeed, ...dynamicFeature.providers],
+  exports: [ApiKeyApplicationSeed, ...dynamicFeature.exports],
 })
 export class AuthInfraModule {}

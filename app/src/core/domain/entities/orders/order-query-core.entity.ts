@@ -1,4 +1,4 @@
-import { PaginationCoreEntity } from '@core/domain/entities/common';
+import { PaginationCoreEntity } from '@core/domain/entities/shared';
 import { OrderStatus } from '@core/domain/enums';
 
 export class OrderQueryCoreEntity {

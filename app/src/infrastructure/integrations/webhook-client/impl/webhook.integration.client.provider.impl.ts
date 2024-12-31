@@ -2,7 +2,7 @@ import { WebhookIntegrationClientProvider } from '@core/providers/integrations';
 import { Injectable, Logger } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
-import { IntegrationAuditCommon } from '@infrastructure/integrations/shared/audit';
+import { IntegrationAuditCommon } from '@shared/audit/integrations';
 
 @Injectable()
 export class WebhookIntegrationClientProviderImpl implements WebhookIntegrationClientProvider {

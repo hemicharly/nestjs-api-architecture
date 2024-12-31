@@ -1,16 +1,13 @@
 import { Module } from '@nestjs/common';
 import { WebhookIntegrationClientModule } from '@infrastructure/integrations/webhook-client';
-import { SqsConsumerQueueProviderImpl } from '@infrastructure/queue/sqs/impl';
-import { UsecaseProviderConfig } from '@entrypoints/config/usecases/abstract';
 import { NotificationSendWebhookUsecaseImpl } from '@core/usecases/notification/impl';
 import { WebhookIntegrationClientProviderImpl } from '@infrastructure/integrations/webhook-client/impl';
 import { NotificationOrderConsumerService } from '@entrypoints/consumers/notification';
-import { DiscoveryModule } from '@nestjs/core';
-
-const notificationProvider = [UsecaseProviderConfig(NotificationSendWebhookUsecaseImpl, [WebhookIntegrationClientProviderImpl]), NotificationOrderConsumerService];
+import { DynamicConfigModule } from '@shared/config';
+import { SqsQueueInfraModule } from '@infrastructure/queue/sqs';
 
 @Module({
-  imports: [DiscoveryModule, WebhookIntegrationClientModule],
-  providers: [SqsConsumerQueueProviderImpl, ...notificationProvider],
+  imports: [SqsQueueInfraModule, WebhookIntegrationClientModule],
+  providers: [DynamicConfigModule.forProvider(NotificationSendWebhookUsecaseImpl, [WebhookIntegrationClientProviderImpl]), NotificationOrderConsumerService],
 })
 export class ConsumerModule {}

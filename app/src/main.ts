@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '@src/app.module';
@@ -9,9 +8,11 @@ import * as express from 'express';
 import * as compression from 'compression';
 import helmet from 'helmet';
 import { SetupRedoc, SwaggerDoc } from '@src/entrypoints/web/config/swagger';
-import { configEnv } from '@shared/config';
 
 async function bootstrap() {
+  const HOST = '0.0.0.0';
+  const PORT = 3000;
+
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     cors: true,
   });
@@ -27,9 +28,9 @@ async function bootstrap() {
   app.use(helmet());
   app.use(compression());
 
-  await app.listen(configEnv.app.port, configEnv.app.host);
+  await app.listen(PORT, HOST);
 
-  Logger.log(`Server running on http://${configEnv.app.host}:${configEnv.app.port} environment: ${configEnv.nodeEnv}`, 'Bootstrap');
+  Logger.log(`Server running on http://${HOST}:${PORT}`, 'Bootstrap');
 }
 
 bootstrap();
