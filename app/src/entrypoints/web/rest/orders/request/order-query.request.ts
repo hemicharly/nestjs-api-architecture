@@ -2,7 +2,7 @@ import { IsEnum, IsNotEmpty, IsNumberString, IsOptional, Matches } from 'class-v
 import { ApiProperty } from '@nestjs/swagger';
 import { OrderQueryCoreEntity } from '@core/domain/entities/orders/order-query-core.entity';
 import { OrderStatus } from '@core/domain/enums/order-status.enum';
-import { PaginationCoreEntity } from '@core/domain/entities/common/pagination-core.entity';
+import { PaginationCoreEntity } from '@core/domain/entities/shared/pagination-core.entity';
 
 export class OrderQueryRequest {
   @ApiProperty({ description: 'Page.' })

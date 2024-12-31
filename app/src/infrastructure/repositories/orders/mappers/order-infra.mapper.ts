@@ -9,7 +9,7 @@ import {
   OrderQueryQuantityStatusCoreEntity,
   OrderStartCoreEntity,
 } from '@core/domain/entities/orders';
-import { PaginationCoreEntity } from '@core/domain/entities/common';
+import { PaginationCoreEntity } from '@core/domain/entities/shared';
 import { OrderEntity } from '@infrastructure/repositories/orders/entity';
 import { OrderStatus, PeriodGroup } from '@core/domain/enums';
 import { OrderAggregationResult } from '@infrastructure/repositories/orders/types';

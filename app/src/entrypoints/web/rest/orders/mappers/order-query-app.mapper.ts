@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { OrderPaginationCoreEntity, OrderQueryCoreEntity } from '@core/domain/entities/orders';
-import { PaginationCoreEntity } from '@core/domain/entities/common';
+import { PaginationCoreEntity } from '@core/domain/entities/shared';
 import { OrderQueryRequest } from '@src/entrypoints/web/rest/orders/request';
 import { OrderPaginationResponse, OrderTotalHoursResponse } from '@src/entrypoints/web/rest/orders/response';
 import { PaginationResponse } from '@entrypoints/web/shared/response/pagination';

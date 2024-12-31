@@ -1,4 +1,4 @@
-import { PaginationCoreEntity } from '@core/domain/entities/common';
+import { PaginationCoreEntity } from '@core/domain/entities/shared';
 
 export class GenericPaginationCoreEntity<E> {
   constructor(

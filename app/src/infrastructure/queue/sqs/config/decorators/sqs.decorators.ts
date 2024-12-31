@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { SqsDecoratorsTypes } from '@infrastructure/queue/sqs/config/decorators/types';
 
 export const SQS_HANDLER_METADATA = 'SQS_HANDLER_METADATA';

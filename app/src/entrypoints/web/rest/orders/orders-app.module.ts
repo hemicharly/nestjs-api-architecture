@@ -2,12 +2,12 @@ import { Module, Provider } from '@nestjs/common';
 import { RepositoryInfraModule } from '@infrastructure/repositories';
 import { AuthAppModule } from '@entrypoints/web/shared/middleware/apikey';
 import { OrdersController } from '@src/entrypoints/web/rest/orders';
-import { UsecaseProviderConfig } from '@src/entrypoints/config/usecases/abstract';
 import { NotificationOrderRegisterUsecaseImpl } from '@core/usecases/notification/impl';
 import { SqsProducerQueueProviderImpl } from '@infrastructure/queue/sqs/impl';
 import { SqsQueueInfraModule } from '@infrastructure/queue/sqs';
 import { OrderCreationUseCaseImpl, OrderEndUsecaseImpl, OrderFindByIdUsecaseImpl, OrderQueryQuantityStatusUsecaseImpl, OrderQueryUsecaseImpl, OrderStartUsecaseImpl } from '@core/usecases/orders/impl';
 import { OrderRepositoryProviderImpl } from '@infrastructure/repositories/orders/impl';
+import { UsecaseProviderConfig } from '@shared/config/abstract';
 
 const usecaseProvidersConfig: Provider[] = [
   UsecaseProviderConfig(OrderCreationUseCaseImpl, [OrderRepositoryProviderImpl, NotificationOrderRegisterUsecaseImpl]),
