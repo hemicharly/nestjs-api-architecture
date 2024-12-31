@@ -37,13 +37,16 @@ jobs:
 
 
       - name: Fetch the reference branch
-        run: git fetch origin ${{ github.ref }}
+        run: |
+          BRANCH_NAME=$(echo "${{ github.ref }}" | sed 's|refs/heads/||')
+          git fetch origin $BRANCH_NAME
 
       - name: Get pull request commits
         id: pr-commits
         run: |
           # Obter a lista de commits do pull request
-          PR_COMMITS=$(git log --no-merges origin/${{ github.ref }}..HEAD --oneline)
+          BRANCH_NAME=$(echo "${{ github.ref }}" | sed 's|refs/heads/||')
+          PR_COMMITS=$(git log --no-merges origin/$BRANCH_NAME..HEAD --oneline)
           echo "Commits in the PR: $PR_COMMITS"
           echo "PR_COMMITS=$PR_COMMITS" >> $GITHUB_ENV
 
