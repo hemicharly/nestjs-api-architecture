@@ -8,10 +8,4 @@ export const configEnv = {
       },
     },
   },
-  database: {
-    mongodb: {
-      url: process.env.MONGODB_URL,
-      synchronize: true,
-    },
-  },
 };
