@@ -6,6 +6,7 @@ import { configEnv } from '@shared/config';
 import { SQS_HANDLER_METADATA } from '@infrastructure/queue/sqs/config/decorators';
 import { SqsDecoratorsTypes } from '@infrastructure/queue/sqs/config/decorators/types';
 import { TracerContextAudit } from '@shared/audit';
+import { ConfigEnvProvider } from '@core/providers/config-env';
 
 @Injectable()
 export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestroy {
@@ -38,6 +39,7 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
   constructor(
     private readonly discoveryService: DiscoveryService,
     private readonly metadataScanner: MetadataScanner,
+    // private readonly configEnvProvider: ConfigEnvProvider
   ) {
     const config: SQSClientConfig = {
       region: configEnv.aws.region,

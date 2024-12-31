@@ -9,8 +9,8 @@ import { ConfigEnvProviderImpl } from '@infrastructure/config-env/impl';
     ConfigEnvModule,
     HttpModule.registerAsync({
       imports: [ConfigEnvModule],
-      useFactory: async (configService: ConfigEnvProvider) => ({
-        baseURL: configService.getString('WEBHOOK_BASE_URL'),
+      useFactory: async (configEnvProvider: ConfigEnvProvider) => ({
+        baseURL: configEnvProvider.getString('WEBHOOK_BASE_URL'),
         timeout: 60 * 1000,
         maxRedirects: 5,
       }),

@@ -56,7 +56,7 @@ import { Provider, Type } from '@nestjs/common';
  * This utility simplifies the creation of providers in NestJS, particularly when multiple dependencies
  * need to be dynamically injected into a use case.
  */
-export const UsecaseProviderConfig = (useCaseImpl: Type, injectImpl: Type[]): Provider => ({
+export const UsecaseProviderConfig = (useCaseImpl: Type, injectImpl?: Type[]): Provider => ({
   provide: useCaseImpl.name,
   useFactory: (...args: any[]) => new useCaseImpl(...args),
   inject: injectImpl?.map((m) => m.name) || [],
