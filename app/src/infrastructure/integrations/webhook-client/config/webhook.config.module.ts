@@ -6,7 +6,6 @@ import { ConfigEnvProviderImpl } from '@infrastructure/config-env/impl';
 
 @Module({
   imports: [
-    ConfigEnvModule,
     HttpModule.registerAsync({
       imports: [ConfigEnvModule],
       useFactory: async (configEnvProvider: ConfigEnvProvider) => ({
