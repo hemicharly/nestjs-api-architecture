@@ -58,12 +58,8 @@ jobs:
               pull_number: pr.number,
             });
             
-            echo "Commits prefix: $commits"
-          
             const hasTestPrefix = commits.data.some(commit => commit.commit.message.startsWith('test:'));
-            
-            echo "Commit prefix: $hasTestPrefix"
-            
+    
             return hasTestPrefix;
 
       - name: Test
