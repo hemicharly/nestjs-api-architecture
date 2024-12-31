@@ -29,9 +29,9 @@ export class DynamicConfigModule {
    */
   static forFeature(providersImpl: Type[]): Partial<DynamicModule> {
     return {
-      providers: providersImpl.map((p) => ({
-        provide: p.name,
-        useClass: p,
+      providers: providersImpl.map((impl) => ({
+        provide: impl.name,
+        useClass: impl,
       })),
       exports: providersImpl.map((p) => p.name),
     };
@@ -48,7 +48,7 @@ export class DynamicConfigModule {
    * - `imports`: An array containing the dynamically registered imports.
    * - `exports`: An array containing the dynamically registered exports.
    */
-  static forModules(modules: Type[]): DynamicModule {
+  static forModules(modules: Type[]): Partial<DynamicModule> {
     return {
       module: DynamicConfigModule,
       imports: modules,

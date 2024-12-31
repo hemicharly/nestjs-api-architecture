@@ -1,11 +1,8 @@
 import { Module } from '@nestjs/common';
-import { QueueInfraConfigModule } from '@infrastructure/queue/abstract';
 import { SqsQueueInfraModule } from '@infrastructure/queue/sqs';
-
-const queueInfraConfigModule = QueueInfraConfigModule.forModules([SqsQueueInfraModule]);
+import { DynamicConfigModule } from '@shared/config/abstract';
 
 @Module({
-  imports: [...queueInfraConfigModule.imports],
-  exports: [...queueInfraConfigModule.exports],
+  ...DynamicConfigModule.forModules([SqsQueueInfraModule]),
 })
 export class QueueInfraModule {}

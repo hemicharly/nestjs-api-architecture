@@ -20,7 +20,7 @@ import { Provider, Type } from '@nestjs/common';
  * import { RepositoryInfraModule } from '@infrastructure/repositories';
  * import { AuthAppModule } from '@entrypoints/web/middleware/apikey';
  * import { OrdersController } from '@entrypoints/web/controllers/orders';
- * import { UsecaseProviderConfig } from '@entrypoints/config/usecases/abstract';
+ * import { UsecaseProviderConfig } from '@shared/config/abstract';
  * import { NotificationOrderRegisterUsecaseImpl } from '@core/usecases/notification/impl';
  * import { SqsProducerQueueProviderImpl } from '@infrastructure/queue/sqs/impl';
  * import { SqsQueueInfraModule } from '@infrastructure/queue/sqs';

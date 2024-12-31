@@ -1,10 +1,8 @@
 import { Module } from '@nestjs/common';
-import { QueueConfigModule } from '@infrastructure/queue/abstract';
 import { SqsProducerQueueProviderImpl } from '@infrastructure/queue/sqs/impl';
+import { DynamicConfigModule } from '@shared/config/abstract';
 
-const queueConfigModule = QueueConfigModule.forFeature([SqsProducerQueueProviderImpl]);
 @Module({
-  providers: queueConfigModule.providers,
-  exports: queueConfigModule.exports,
+  ...DynamicConfigModule.forFeature([SqsProducerQueueProviderImpl]),
 })
 export class SqsQueueInfraModule {}

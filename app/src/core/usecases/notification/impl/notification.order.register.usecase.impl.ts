@@ -9,7 +9,7 @@ export class NotificationOrderRegisterUsecaseImpl implements NotificationOrderRe
     private readonly configEnvProvider: ConfigEnvProvider,
   ) {}
   public async execute(notificationOrderCoreEntity: Partial<NotificationOrderCoreEntity>): Promise<void> {
-    const queueName = this.configEnvProvider.getString('QUEUE_NOTIFICATION_ORDER', 'queue_notification_order');
+    const queueName = this.configEnvProvider.getString('QUEUE_NOTIFICATION_ORDER');
     await this.sendQueueProvider.sendMessage(queueName, JSON.stringify(notificationOrderCoreEntity));
   }
 }
