@@ -1,31 +1,31 @@
 import { DynamicModule, Module, Provider, Type } from '@nestjs/common';
 
 /**
- * A module utility in NestJS that simplifies the registration of providers dynamically.
+ * A utility module in NestJS that simplifies the dynamic registration of providers and modules.
  *
- * This class provides a static `forFeature` method, which allows registering a provider dynamically
- * for use in a specific feature/module. The registered provider can then be exported for use in other entrypoints.
- *
- * @example
- *
- * ```typescript
-
- * ```
+ * This class provides static methods for dynamically registering providers or modules and making them available for use in other parts of the application.
+ * It is particularly useful in scenarios where you need flexibility and reusability in configuring dependencies.
  *
  * @class DynamicConfigModule
  */
 @Module({})
 export class DynamicConfigModule {
   /**
-   * Registers a provider dynamically and exports it for use in other entrypoints.
+   * Dynamically registers an array of providers and exports them for use in other modules.
    *
-   * @param providersImpl - The class type to be registered as a provider.
-   * @returns {DynamicModule} - A dynamically configured module containing the provider and its export.
+   * @param providersImpl - An array of class types to be registered as providers.
+   * @returns {Partial<DynamicModule>} - A dynamically configured module containing the providers and their exports.
    *
-   * Structure of the returned module:
-   * - `module`: The `DynamicConfigModule` itself.
-   * - `providers`: An array containing the dynamically registered provider.
-   * - `exports`: An array exporting the token of the registered provider, making it available in other entrypoints.
+   * @example
+   * ```typescript
+   * import { DynamicConfigModule } from './dynamic-config.module';
+   * import { MyService } from './my-service';
+   *
+   * @Module({
+   *   imports: [DynamicConfigModule.forFeature([MyService])],
+   * })
+   * export class MyModule {}
+   * ```
    */
   static forFeature(providersImpl: Type[]): Partial<DynamicModule> {
     return {
@@ -33,38 +33,56 @@ export class DynamicConfigModule {
         provide: impl.name,
         useClass: impl,
       })),
-      exports: providersImpl.map((p) => p.name),
+      exports: providersImpl.map((impl) => impl.name),
     };
   }
 
   /**
-   * Registers a provider dynamically and exports it for use in other entrypoints.
+   * Dynamically registers a single provider with optional dependencies and exports it.
    *
    * @param providerImpl - The class type to be registered as a provider.
-   * @param injectsImpl - The class type to be registered injects of provider.
-   * @returns {Provider} - A dynamically configured module containing the provider and its export.
+   * @param injectsImpl - An optional array of class types to be injected into the provider.
+   * @returns {Provider} - A provider configuration object for dynamic registration.
    *
-   * Structure of the returned module:
-   * - `module`: The `DynamicConfigModule` itself.
-   * - `providers`: An array containing the dynamically registered provider.
-   * - `exports`: An array exporting the token of the registered provider, making it available in other entrypoints.
+   * @example
+   * ```typescript
+   * import { DynamicConfigModule } from './dynamic-config.module';
+   * import { MyService } from './my-service';
+   * import { DependencyService } from './dependency-service';
+   *
+   * const myProvider = DynamicConfigModule.forProvider(MyService, [DependencyService]);
+   *
+   * @Module({
+   *   providers: [myProvider, DependencyService],
+   *   exports: [myProvider],
+   * })
+   * export class MyModule {}
+   * ```
    */
-  static forProvider = (providerImpl: Type, injectsImpl?: Type[]): Provider => ({
-    provide: providerImpl.name,
-    useFactory: (...args: any[]) => new providerImpl(...args),
-    inject: injectsImpl?.map((m) => m.name) || [],
-  });
+  static forProvider(providerImpl: Type, injectsImpl?: Type[]): Provider {
+    return {
+      provide: providerImpl.name,
+      useFactory: (...args: any[]) => new providerImpl(...args),
+      inject: injectsImpl?.map((dep) => dep.name) || [],
+    };
+  }
 
   /**
-   * Registers a modules dynamically and exports it for use in other entrypoints.
+   * Dynamically registers an array of modules and exports them for use in other modules.
    *
-   * @param modules - The class type to be registered as a provider.
-   * @returns {DynamicModule} - A dynamically configured module containing the provider and its export.
+   * @param modules - An array of class types to be registered as modules.
+   * @returns {Partial<DynamicModule>} - A dynamically configured module containing the registered modules and their exports.
    *
-   * Structure of the returned module:
-   * - `module`: The `DynamicConfigModule` itself.
-   * - `imports`: An array containing the dynamically registered imports.
-   * - `exports`: An array containing the dynamically registered exports.
+   * @example
+   * ```typescript
+   * import { DynamicConfigModule } from './dynamic-config.module';
+   * import { SomeOtherModule } from './some-other.module';
+   *
+   * @Module({
+   *   imports: [DynamicConfigModule.forModules([SomeOtherModule])],
+   * })
+   * export class MyModule {}
+   * ```
    */
   static forModules(modules: Type[]): Partial<DynamicModule> {
     return {
