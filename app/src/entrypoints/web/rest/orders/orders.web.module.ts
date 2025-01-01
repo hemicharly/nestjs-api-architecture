@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { RepositoryInfraModule } from '@infrastructure/repositories';
+import { RepositoryModule } from '@infrastructure/repositories';
 import { AuthAppModule } from '@entrypoints/web/shared/middleware/apikey';
 import { OrdersController } from '@src/entrypoints/web/rest/orders';
 import { NotificationOrderRegisterUsecaseImpl } from '@core/usecases/notification/impl';
@@ -12,7 +12,7 @@ import { ConfigEnvProviderImpl } from '@infrastructure/config-env/impl';
 import { ConfigEnvModule } from '@infrastructure/config-env';
 
 @Module({
-  imports: [RepositoryInfraModule, AuthAppModule, SqsQueueInfraModule, ConfigEnvModule],
+  imports: [RepositoryModule, AuthAppModule, SqsQueueInfraModule, ConfigEnvModule],
   controllers: [OrdersController],
   providers: [
     DynamicConfigModule.forProvider(OrderCreationUseCaseImpl, [OrderRepositoryProviderImpl, NotificationOrderRegisterUsecaseImpl]),
@@ -24,4 +24,4 @@ import { ConfigEnvModule } from '@infrastructure/config-env';
     DynamicConfigModule.forProvider(NotificationOrderRegisterUsecaseImpl, [SqsProducerQueueProviderImpl, ConfigEnvProviderImpl]),
   ],
 })
-export class OrdersAppModule {}
+export class OrdersWebModule {}

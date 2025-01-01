@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { WebModule } from '@entrypoints/web';
-import { ConsumerModule } from '@src/entrypoints/consumers';
+import { InfrastructureModule } from '@src/infrastructure';
+import { EntrypointsModule } from '@src/entrypoints';
 
 @Module({
-  imports: [WebModule, ConsumerModule],
+  imports: [InfrastructureModule, EntrypointsModule],
 })
 export class AppModule {}
