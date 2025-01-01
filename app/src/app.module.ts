@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
-import { WebModule } from '@entrypoints/web';
-import { ConsumerModule } from '@src/entrypoints/consumers';
+import { InfrastructureModule } from '@src/infrastructure';
+import { EntrypointsModule } from '@src/entrypoints';
+import { DynamicConfigModule } from '@shared/config';
 
 @Module({
-  imports: [WebModule, ConsumerModule],
+  ...DynamicConfigModule.forModules([InfrastructureModule, EntrypointsModule]),
 })
 export class AppModule {}

@@ -8,4 +8,4 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   imports: [TypeOrmModule.forFeature([OrderEntity])],
   ...DynamicConfigModule.forFeature([OrderRepositoryProviderImpl]),
 })
-export class OrdersInfraModule {}
+export class OrdersRepositoryModule {}

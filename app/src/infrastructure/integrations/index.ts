@@ -1,1 +1,1 @@
-export * from './integration-infra.module';
+export * from './integrations.module';

@@ -12,4 +12,4 @@ const dynamicFeature = DynamicConfigModule.forFeature([ApiKeyApplicationReposito
   providers: [ApiKeyApplicationSeed, ...dynamicFeature.providers],
   exports: [ApiKeyApplicationSeed, ...dynamicFeature.exports],
 })
-export class AuthInfraModule {}
+export class AuthRepositoryModule {}
