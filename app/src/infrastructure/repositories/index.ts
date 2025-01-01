@@ -1,1 +1,1 @@
-export * from './repository-infra.module';
+export * from './repository.module';

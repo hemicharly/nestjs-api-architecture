@@ -1,1 +1,1 @@
-export * from './auth-infra.module';
+export * from './auth.repository.module';

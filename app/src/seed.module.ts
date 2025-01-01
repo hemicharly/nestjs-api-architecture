@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
-import { DatabaseModule } from '@src/database.module';
-import { RepositoryInfraModule } from '@infrastructure/repositories';
+import { InfrastructureModule } from '@src/infrastructure';
 
 @Module({
-  imports: [DatabaseModule, RepositoryInfraModule],
+  imports: [InfrastructureModule],
 })
 export class SeedModule {}
