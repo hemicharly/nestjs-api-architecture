@@ -57,7 +57,7 @@ module.exports = [
         rules: [
           {
             from: ["entrypoints"],
-            allow: ["entrypoints", "infrastructure", "core", "shared"],
+            allow: ["entrypoints", "core", "shared"],
             importKind: "value",
           },
           {
