@@ -57,7 +57,7 @@ module.exports = [
         rules: [
           {
             from: ["entrypoints"],
-            allow: ["entrypoints", "infrastructure", "core", "shared"],
+            allow: ["entrypoints", "core", "shared"],
             importKind: "value",
           },
           {
@@ -72,7 +72,7 @@ module.exports = [
           },
           {
             from: ["shared"],
-            allow: ["shared", "core"],
+            allow: ["shared", "core", "infrastructure"],
             importKind: "value",
           },
         ]

@@ -1,12 +1,12 @@
 import { Inject, Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { ChangeMessageVisibilityCommand, DeleteMessageCommand, ReceiveMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
 import { DiscoveryService, MetadataScanner } from '@nestjs/core';
-import { SQS_HANDLER_METADATA } from '@infrastructure/queue/sqs/config/decorators';
-import { SqsDecoratorsTypes } from '@infrastructure/queue/sqs/config/decorators/types';
+import { SQS_HANDLER_METADATA } from '@shared/config/sqs/decorators';
+import { SqsDecoratorsTypes } from '@shared/config/sqs/decorators/types';
 import { TracerContextAudit } from '@shared/audit';
 import { ConfigEnvProvider } from '@core/providers/config-env';
 import { ConfigEnvProviderImpl } from '@infrastructure/config-env/impl';
-import { SqsBuilderConfig } from '@infrastructure/queue/sqs/config';
+import { SqsBuilderConfig } from '@shared/config/sqs';
 
 @Injectable()
 export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestroy {

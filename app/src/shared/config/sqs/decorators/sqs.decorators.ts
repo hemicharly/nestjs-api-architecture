@@ -1,4 +1,4 @@
-import { SqsDecoratorsTypes } from '@infrastructure/queue/sqs/config/decorators/types';
+import { SqsDecoratorsTypes } from '@shared/config/sqs/decorators/types';
 
 export const SQS_HANDLER_METADATA = 'SQS_HANDLER_METADATA';
 

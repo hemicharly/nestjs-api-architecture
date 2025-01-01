@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Message } from '@aws-sdk/client-sqs';
 import { NotificationSendWebhookUsecaseImpl } from '@core/usecases/notification/impl';
 import { NotificationSendWebhookUsecase } from '@core/usecases/notification';
-import { SqsMessageHandler } from '@infrastructure/queue/sqs/config/decorators';
+import { SqsMessageHandler } from '@shared/config/sqs/decorators';
 
 @Injectable()
 export class NotificationOrderConsumerService {

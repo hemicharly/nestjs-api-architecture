@@ -2,7 +2,7 @@ import { ProducerQueueProvider } from '@core/providers/queue';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { SendMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
 import { TracerContextAudit } from '@shared/audit';
-import { SqsBuilderConfig } from '@infrastructure/queue/sqs/config';
+import { SqsBuilderConfig } from '@shared/config/sqs';
 import { ConfigEnvProviderImpl } from '@infrastructure/config-env/impl';
 import { ConfigEnvProvider } from '@core/providers/config-env';
 
