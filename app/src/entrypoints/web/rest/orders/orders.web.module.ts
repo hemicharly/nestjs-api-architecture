@@ -10,7 +10,7 @@ import { ConfigEnvProviderImpl } from '@infrastructure/config-env/impl';
 import { InfrastructureModule } from '@src/infrastructure';
 
 @Module({
-  imports: [InfrastructureModule, AuthAppModule],
+  imports: [InfrastructureModule],
   controllers: [OrdersController],
   providers: [
     DynamicConfigModule.forProvider(OrderCreationUseCaseImpl, [OrderRepositoryProviderImpl, NotificationOrderRegisterUsecaseImpl]),

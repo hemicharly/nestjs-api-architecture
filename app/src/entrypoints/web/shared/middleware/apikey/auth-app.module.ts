@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
-import { RepositoryModule } from '@infrastructure/repositories';
 import { CheckApiKeyUsecaseImpl } from '@core/usecases/auth/impl';
 import { ApiKeyApplicationRepositoryProviderImpl } from '@infrastructure/repositories/auth/impl';
 import { DynamicConfigModule } from '@shared/config';
+import { InfrastructureModule } from '@src/infrastructure';
 
 const dynamicProvider = [DynamicConfigModule.forProvider(CheckApiKeyUsecaseImpl, [ApiKeyApplicationRepositoryProviderImpl])];
 
 @Module({
-  imports: [RepositoryModule],
+  imports: [InfrastructureModule],
   providers: dynamicProvider,
   exports: dynamicProvider,
 })
