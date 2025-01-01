@@ -4,10 +4,7 @@ import { OrdersRepositoryModule } from '@infrastructure/repositories/orders';
 import { DatabaseModule } from '@src/database.module';
 import { DynamicConfigModule } from '@shared/config';
 
-const dynamicModule = DynamicConfigModule.forModules([AuthRepositoryModule, OrdersRepositoryModule]);
-
 @Module({
-  imports: [DatabaseModule, ...dynamicModule.imports],
-  exports: [...dynamicModule.exports],
+  ...DynamicConfigModule.forModules([DatabaseModule, AuthRepositoryModule, OrdersRepositoryModule]),
 })
 export class RepositoryModule {}
