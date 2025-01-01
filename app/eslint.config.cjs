@@ -72,7 +72,7 @@ module.exports = [
           },
           {
             from: ["shared"],
-            allow: ["shared", "core"],
+            allow: ["shared", "core", "infrastructure"],
             importKind: "value",
           },
         ]
