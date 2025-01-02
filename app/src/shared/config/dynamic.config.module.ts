@@ -1,5 +1,10 @@
 import { DynamicModule, Module, Provider, Type } from '@nestjs/common';
 
+interface OptionProviderRegister {
+  useClass: Type;
+  injects?: Type[];
+}
+
 /**
  * A utility module in NestJS that simplifies the dynamic registration of providers and modules.
  *
@@ -11,37 +16,10 @@ import { DynamicModule, Module, Provider, Type } from '@nestjs/common';
 @Module({})
 export class DynamicConfigModule {
   /**
-   * Dynamically registers an array of providers and exports them for use in other modules.
-   *
-   * @param providersImpl - An array of class types to be registered as providers.
-   * @returns {Partial<DynamicModule>} - A dynamically configured module containing the providers and their exports.
-   *
-   * @example
-   * ```typescript
-   * import { DynamicConfigModule } from './dynamic-config.module';
-   * import { MyService } from './my-service';
-   *
-   * @Module({
-   *   imports: [DynamicConfigModule.register([MyService])],
-   * })
-   * export class MyModule {}
-   * ```
-   */
-  static register(providersImpl: Type[]): Partial<DynamicModule> {
-    return {
-      providers: providersImpl.map((impl) => ({
-        provide: impl,
-        useClass: impl,
-      })),
-      exports: providersImpl,
-    };
-  }
-
-  /**
    * Dynamically registers a single provider with optional dependencies and exports it.
    *
-   * @param providerImpl - The class type to be registered as a provider.
-   * @param injectsImpl - An optional array of class types to be injected into the provider.
+   * @param useClass - The class type to be registered as a provider.
+   * @param injects - An optional array of class types to be injected into the provider.
    * @returns {Provider} - A provider configuration object for dynamic registration.
    *
    * @example
@@ -59,11 +37,58 @@ export class DynamicConfigModule {
    * export class MyModule {}
    * ```
    */
-  static forProvider<T>(providerImpl: Type<T>, injectsImpl?: Type[]): Provider {
+  private static forProvider<T>(useClass: Type<T>, injects?: Type[]): Provider {
+    if (injects && injects.length > 0) {
+      return {
+        provide: useClass,
+        useFactory: (...args: any[]) => new useClass(...args),
+        useClass,
+        inject: injects,
+      };
+    }
     return {
-      provide: providerImpl,
-      useFactory: (...args: any[]) => new providerImpl(...args),
-      inject: injectsImpl || [],
+      provide: useClass,
+      useClass: useClass,
+    };
+  }
+
+  /**
+   * Dynamically registers a single provider with optional dependencies and exports it.
+   *
+   * @param options - The options to be registered as a provider.
+   * @returns {Partial<DynamicModule>} - A provider configuration object for dynamic registration.
+   *
+   * @example
+   * ```typescript
+   * import { Module } from '@nestjs/common';
+   * import { InfrastructureModule } from '@src/infrastructure';
+   * import { DynamicConfigModule } from '@shared/config';
+   * import { OrderCreationUseCaseImpl, OrderEndUsecaseImpl, OrderFindByIdUsecaseImpl, OrderQueryQuantityStatusUsecaseImpl, OrderQueryUsecaseImpl, OrderStartUsecaseImpl } from '@core/usecases/orders/impl';
+   * import { OrderRepositoryProviderImpl } from '@infrastructure/repositories/orders/impl';
+   * import { NotificationOrderRegisterUsecaseImpl } from '@core/usecases/notification/impl';
+   * import { SqsProducerQueueProviderImpl } from '@infrastructure/queue/sqs/impl';
+   * import { ConfigEnvProviderImpl } from '@infrastructure/config-env/impl';
+   *
+   * @Module({
+   *   imports: [InfrastructureModule],
+   *   ...DynamicConfigModule.forProviderRegister([
+   *     { useClass: OrderCreationUseCaseImpl, injects: [OrderRepositoryProviderImpl, NotificationOrderRegisterUsecaseImpl] },
+   *     { useClass: OrderQueryUsecaseImpl, injects: [OrderRepositoryProviderImpl] },
+   *     { useClass: OrderQueryQuantityStatusUsecaseImpl, injects: [OrderRepositoryProviderImpl] },
+   *     { useClass: OrderFindByIdUsecaseImpl, injects: [OrderRepositoryProviderImpl] },
+   *     { useClass: OrderEndUsecaseImpl, injects: [OrderRepositoryProviderImpl, NotificationOrderRegisterUsecaseImpl] },
+   *     { useClass: OrderStartUsecaseImpl, injects: [OrderRepositoryProviderImpl, NotificationOrderRegisterUsecaseImpl] },
+   *     { useClass: NotificationOrderRegisterUsecaseImpl, injects: [SqsProducerQueueProviderImpl, ConfigEnvProviderImpl] },
+   *   ]),
+   * })
+   * export class OrdersWebConfigModule {}
+   * ```
+   */
+  static forProviderRegister(options: OptionProviderRegister[]): Partial<DynamicModule> {
+    const providers: Provider[] = options.map(({ useClass, injects }) => this.forProvider(useClass, injects));
+    return {
+      providers: [...providers],
+      exports: [...providers],
     };
   }
 
@@ -86,8 +111,8 @@ export class DynamicConfigModule {
    */
   static forModules(modules: Type[]): Partial<DynamicModule> {
     return {
-      imports: modules,
-      exports: modules,
+      imports: [...modules],
+      exports: [...modules],
     };
   }
 }

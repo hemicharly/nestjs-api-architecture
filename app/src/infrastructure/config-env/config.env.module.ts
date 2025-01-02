@@ -9,6 +9,6 @@ import { DynamicConfigModule } from '@shared/config';
       isGlobal: false,
     }),
   ],
-  ...DynamicConfigModule.register([ConfigEnvProviderImpl]),
+  ...DynamicConfigModule.forProviderRegister([{ useClass: ConfigEnvProviderImpl }]),
 })
 export class ConfigEnvModule {}

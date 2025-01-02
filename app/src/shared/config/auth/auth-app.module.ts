@@ -4,11 +4,13 @@ import { ApiKeyApplicationRepositoryProviderImpl } from '@infrastructure/reposit
 import { DynamicConfigModule } from '@shared/config';
 import { InfrastructureModule } from '@src/infrastructure';
 
-const dynamicProvider = [DynamicConfigModule.forProvider(CheckApiKeyUsecaseImpl, [ApiKeyApplicationRepositoryProviderImpl])];
-
 @Module({
   imports: [InfrastructureModule],
-  providers: dynamicProvider,
-  exports: dynamicProvider,
+  ...DynamicConfigModule.forProviderRegister([
+    {
+      useClass: CheckApiKeyUsecaseImpl,
+      injects: [ApiKeyApplicationRepositoryProviderImpl],
+    },
+  ]),
 })
 export class AuthAppModule {}

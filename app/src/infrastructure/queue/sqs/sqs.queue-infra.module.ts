@@ -6,6 +6,6 @@ import { ConfigEnvModule } from '@infrastructure/config-env';
 
 @Module({
   imports: [DiscoveryModule, ConfigEnvModule],
-  ...DynamicConfigModule.register([SqsProducerQueueProviderImpl, SqsConsumerQueueProviderImpl]),
+  ...DynamicConfigModule.forProviderRegister([{ useClass: SqsProducerQueueProviderImpl }, { useClass: SqsConsumerQueueProviderImpl }]),
 })
 export class SqsQueueInfraModule {}
