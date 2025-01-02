@@ -15,7 +15,7 @@ import { ConfigEnvProviderImpl } from '@infrastructure/config-env/impl';
         synchronize: configEnvProvider.getBoolean('TYPER_ORM_SYNCHRONIZE', false),
         logging: false,
       }),
-      inject: [ConfigEnvProviderImpl.name],
+      inject: [ConfigEnvProviderImpl],
     }),
   ],
 })

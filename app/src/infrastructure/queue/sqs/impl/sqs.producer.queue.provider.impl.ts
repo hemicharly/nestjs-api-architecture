@@ -12,7 +12,7 @@ export class SqsProducerQueueProviderImpl implements ProducerQueueProvider {
   private readonly sqsClient: SQSClient;
 
   constructor(
-    @Inject(ConfigEnvProviderImpl.name)
+    @Inject(ConfigEnvProviderImpl)
     private readonly configEnvProvider: ConfigEnvProvider,
   ) {
     this.sqsClient = SqsBuilderConfig.builderClient(this.configEnvProvider);

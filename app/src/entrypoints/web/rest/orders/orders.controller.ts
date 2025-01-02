@@ -21,22 +21,22 @@ import { OrderCreationUseCaseImpl, OrderEndUsecaseImpl, OrderFindByIdUsecaseImpl
 @Controller('v1/orders')
 @UseGuards(ApiKeyGuard)
 export class OrdersController {
-  @Inject(OrderCreationUseCaseImpl.name)
+  @Inject(OrderCreationUseCaseImpl)
   private readonly orderCreationUseCase: OrderCreationUseCase;
 
-  @Inject(OrderQueryUsecaseImpl.name)
+  @Inject(OrderQueryUsecaseImpl)
   private readonly orderQueryUsecase: OrderQueryUsecase;
 
-  @Inject(OrderQueryQuantityStatusUsecaseImpl.name)
+  @Inject(OrderQueryQuantityStatusUsecaseImpl)
   private readonly orderQueryQuantityStatusUsecase: OrderQueryQuantityStatusUsecase;
 
-  @Inject(OrderFindByIdUsecaseImpl.name)
+  @Inject(OrderFindByIdUsecaseImpl)
   private readonly orderFindByIdUsecase: OrderFindByIdUsecase;
 
-  @Inject(OrderStartUsecaseImpl.name)
+  @Inject(OrderStartUsecaseImpl)
   private readonly orderStartUsecase: OrderStartUsecase;
 
-  @Inject(OrderEndUsecaseImpl.name)
+  @Inject(OrderEndUsecaseImpl)
   private readonly orderEndUsecase: OrderEndUsecase;
 
   @Post()

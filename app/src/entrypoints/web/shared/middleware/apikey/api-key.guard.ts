@@ -5,7 +5,7 @@ import { CheckApiKeyUsecaseImpl } from '@core/usecases/auth/impl';
 
 @Injectable()
 export class ApiKeyGuard implements CanActivate {
-  @Inject(CheckApiKeyUsecaseImpl.name)
+  @Inject(CheckApiKeyUsecaseImpl)
   private readonly checkApiKeyUsecase: CheckApiKeyUsecase;
 
   public async canActivate(context: ExecutionContext): Promise<boolean> {
