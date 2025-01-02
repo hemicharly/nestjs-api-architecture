@@ -20,6 +20,7 @@ build:
 # Installs the project dependencies using Yarn, running in a container
 # configured in the yarn.cli.yml file.
 install:
+	yarn install &&\
 	docker compose -f yarn.cli.yml run --rm yarn install
 
 # Run test

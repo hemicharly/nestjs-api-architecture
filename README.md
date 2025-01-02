@@ -29,6 +29,8 @@ To run the project, you will need the following requirements:
 * **Makefile**: Ensure you have Makefile installed to simplify command execution.
 * **MongoDB**: Version 8.x of MongoDB running in a Docker container.
 * **NodeJs**: Version 22.x of NodeJs running in a Docker container.
+* **NodeJs**: Version 20.x of NodeJs installed your machine.
+* **Yarn**: Versão 1.22.x do Yarn installed your machine.
 
 ## 1.1. Project Structure
 

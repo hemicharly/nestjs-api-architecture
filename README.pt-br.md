@@ -28,6 +28,8 @@ Para rodar o projeto, você precisará dos seguintes requisitos:
 * **Makefile**: Certifique-se de ter o Makefile instalado para facilitar a execução de comandos.
 * **MongoDB**: Versão 8.x do MongoDB com container docker.
 * **NodeJs**: Versão 22.x do NodeJs com container docker.
+* **NodeJs**: Versão 20.x do NodeJs instalado na máquina local.
+* **Yarn**: Versão 1.22.x do Yarn instalado na máquina local.
 
 ## 1.1. Estrutura do Projeto
 
