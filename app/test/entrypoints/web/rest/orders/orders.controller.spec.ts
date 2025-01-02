@@ -20,12 +20,12 @@ describe('OrdersController', () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [OrdersController],
       providers: [
-        { provide: OrderCreationUseCaseImpl.name, useValue: mockOrderCreationUseCase },
-        { provide: OrderQueryUsecaseImpl.name, useValue: mockOrderQueryUsecase },
-        { provide: OrderQueryQuantityStatusUsecaseImpl.name, useValue: mockOrderQueryQuantityStatusUsecase },
-        { provide: OrderFindByIdUsecaseImpl.name, useValue: mockOrderFindByIdUsecase },
-        { provide: OrderStartUsecaseImpl.name, useValue: mockOrderStartUsecase },
-        { provide: OrderEndUsecaseImpl.name, useValue: mockOrderEndUsecase },
+        { provide: OrderCreationUseCaseImpl, useValue: mockOrderCreationUseCase },
+        { provide: OrderQueryUsecaseImpl, useValue: mockOrderQueryUsecase },
+        { provide: OrderQueryQuantityStatusUsecaseImpl, useValue: mockOrderQueryQuantityStatusUsecase },
+        { provide: OrderFindByIdUsecaseImpl, useValue: mockOrderFindByIdUsecase },
+        { provide: OrderStartUsecaseImpl, useValue: mockOrderStartUsecase },
+        { provide: OrderEndUsecaseImpl, useValue: mockOrderEndUsecase },
       ],
     })
       .overrideGuard(ApiKeyGuard)
