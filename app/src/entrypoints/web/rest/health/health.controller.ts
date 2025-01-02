@@ -4,6 +4,7 @@ import { HealthCheck, HealthCheckService, TypeOrmHealthIndicator } from '@nestjs
 import { ApiDocGenericGet } from '@src/entrypoints/web/config/swagger/decorators';
 import { HealthCheckResultResponse } from '@src/entrypoints/web/rest/health/response';
 import { HealthCheckResultMapper } from '@src/entrypoints/web/rest/health/mappers';
+import packageJson from '@packageJson';
 
 @ApiTags('Health')
 @Controller('health')
@@ -22,6 +23,7 @@ export class HealthController {
     const info = { ...healthCheckResult.info };
     info['application'] = {
       status: 'up',
+      version: packageJson.version,
       uptime: process.uptime(),
     };
     return HealthCheckResultMapper.toApi({ ...healthCheckResult, info: info });
