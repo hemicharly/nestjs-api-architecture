@@ -39,7 +39,7 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
   constructor(
     private readonly discoveryService: DiscoveryService,
     private readonly metadataScanner: MetadataScanner,
-    @Inject(ConfigEnvProviderImpl.name)
+    @Inject(ConfigEnvProviderImpl)
     private readonly configEnvProvider: ConfigEnvProvider,
   ) {
     this.sqsClient = SqsBuilderConfig.builderClient(this.configEnvProvider);

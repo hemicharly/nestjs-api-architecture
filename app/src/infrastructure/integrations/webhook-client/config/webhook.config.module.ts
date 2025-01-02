@@ -13,7 +13,7 @@ import { ConfigEnvProviderImpl } from '@infrastructure/config-env/impl';
         timeout: 60 * 1000,
         maxRedirects: 5,
       }),
-      inject: [ConfigEnvProviderImpl.name],
+      inject: [ConfigEnvProviderImpl],
     }),
   ],
   exports: [HttpModule],

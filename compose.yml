@@ -46,7 +46,6 @@ services:
       - "9229:9229" # Port of debug
     environment:
       NODE_ENV: development
-      AWS_PROFILE: 99pay
       AWS_REGION: us-east-1
     env_file:
       - .env

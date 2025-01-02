@@ -6,7 +6,7 @@ import { SqsMessageHandler } from '@shared/config/sqs/decorators';
 
 @Injectable()
 export class NotificationOrderConsumerService {
-  @Inject(NotificationSendWebhookUsecaseImpl.name)
+  @Inject(NotificationSendWebhookUsecaseImpl)
   private readonly notificationSendWebhookUsecase: NotificationSendWebhookUsecase;
 
   @SqsMessageHandler({ queueNameEnv: 'QUEUE_NOTIFICATION_ORDER', waitTimeSeconds: 5, batchSize: 10 })
