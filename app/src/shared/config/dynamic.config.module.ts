@@ -6,10 +6,11 @@ interface OptionProviderRegister {
 }
 
 /**
- * A utility module in NestJS that simplifies the dynamic registration of providers and modules.
+ * A utility module in NestJS for dynamically registering providers and modules.
  *
- * This class provides static methods for dynamically registering providers or modules and making them available for use in other parts of the application.
- * It is particularly useful in scenarios where you need flexibility and reusability in configuring dependencies.
+ * This module simplifies the dynamic registration of providers and modules within a NestJS application,
+ * making them available for use in other parts of the application. It's especially useful when there is
+ * a need for flexibility and reusability in configuring dependencies in different modules.
  *
  * @class DynamicConfigModule
  */
@@ -53,10 +54,10 @@ export class DynamicConfigModule {
   }
 
   /**
-   * Dynamically registers a single provider with optional dependencies and exports it.
+   * Dynamically registers a collection of providers with optional dependencies and exports them.
    *
-   * @param options - The options to be registered as a provider.
-   * @returns {Partial<DynamicModule>} - A provider configuration object for dynamic registration.
+   * @param options - An array of provider configurations containing `useClass` (class type) and optional `injects` (dependencies).
+   * @returns {Partial<DynamicModule>} - A configuration object for dynamically registering and exporting the provided classes.
    *
    * @example
    * ```typescript
