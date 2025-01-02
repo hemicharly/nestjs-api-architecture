@@ -13,4 +13,4 @@ import { InfrastructureModule } from '@src/infrastructure';
     },
   ]),
 })
-export class AuthAppModule {}
+export class AuthConfigModule {}

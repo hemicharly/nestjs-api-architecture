@@ -5,8 +5,6 @@ interface OptionProviderRegister {
   injects?: Type[];
 }
 
-const REGISTER_TOKENS: Record<string, Type> = {};
-
 /**
  * A utility module in NestJS for dynamically registering providers and modules.
  *
@@ -18,23 +16,6 @@ const REGISTER_TOKENS: Record<string, Type> = {};
  */
 @Module({})
 export class DynamicConfigModule {
-  private static setClassImplementation<T>(useClass: Type<T>) {
-    const interfaceName = useClass.name.replace(/Impl$/, '');
-    REGISTER_TOKENS[interfaceName] = useClass;
-  }
-
-  static getClassImplementation<T = any>(propertyKey: string): Type<T> {
-    if (!propertyKey || propertyKey?.length === 0) {
-      throw new Error(`Property '${propertyKey}' is required.`);
-    }
-    const interfaceName = propertyKey.charAt(0).toUpperCase() + propertyKey.slice(1);
-    const useClass = REGISTER_TOKENS[interfaceName];
-    if (!useClass) {
-      throw new Error(`Class not registered for the ${interfaceName}`);
-    }
-    return useClass;
-  }
-
   /**
    * Dynamically registers a single provider with optional dependencies and exports it.
    *
@@ -58,7 +39,6 @@ export class DynamicConfigModule {
    * ```
    */
   private static forProvider<T>(useClass: Type<T>, injects?: Type[]): Provider {
-    this.setClassImplementation(useClass);
     if (injects && injects.length > 0) {
       return {
         provide: useClass,
