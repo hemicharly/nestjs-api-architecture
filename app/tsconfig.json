@@ -4,6 +4,8 @@
     "moduleResolution": "node",
     "declaration": true,
     "removeComments": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
@@ -19,6 +21,9 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
+      "@packageJson": [
+        "package.json"
+      ],
       "@entrypoints/*": [
         "src/entrypoints/*"
       ],
@@ -33,7 +38,7 @@
       ],
       "@src/*": [
         "src/*"
-      ]
+      ],
     }
   }
 }

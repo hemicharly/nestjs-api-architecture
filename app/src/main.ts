@@ -5,7 +5,7 @@ import { HttpExceptionFilter } from '@entrypoints/web/shared/middleware/exceptio
 import { CustomValidationPipe } from '@src/entrypoints/web/shared/middleware/exceptions';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import * as express from 'express';
-import * as compression from 'compression';
+import compression from 'compression';
 import helmet from 'helmet';
 import { SetupRedoc, SwaggerDoc } from '@src/entrypoints/web/config/swagger';
 
