@@ -7,19 +7,16 @@ import { NotificationOrderRegisterUsecaseImpl } from '@core/usecases/notificatio
 import { SqsProducerQueueProviderImpl } from '@infrastructure/queue/sqs/impl';
 import { ConfigEnvProviderImpl } from '@infrastructure/config-env/impl';
 
-const dynamicProvider = [
-  DynamicConfigModule.forProvider(OrderCreationUseCaseImpl, [OrderRepositoryProviderImpl, NotificationOrderRegisterUsecaseImpl]),
-  DynamicConfigModule.forProvider(OrderQueryUsecaseImpl, [OrderRepositoryProviderImpl]),
-  DynamicConfigModule.forProvider(OrderQueryQuantityStatusUsecaseImpl, [OrderRepositoryProviderImpl]),
-  DynamicConfigModule.forProvider(OrderFindByIdUsecaseImpl, [OrderRepositoryProviderImpl]),
-  DynamicConfigModule.forProvider(OrderEndUsecaseImpl, [OrderRepositoryProviderImpl, NotificationOrderRegisterUsecaseImpl]),
-  DynamicConfigModule.forProvider(OrderStartUsecaseImpl, [OrderRepositoryProviderImpl, NotificationOrderRegisterUsecaseImpl]),
-  DynamicConfigModule.forProvider(NotificationOrderRegisterUsecaseImpl, [SqsProducerQueueProviderImpl, ConfigEnvProviderImpl]),
-];
-
 @Module({
   imports: [InfrastructureModule],
-  providers: dynamicProvider,
-  exports: dynamicProvider,
+  ...DynamicConfigModule.forProviderRegister([
+    { useClass: OrderCreationUseCaseImpl, injects: [OrderRepositoryProviderImpl, NotificationOrderRegisterUsecaseImpl] },
+    { useClass: OrderQueryUsecaseImpl, injects: [OrderRepositoryProviderImpl] },
+    { useClass: OrderQueryQuantityStatusUsecaseImpl, injects: [OrderRepositoryProviderImpl] },
+    { useClass: OrderFindByIdUsecaseImpl, injects: [OrderRepositoryProviderImpl] },
+    { useClass: OrderEndUsecaseImpl, injects: [OrderRepositoryProviderImpl, NotificationOrderRegisterUsecaseImpl] },
+    { useClass: OrderStartUsecaseImpl, injects: [OrderRepositoryProviderImpl, NotificationOrderRegisterUsecaseImpl] },
+    { useClass: NotificationOrderRegisterUsecaseImpl, injects: [SqsProducerQueueProviderImpl, ConfigEnvProviderImpl] },
+  ]),
 })
 export class OrdersWebConfigModule {}

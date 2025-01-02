@@ -5,11 +5,8 @@ import { ApiKeyApplicationRepositoryProviderImpl } from '@infrastructure/reposit
 import { DynamicConfigModule } from '@shared/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-const dynamicFeature = DynamicConfigModule.forFeature([ApiKeyApplicationRepositoryProviderImpl]);
-
 @Module({
   imports: [TypeOrmModule.forFeature([ApiKeyApplication])],
-  providers: [ApiKeyApplicationSeed, ...dynamicFeature.providers],
-  exports: [ApiKeyApplicationSeed, ...dynamicFeature.exports],
+  ...DynamicConfigModule.forProviderRegister([{ useClass: ApiKeyApplicationSeed }, { useClass: ApiKeyApplicationRepositoryProviderImpl }]),
 })
 export class AuthRepositoryModule {}

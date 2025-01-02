@@ -6,6 +6,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [TypeOrmModule.forFeature([OrderEntity])],
-  ...DynamicConfigModule.forFeature([OrderRepositoryProviderImpl]),
+  ...DynamicConfigModule.forProviderRegister([{ useClass: OrderRepositoryProviderImpl }]),
 })
 export class OrdersRepositoryModule {}
