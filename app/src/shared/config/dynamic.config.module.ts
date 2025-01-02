@@ -33,7 +33,7 @@ export class DynamicConfigModule {
         provide: impl,
         useClass: impl,
       })),
-      exports: providersImpl.map((impl) => impl),
+      exports: providersImpl,
     };
   }
 
@@ -59,11 +59,11 @@ export class DynamicConfigModule {
    * export class MyModule {}
    * ```
    */
-  static forProvider(providerImpl: Type, injectsImpl?: Type[]): Provider {
+  static forProvider<T>(providerImpl: Type<T>, injectsImpl?: Type[]): Provider {
     return {
       provide: providerImpl,
       useFactory: (...args: any[]) => new providerImpl(...args),
-      inject: injectsImpl?.map((dep) => dep) || [],
+      inject: injectsImpl || [],
     };
   }
 
