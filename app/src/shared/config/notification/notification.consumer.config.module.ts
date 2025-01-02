@@ -4,11 +4,13 @@ import { DynamicConfigModule } from '@shared/config';
 import { NotificationSendWebhookUsecaseImpl } from '@core/usecases/notification/impl';
 import { WebhookIntegrationClientProviderImpl } from '@infrastructure/integrations/webhook-client/impl';
 
-const dynamicProvider = [DynamicConfigModule.forProvider(NotificationSendWebhookUsecaseImpl, [WebhookIntegrationClientProviderImpl])];
-
 @Module({
   imports: [InfrastructureModule],
-  providers: dynamicProvider,
-  exports: dynamicProvider,
+  ...DynamicConfigModule.forProviderRegister([
+    {
+      useClass: NotificationSendWebhookUsecaseImpl,
+      injects: [WebhookIntegrationClientProviderImpl],
+    },
+  ]),
 })
 export class NotificationConsumerConfigModule {}
