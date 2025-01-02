@@ -1,1 +1,1 @@
-export * from './auth-app.module';
+export * from './auth.config.module';
