@@ -30,10 +30,10 @@ export class DynamicConfigModule {
   static forFeature(providersImpl: Type[]): Partial<DynamicModule> {
     return {
       providers: providersImpl.map((impl) => ({
-        provide: impl.name,
+        provide: impl,
         useClass: impl,
       })),
-      exports: providersImpl.map((impl) => impl.name),
+      exports: providersImpl.map((impl) => impl),
     };
   }
 
@@ -61,9 +61,9 @@ export class DynamicConfigModule {
    */
   static forProvider(providerImpl: Type, injectsImpl?: Type[]): Provider {
     return {
-      provide: providerImpl.name,
+      provide: providerImpl,
       useFactory: (...args: any[]) => new providerImpl(...args),
-      inject: injectsImpl?.map((dep) => dep.name) || [],
+      inject: injectsImpl?.map((dep) => dep) || [],
     };
   }
 
