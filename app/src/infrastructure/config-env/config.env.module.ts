@@ -6,9 +6,9 @@ import { DynamicConfigModule } from '@shared/config';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true,
+      isGlobal: false,
     }),
   ],
-  ...DynamicConfigModule.forFeature([ConfigEnvProviderImpl]),
+  ...DynamicConfigModule.register([ConfigEnvProviderImpl]),
 })
 export class ConfigEnvModule {}

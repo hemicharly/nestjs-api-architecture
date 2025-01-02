@@ -5,6 +5,6 @@ import { DynamicConfigModule } from '@shared/config';
 
 @Module({
   imports: [WebhookConfigModule],
-  ...DynamicConfigModule.forFeature([WebhookIntegrationClientProviderImpl]),
+  ...DynamicConfigModule.register([WebhookIntegrationClientProviderImpl]),
 })
 export class WebhookIntegrationClientModule {}

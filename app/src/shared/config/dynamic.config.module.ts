@@ -22,12 +22,12 @@ export class DynamicConfigModule {
    * import { MyService } from './my-service';
    *
    * @Module({
-   *   imports: [DynamicConfigModule.forFeature([MyService])],
+   *   imports: [DynamicConfigModule.register([MyService])],
    * })
    * export class MyModule {}
    * ```
    */
-  static forFeature(providersImpl: Type[]): Partial<DynamicModule> {
+  static register(providersImpl: Type[]): Partial<DynamicModule> {
     return {
       providers: providersImpl.map((impl) => ({
         provide: impl,
