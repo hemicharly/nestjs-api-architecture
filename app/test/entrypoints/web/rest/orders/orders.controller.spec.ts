@@ -6,7 +6,10 @@ import { OrderCreateResponse, OrderItemsResponse, OrderPaginationResponse, Order
 import { OrdersController } from '@entrypoints/web/rest/orders';
 import { OrderStatus } from '@core/domain/enums';
 
-describe('OrdersController', () => {
+/**
+ * Implementation of test to 'orders.controller.ts'
+ */
+describe('orders.controller.ts', () => {
   let controller: OrdersController;
 
   const mockOrderCreationUseCase = { execute: jest.fn() };
