@@ -51,6 +51,10 @@ generate-index:
 	docker compose -f yarn.cli.yml run --rm yarn generate-index && \
 	git add .
 
+# Generates the test file
+generate-test-file:
+	docker compose -f yarn.cli.yml run --rm yarn generate-test-file
+
 # Creates the network defined in NETWORK_NAME (if it doesn't exist) and starts only the MongoDB
 # container in the background, based on the compose.yml file.
 mongodb:

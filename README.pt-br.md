@@ -196,6 +196,11 @@ Siga os passos abaixo para rodar o projeto em modo desenvolvimento.
   make generate-index
 ```
 
+- Gera arquivos de teste automaticamente:
+```bash
+  make generate-test-file
+```
+
 - Executa testes:
 ```bash
   make test
