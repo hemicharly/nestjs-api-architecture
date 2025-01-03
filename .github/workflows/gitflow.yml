@@ -7,6 +7,7 @@ on:
       - "release/*"
       - "feature/*"
       - "hotfix/*"
+      - "bugfix/*"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -44,7 +45,7 @@ jobs:
           else
             # Create the pull request
             PR_URL=$(gh pr create \
-              --label "GitFlow" \
+              --label "gitflow" \
               --base develop \
               --head "$MAIN_BRANCH" \
               --title "Sync $MAIN_BRANCH to develop" \
@@ -57,6 +58,7 @@ jobs:
             # Wait for the PR to be created and then merge it
             gh pr merge "$PR_NUMBER" --merge --auto
           fi
+
 
       # Release to Main
       - name: Create Pull Request for Release to Main
@@ -76,12 +78,13 @@ jobs:
             echo "PR from $RELEASE_BRANCH to develop already exists (open, closed, or merged). Skipping."
           else
             gh pr create \
-              --label "GitFlow" \
+              --label "gitflow" \
               --base main \
               --head "$RELEASE_BRANCH" \
               --title "Merge $RELEASE_BRANCH into Main" \
               --body "$PR_BODY"
           fi
+
 
       # Feature to Develop
       - name: Create Pull Request for Feature to Develop
@@ -101,12 +104,37 @@ jobs:
             echo "PR from $FEATURE_BRANCH to develop already exists (open, closed, or merged). Skipping."
           else
             gh pr create \
-              --label "GitFlow" \
+              --label "gitflow" \
               --base develop \
               --head "$FEATURE_BRANCH" \
               --title "Feature: Merge $FEATURE_BRANCH into Develop" \
               --body "$PR_BODY"
           fi
+          
+
+      # Bugfix to Develop
+      - name: Create Pull Request for Bugfix to Develop
+        if: github.ref_name && startsWith(github.ref, 'refs/heads/bugfix/')
+        run: |
+          # Extract branch name
+          BUGFIX_BRANCH=$(echo "${{ github.ref }}" | sed 's|refs/heads/||')
+          
+          PR_DESCRIPTION="This Pull Request merges the hotfix branch '$BUGFIX_BRANCH' into 'develop'."
+          PR_BODY=$(cat .github/PULL_REQUEST_TEMPLATE/hotfix_bugfix.md)
+          PR_BODY=$(echo "$PR_BODY" | sed "s|\$PR_DESCRIPTION|$PR_DESCRIPTION|g")
+
+          # PR for bugfix to develop
+          if gh pr list --base develop --head "$BUGFIX_BRANCH" --json id | grep -q id; then
+            echo "PR from $HOTFIX_BRANCH to develop already exists. Skipping."
+          else
+            gh pr create \
+              --label "gitflow" \
+              --base develop \
+              --head "$BUGFIX_BRANCH" \
+              --title "Bugfix: Merge $$BUGFIX_BRANCH into Develop" \
+              --body "$PR_BODY"
+          fi
+
 
       # Hotfix to Main and Develop
       - name: Create Pull Request for Hotfix to Main and Develop
@@ -116,7 +144,7 @@ jobs:
           HOTFIX_BRANCH=$(echo "${{ github.ref }}" | sed 's|refs/heads/||')
           
           PR_DESCRIPTION="This Pull Request merges the hotfix branch '$HOTFIX_BRANCH' into 'main'. Fixes critical issues in **production**."
-          PR_BODY=$(cat .github/PULL_REQUEST_TEMPLATE/hotfix.md)
+          PR_BODY=$(cat .github/PULL_REQUEST_TEMPLATE/hotfix_bugfix.md)
           PR_BODY=$(echo "$PR_BODY" | sed "s|\$PR_DESCRIPTION|$PR_DESCRIPTION|g")
 
           # Check if PR already exists (open, closed, or merged)
@@ -126,7 +154,7 @@ jobs:
             echo "PR from $HOTFIX_BRANCH to main already exists (open, closed, or merged). Skipping."
           else
             gh pr create \
-              --label "GitFlow" \
+              --label "gitflow" \
               --base main \
               --head "$HOTFIX_BRANCH" \
               --title "Hotfix: Merge $HOTFIX_BRANCH into Main" \
@@ -134,7 +162,7 @@ jobs:
           fi
           
           PR_DESCRIPTION="This Pull Request merges the hotfix branch '$HOTFIX_BRANCH' into 'develop'. Fixes critical issues in **production**."
-          PR_BODY=$(cat .github/PULL_REQUEST_TEMPLATE/hotfix.md)
+          PR_BODY=$(cat .github/PULL_REQUEST_TEMPLATE/hotfix_bugfix.md)
           PR_BODY=$(echo "$PR_BODY" | sed "s|\$PR_DESCRIPTION|$PR_DESCRIPTION|g")
 
           # PR for hotfix to develop
@@ -142,10 +170,10 @@ jobs:
             echo "PR from $HOTFIX_BRANCH to develop already exists. Skipping."
           else
             gh pr create \
-              --label "GitFlow" \
+              --label "gitflow" \
               --base develop \
               --head "$HOTFIX_BRANCH" \
-              --title "Hotfix: Sync $HOTFIX_BRANCH with Develop" \
+              --title "Hotfix: Merge $HOTFIX_BRANCH into Develop" \
               --body "$PR_BODY"
           fi
 
