@@ -22,7 +22,6 @@ const FILE_EXTENSION = '.ts';
  * Paths to ignore
  */
 const IGNORE_PATHS = [
-  'src/shared/audit',
   'src/core/providers',
   'src/core/domain/exceptions',
   'src/core/domain/enums',
