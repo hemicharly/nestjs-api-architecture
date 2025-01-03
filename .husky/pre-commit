@@ -22,6 +22,15 @@ npm run lint:fix
 echo "Running format fix..."
 npm run format:fix
 
+echo "Running build..."
+npm run build
+
+echo "Running test coverage..."
+npm run test:coverage
+
+echo "Running readme coverage update..."
+npm run readme:coverage
+
 # shellcheck disable=SC2103
 cd ..
 
