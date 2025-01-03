@@ -3,5 +3,6 @@ export class ApikeyApplicationCoreEntity {
   apiKey: string;
   userId: string;
   description: string;
+  rulesPaths?: string[];
   createdAt: string;
 }

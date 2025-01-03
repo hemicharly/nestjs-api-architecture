@@ -17,5 +17,8 @@ export class ApiKeyApplication {
   description: string;
 
   @Column()
+  rulesPaths: string[];
+
+  @Column()
   createdAt: string;
 }

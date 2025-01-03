@@ -31,6 +31,10 @@ test:
 test-coverage:
 	docker compose -f yarn.cli.yml run --rm yarn test:coverage
 
+# Run to update readme coverage
+readme-coverage:
+	docker compose -f yarn.cli.yml run --rm yarn readme:coverage
+
 # Updates all project libraries to their latest versions using Yarn,
 # running in a container defined in the yarn.cli.yml file.
 upgrade-lib:
