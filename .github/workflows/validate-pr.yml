@@ -1,0 +1,43 @@
+name: Validate Pull Request
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+    branches:
+      - main
+      - develop
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-pr:
+    if: ${{ github.event.pull_request.base.ref != 'develop' || github.event.pull_request.head.ref != 'main' }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-${{ steps.node-version.outputs.node-version }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Install dependencies
+        run: yarn install
+      - name: Lint
+        run: yarn lint
+      - name: Format
+        run: yarn format
+      - name: Build
+        run: yarn build
+      - name: Test
+        run: yarn test
