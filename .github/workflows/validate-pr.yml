@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   validate-pr:
-    if: ${{ github.event.pull_request.base.ref != 'develop' || github.event.pull_request.head.ref != 'main' }}
+    if: ${{ (github.event.pull_request.base.ref != 'develop' || github.event.pull_request.head.ref != 'main') && !(contains(github.head_ref, 'release/') && contains(github.base_ref, 'main'))}}
     runs-on: ubuntu-latest
     defaults:
       run:
