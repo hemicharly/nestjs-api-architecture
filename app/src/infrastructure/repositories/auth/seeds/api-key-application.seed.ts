@@ -35,13 +35,21 @@ export class ApiKeyApplicationSeed {
     apiKeyApplication3.userId = uuid();
     apiKeyApplication3.createdAt = new Date().toJSON();
 
+    const apiKeyApplication4 = new ApiKeyApplication();
+    apiKeyApplication4.apiKey = this.genApiKey();
+    apiKeyApplication4.description = 'funcionario-04';
+    apiKeyApplication4.rulesPaths = ['GET /v1/orders'];
+    apiKeyApplication4.userId = uuid();
+    apiKeyApplication4.createdAt = new Date().toJSON();
+
     console.log('apiKeyApplication: ', {
       apiKeyApplication1,
       apiKeyApplication2,
       apiKeyApplication3,
+      apiKeyApplication4,
     });
 
-    await this.repository.save([apiKeyApplication1, apiKeyApplication2, apiKeyApplication3]);
+    await this.repository.save([apiKeyApplication1, apiKeyApplication2, apiKeyApplication3, apiKeyApplication4]);
   }
 
   private genApiKey(): string {
