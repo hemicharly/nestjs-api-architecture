@@ -15,7 +15,7 @@ export default {
   coverageDirectory: 'coverage',
   coveragePathIgnorePatterns: ['<rootDir>/dist/', '<rootDir>/node_modules/'],
   coverageProvider: 'v8',
-  coverageReporters: ['json-summary', 'text', 'lcov'],
+  coverageReporters: ['json-summary', 'text', 'lcov', 'html'],
   reporters: ['default', ['jest-junit', { outputDirectory: 'coverage' }]],
   preset: 'ts-jest',
   runner: 'groups',

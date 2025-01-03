@@ -196,6 +196,11 @@ Follow the steps below to run the project in development mode.
   make generate-index
 ```
 
+- Automatically generates test file:
+```bash
+  make generate-test-file
+```
+
 - Runs test:
 ```bash
   make test

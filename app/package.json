@@ -9,6 +9,7 @@
   "scripts": {
     "build": "NODE_ENV=production && nest build",
     "generate-index": "node generate-index.js",
+    "generate-test-file": "node generate-tests.js",
     "seed": "ts-node -r tsconfig-paths/register src/seed.ts",
     "format": "prettier --check \"{src,test}/**/*.ts\"",
     "format:fix": "prettier --write \"{src,test}/**/*.ts\"",
