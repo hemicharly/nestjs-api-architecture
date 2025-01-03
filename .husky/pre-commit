@@ -3,8 +3,6 @@
 
 echo "Running pre-commit..."
 
-node app/generate-index.js
-
 BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
 
 if echo "$BRANCH_NAME" | grep -qE '^(feature|bugfix|release|hotfix|refactor|test)\/[a-z0-9-]+$'; then

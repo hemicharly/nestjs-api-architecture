@@ -1,7 +1,7 @@
 import { CheckApiKeyUsecase } from '@core/usecases/auth';
 import { ApiKeyApplicationRepositoryProvider } from '@core/providers/repositories';
 import { ApikeyApplicationCoreEntity } from '@core/domain/entities/auth';
-import { CustomAccessDeniedException, CustomUnauthorizedException } from '@core/domain/exceptions';
+import { CustomForbiddenException, CustomUnauthorizedException } from '@core/domain/exceptions';
 
 export class CheckApiKeyUsecaseImpl implements CheckApiKeyUsecase {
   constructor(private readonly repositoryProvider: ApiKeyApplicationRepositoryProvider) {}
@@ -21,7 +21,7 @@ export class CheckApiKeyUsecaseImpl implements CheckApiKeyUsecase {
     }
 
     if (!this.canAccessPath(path, apiKeyApplication?.rulesPaths || [])) {
-      throw new CustomAccessDeniedException();
+      throw new CustomForbiddenException();
     }
 
     return apiKeyApplication;
