@@ -11,6 +11,7 @@ export class ApikeyApplicationInfraTransformer {
     dbEntity.apiKey = entityCore.apiKey;
     dbEntity.description = entityCore.description;
     dbEntity.userId = entityCore.userId;
+    dbEntity.rulesPaths = entityCore?.rulesPaths || [];
     dbEntity.createdAt = new Date().toJSON();
     return dbEntity;
   }
@@ -25,6 +26,7 @@ export class ApikeyApplicationInfraTransformer {
     coreEntity.apiKey = entity.apiKey;
     coreEntity.description = entity.description;
     coreEntity.userId = entity.userId;
+    coreEntity.rulesPaths = entity?.rulesPaths || [];
     coreEntity.createdAt = entity.createdAt;
     return coreEntity;
   }
