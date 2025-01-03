@@ -1,0 +1,130 @@
+name: Validate Release
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  test-coverage:
+    if: contains(github.head_ref, 'release/') && contains(github.base_ref, 'main')
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-${{ steps.node-version.outputs.node-version }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Install dependencies
+        run: yarn install
+      - name: Lint
+        run: yarn lint
+      - name: Format
+        run: yarn format
+      - name: Build
+        run: yarn build
+      - name: Test Coverage
+        run: yarn test:coverage
+      - name: Create badges
+        run: |
+          echo "Update badges readme file"
+          yarn readme:coverage
+      - name: Upload coverage files
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-files
+          path: |
+            app/coverage
+            app/test/badges
+
+  tag:
+    if: contains(github.head_ref, 'release/') && contains(github.base_ref, 'main')
+    needs:
+      - test-coverage
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
+    steps:
+      - name: Extract branch tag
+        id: tag
+        run: |
+          BRANCH=${{ github.head_ref }}
+          TAG="${BRANCH//release\//}"
+          echo $TAG
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+  update-version:
+    if: contains(github.head_ref, 'release/') && contains(github.base_ref, 'main')
+    needs:
+      - tag
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    env:
+      TAG: ${{ needs.tag.outputs.tag }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Update version in package.json
+        run: |
+          jq '.version = "${{ env.TAG }}"' package.json > temp.json && mv temp.json package.json
+      - name: Upload updated package.json
+        uses: actions/upload-artifact@v4
+        with:
+          name: updated-package-json
+          path: app/package.json
+
+  commit-push:
+    if: contains(github.head_ref, 'release/') && contains(github.base_ref, 'main')
+    needs:
+      - test-coverage
+      - update-version
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Download coverage files
+        uses: actions/download-artifact@v4
+        with:
+          name: coverage-files
+          path: app
+      - name: Download updated package.json
+        uses: actions/download-artifact@v4
+        with:
+          name: updated-package-json
+          path: app
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "github-actions@github.com"
+
+          git checkout -B ${{ github.head_ref }} || git checkout -b ${{ github.head_ref }}
+          
+          echo "Commit update version to '${{ env.TAG }}' and test coverage badges"
+          git add .
+          git commit -m "chore: update version to '${{ env.TAG }}' and test coverage badges"
+          
+          git pull origin ${{ github.head_ref }} --rebase
+
+          git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git ${{ github.head_ref }}

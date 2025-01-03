@@ -9,6 +9,15 @@
 [![en](https://img.shields.io/badge/lang-en-blue.svg)](README.md)
 [![pt-br](https://img.shields.io/badge/lang-pt--br-green.svg)](README.pt-br.md)
 
+
+### Cobertura de teste
+
+![Entrypoints](app/test/badges/entrypoints.svg)
+![Core](app/test/badges/core.svg)
+![Infrastructure](app/test/badges/infrastructure.svg)
+![Shared](app/test/badges/shared.svg)
+
+
 ## Introdução
 
 Este projeto foi desenvolvido com fins didáticos, visando explorar e aprofundar o conhecimento no framework **NestJS**.
