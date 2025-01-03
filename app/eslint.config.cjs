@@ -1,5 +1,6 @@
 const tsParser = require('@typescript-eslint/parser');
 const typescriptPlugin = require('@typescript-eslint/eslint-plugin');
+const unusedImports = require('eslint-plugin-unused-imports');
 const prettierPlugin = require('eslint-plugin-prettier');
 const importPlugin = require('eslint-plugin-import');
 const boundariesPlugin = require('eslint-plugin-boundaries');
@@ -23,6 +24,7 @@ module.exports = [
     plugins: {
       '@typescript-eslint': typescriptPlugin,
       prettier: prettierPlugin,
+      'unused-imports': unusedImports,
       'import': importPlugin,
       boundaries: boundariesPlugin
     },
@@ -40,11 +42,15 @@ module.exports = [
       ],
     },
     rules: {
+      'complexity': ['error', { max: 10 }],
+      'unused-imports/no-unused-imports': 'error',
       '@typescript-eslint/interface-name-prefix': 'off',
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-namespace': 'off',
+      'no-duplicate-case': 'error',
+      'no-duplicate-imports': 'error',
       'prettier/prettier': [
         'error',
         {
