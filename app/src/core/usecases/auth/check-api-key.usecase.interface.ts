@@ -1,5 +1,5 @@
 import { ApikeyApplicationCoreEntity } from '@core/domain/entities/auth';
 
-export interface CheckApiKeyUsecase {
+export interface CheckApiKeyUsecaseInterface {
   execute(apiKey: string, path: string): Promise<ApikeyApplicationCoreEntity>;
 }

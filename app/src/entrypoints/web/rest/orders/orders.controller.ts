@@ -1,6 +1,13 @@
 import { Body, Controller, Get, HttpCode, Inject, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
-import { OrderCreationUseCase, OrderEndUsecase, OrderFindByIdUsecase, OrderQueryQuantityStatusUsecase, OrderQueryUsecase, OrderStartUsecase } from '@core/usecases/orders';
+import {
+  OrderCreationUsecaseInterface,
+  OrderEndUsecaseInterface,
+  OrderFindByIdUsecaseInterface,
+  OrderQueryQuantityStatusUsecaseInterface,
+  OrderQueryUsecaseInterface,
+  OrderStartUsecaseInterface,
+} from '@core/usecases/orders';
 import { ApiKeyGuard } from '@entrypoints/web/shared/middleware/apikey';
 import { OrderCreateResponse, OrderPaginationResponse, OrderQuantityStatusResponse, OrderItemsResponse } from '@src/entrypoints/web/rest/orders/response';
 import { OrderQueryRequest, OrderCreationRequest, OrderStartRequest, OrderEndRequest, OrderQueryQuantityStatusRequest } from '@src/entrypoints/web/rest/orders/request';
@@ -22,22 +29,22 @@ import { OrderCreationUseCaseImpl, OrderEndUsecaseImpl, OrderFindByIdUsecaseImpl
 @UseGuards(ApiKeyGuard)
 export class OrdersController {
   @Inject(OrderCreationUseCaseImpl)
-  private readonly orderCreationUseCase: OrderCreationUseCase;
+  private readonly orderCreationUseCase: OrderCreationUsecaseInterface;
 
   @Inject(OrderQueryUsecaseImpl)
-  private readonly orderQueryUsecase: OrderQueryUsecase;
+  private readonly orderQueryUsecase: OrderQueryUsecaseInterface;
 
   @Inject(OrderQueryQuantityStatusUsecaseImpl)
-  private readonly orderQueryQuantityStatusUsecase: OrderQueryQuantityStatusUsecase;
+  private readonly orderQueryQuantityStatusUsecase: OrderQueryQuantityStatusUsecaseInterface;
 
   @Inject(OrderFindByIdUsecaseImpl)
-  private readonly orderFindByIdUsecase: OrderFindByIdUsecase;
+  private readonly orderFindByIdUsecase: OrderFindByIdUsecaseInterface;
 
   @Inject(OrderStartUsecaseImpl)
-  private readonly orderStartUsecase: OrderStartUsecase;
+  private readonly orderStartUsecase: OrderStartUsecaseInterface;
 
   @Inject(OrderEndUsecaseImpl)
-  private readonly orderEndUsecase: OrderEndUsecase;
+  private readonly orderEndUsecase: OrderEndUsecaseInterface;
 
   @Post()
   @HttpCode(201)

@@ -1,19 +1,19 @@
-import { ProducerQueueProvider } from '@core/providers/queue';
+import { ProducerQueueProviderInterface } from '@core/providers/queue';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { SendMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
 import { TracerContextAudit } from '@shared/audit';
 import { SqsBuilderConfig } from '@shared/config/sqs';
 import { ConfigEnvProviderImpl } from '@infrastructure/config-env/impl';
-import { ConfigEnvProvider } from '@core/providers/config-env';
+import { ConfigEnvProviderInterface } from '@core/providers/config-env';
 
 @Injectable()
-export class SqsProducerQueueProviderImpl implements ProducerQueueProvider {
+export class SqsProducerQueueProviderImpl implements ProducerQueueProviderInterface {
   private readonly logger = new Logger(SqsProducerQueueProviderImpl.name);
   private readonly sqsClient: SQSClient;
 
   constructor(
     @Inject(ConfigEnvProviderImpl)
-    private readonly configEnvProvider: ConfigEnvProvider,
+    private readonly configEnvProvider: ConfigEnvProviderInterface,
   ) {
     this.sqsClient = SqsBuilderConfig.builderClient(this.configEnvProvider);
   }

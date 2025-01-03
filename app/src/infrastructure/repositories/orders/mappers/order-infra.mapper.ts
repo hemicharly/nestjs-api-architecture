@@ -12,7 +12,7 @@ import {
 import { PaginationCoreEntity } from '@core/domain/entities/shared';
 import { OrderEntity } from '@infrastructure/repositories/orders/entity';
 import { OrderStatus, PeriodGroup } from '@core/domain/enums';
-import { OrderAggregationResult } from '@infrastructure/repositories/orders/types';
+import { OrderAggregationResultType } from '@infrastructure/repositories/orders/types';
 import { FindOptionsWhere } from 'typeorm/find-options/FindOptionsWhere';
 
 export class OrderInfraMapper {
@@ -180,7 +180,7 @@ export class OrderInfraMapper {
     ];
   }
 
-  public static fromAggregationResult(aggregationResult: OrderAggregationResult[]): OrderQuantityStatusEntity[] {
+  public static fromAggregationResult(aggregationResult: OrderAggregationResultType[]): OrderQuantityStatusEntity[] {
     if (aggregationResult?.length === 0) {
       return [];
     }

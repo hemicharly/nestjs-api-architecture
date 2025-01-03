@@ -1,1 +1,1 @@
-export * from './sqs.decorators.types';
+export * from './sqs.decorator.type';

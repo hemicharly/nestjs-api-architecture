@@ -1,4 +1,4 @@
-export interface OrderAggregationResult {
+export interface OrderAggregationResultType {
   count: number;
   year: number;
   month: number;

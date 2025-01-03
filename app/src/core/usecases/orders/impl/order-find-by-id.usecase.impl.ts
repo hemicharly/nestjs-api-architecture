@@ -1,11 +1,11 @@
-import { OrderRepositoryProvider } from '@core/providers/repositories';
+import { OrderRepositoryProviderInterface } from '@core/providers/repositories';
 import { CustomResourceNotFoundException } from '@core/domain/exceptions';
 import { CodeError } from '@core/domain/exceptions/error';
 import { OrderCoreEntity, OrderFindByIdCoreEntity } from '@core/domain/entities/orders';
-import { OrderFindByIdUsecase } from '@core/usecases/orders';
+import { OrderFindByIdUsecaseInterface } from '@core/usecases/orders';
 
-export class OrderFindByIdUsecaseImpl implements OrderFindByIdUsecase {
-  constructor(private readonly repositoryProvider: OrderRepositoryProvider) {}
+export class OrderFindByIdUsecaseImpl implements OrderFindByIdUsecaseInterface {
+  constructor(private readonly repositoryProvider: OrderRepositoryProviderInterface) {}
 
   public async execute(orderFindByIdCoreEntity: OrderFindByIdCoreEntity): Promise<OrderCoreEntity> {
     const entityCore = await this.repositoryProvider.findByIdAndEmployeeId(orderFindByIdCoreEntity.id, orderFindByIdCoreEntity.employeeId);
