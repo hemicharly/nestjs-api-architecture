@@ -56,9 +56,21 @@ jobs:
         if: contains(github.head_ref, 'release/') && contains(github.base_ref, 'main')
         run: yarn readme:coverage
 
+      - name: Authenticate GitHub CLI
+        if: contains(github.head_ref, 'release/') && contains(github.base_ref, 'main')
+        run: echo "${{ secrets.GH_PAT }}" | gh auth login --with-token
+
       - name: Commit and push changes
         if: contains(github.head_ref, 'release/') && contains(github.base_ref, 'main')
-        uses: devops-infra/action-commit-push@master
-        with:
-          github_token: ${{ secrets.GH_PAT }}
-          commit_message: "docs: test coverage badges update"
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "github-actions@github.com"
+
+          git checkout -B ${{ github.head_ref }} || git checkout -b ${{ github.head_ref }}
+
+          git add .
+          git commit -m "docs: test coverage badges update"
+
+          git pull origin ${{ github.head_ref }} --rebase
+
+          git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}.git ${{ github.head_ref }}
