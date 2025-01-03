@@ -1,9 +1,9 @@
-import { ConfigEnvProvider } from '@core/providers/config-env';
+import { ConfigEnvProviderInterface } from '@core/providers/config-env';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
-export class ConfigEnvProviderImpl implements ConfigEnvProvider {
+export class ConfigEnvProviderImpl implements ConfigEnvProviderInterface {
   constructor(private readonly configService: ConfigService) {}
 
   public get<T = any>(key: string, defaultValue?: T): T {

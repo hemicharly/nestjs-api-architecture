@@ -1,1 +1,1 @@
-export * from './sqs.decorators';
+export * from './sqs.message.handler.decorator';

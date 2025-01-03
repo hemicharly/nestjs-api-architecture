@@ -1,12 +1,12 @@
 import { CanActivate, ExecutionContext, Inject, Injectable } from '@nestjs/common';
 import { Request } from 'express';
-import { CheckApiKeyUsecase } from '@core/usecases/auth';
+import { CheckApiKeyUsecaseInterface } from '@core/usecases/auth';
 import { CheckApiKeyUsecaseImpl } from '@core/usecases/auth/impl';
 
 @Injectable()
 export class ApiKeyGuard implements CanActivate {
   @Inject(CheckApiKeyUsecaseImpl)
-  private readonly checkApiKeyUsecase: CheckApiKeyUsecase;
+  private readonly checkApiKeyUsecase: CheckApiKeyUsecaseInterface;
 
   public async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();

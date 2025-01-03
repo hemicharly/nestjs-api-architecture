@@ -1,1 +1,1 @@
-export * from './config.env.provider';
+export * from './config.env.provider.interface';

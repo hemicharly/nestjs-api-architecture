@@ -1,2 +1,2 @@
-export * from './notification.order.register.usecase';
-export * from './notification.send.webhook.usecase';
+export * from './notification.order.register.usecase.interface';
+export * from './notification.send.webhook.usecase.interface';

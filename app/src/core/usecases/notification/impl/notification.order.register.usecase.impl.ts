@@ -1,12 +1,12 @@
 import { NotificationOrderCoreEntity } from '@core/domain/entities/notifications';
-import { NotificationOrderRegisterUsecase } from '@core/usecases/notification';
-import { ProducerQueueProvider } from '@core/providers/queue';
-import { ConfigEnvProvider } from '@core/providers/config-env';
+import { NotificationOrderRegisterUsecaseInterface } from '@core/usecases/notification';
+import { ProducerQueueProviderInterface } from '@core/providers/queue';
+import { ConfigEnvProviderInterface } from '@core/providers/config-env';
 
-export class NotificationOrderRegisterUsecaseImpl implements NotificationOrderRegisterUsecase {
+export class NotificationOrderRegisterUsecaseImpl implements NotificationOrderRegisterUsecaseInterface {
   constructor(
-    private readonly sendQueueProvider: ProducerQueueProvider,
-    private readonly configEnvProvider: ConfigEnvProvider,
+    private readonly sendQueueProvider: ProducerQueueProviderInterface,
+    private readonly configEnvProvider: ConfigEnvProviderInterface,
   ) {}
   public async execute(notificationOrderCoreEntity: Partial<NotificationOrderCoreEntity>): Promise<void> {
     const queueName = this.configEnvProvider.getString('QUEUE_NOTIFICATION_ORDER');

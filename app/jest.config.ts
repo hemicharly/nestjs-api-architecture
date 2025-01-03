@@ -9,9 +9,33 @@ export default {
     '^.+\\.(t|j)s$': ['ts-jest', { isolatedModules: true }],
   },
   verbose: true,
-
   collectCoverage: true,
-  collectCoverageFrom: ['src/core/**/*.ts','src/entrypoints/**/*.ts',  'src/infrastructure/**/*.ts', 'src/shared/**/*.ts'],
+  collectCoverageFrom: [
+    'src/core/**/*.ts',
+    'src/entrypoints/**/*.ts',
+    'src/infrastructure/**/*.ts',
+    'src/shared/**/*.ts',
+
+    //Ignore patterns
+    '!src/**/*index.ts',
+    '!src/**/*express.d.ts',
+    '!src/**/*.config.ts',
+    '!src/**/*.module.ts',
+    '!src/**/*.interface.ts',
+    '!src/**/*.pipe.ts',
+    '!src/**/*.guard.ts',
+    '!src/**/*.filter.ts',
+    '!src/**/*.doc.ts',
+    '!src/**/*tracer.context.audit.ts',
+    '!src/**/*.type.ts',
+    '!src/**/*.enum.ts',
+    '!src/**/*.exception.ts',
+    '!src/**/*.decorator.ts',
+    '!src/**/*.dto.ts',
+    '!src/**/*.request.ts',
+    '!src/**/*.response.ts',
+    '!src/**/*.seed.ts',
+  ],
   coverageDirectory: 'coverage',
   coveragePathIgnorePatterns: ['<rootDir>/dist/', '<rootDir>/node_modules/'],
   coverageProvider: 'v8',
@@ -25,10 +49,10 @@ export default {
     prefix: '<rootDir>/',
   }),
   modulePathIgnorePatterns: [
-    "<rootDir>/dist/"
+    '<rootDir>/dist/',
   ],
   testPathIgnorePatterns: [
-    "<rootDir>/dist/",
-    "<rootDir>/node_modules/"
+    '<rootDir>/dist/',
+    '<rootDir>/node_modules/',
   ],
 };

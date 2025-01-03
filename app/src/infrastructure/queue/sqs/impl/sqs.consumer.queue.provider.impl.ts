@@ -2,9 +2,9 @@ import { Inject, Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nest
 import { ChangeMessageVisibilityCommand, DeleteMessageCommand, Message, ReceiveMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
 import { DiscoveryService, MetadataScanner } from '@nestjs/core';
 import { SQS_HANDLER_METADATA } from '@shared/config/sqs/decorators';
-import { SqsDecoratorsTypes } from '@shared/config/sqs/decorators/types';
+import { SqsDecoratorType } from '@shared/config/sqs/decorators/types';
 import { TracerContextAudit } from '@shared/audit';
-import { ConfigEnvProvider } from '@core/providers/config-env';
+import { ConfigEnvProviderInterface } from '@core/providers/config-env';
 import { ConfigEnvProviderImpl } from '@infrastructure/config-env/impl';
 import { SqsBuilderConfig } from '@shared/config/sqs';
 
@@ -22,7 +22,7 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
    * - Key: Queue configuration (e.g., queueName, batchSize).
    * - Value: The handler function to process messages.
    */
-  private readonly handlers = new Map<SqsDecoratorsTypes, Function>();
+  private readonly handlers = new Map<SqsDecoratorType, Function>();
 
   /**
    * A map of polling intervals for each queue.
@@ -40,7 +40,7 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
     private readonly discoveryService: DiscoveryService,
     private readonly metadataScanner: MetadataScanner,
     @Inject(ConfigEnvProviderImpl)
-    private readonly configEnvProvider: ConfigEnvProvider,
+    private readonly configEnvProvider: ConfigEnvProviderInterface,
   ) {
     this.sqsClient = SqsBuilderConfig.builderClient(this.configEnvProvider);
   }
@@ -109,7 +109,7 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
    * @param sqsDecoratorsTypes - Configuration of the handler associated with the queue.
    * @returns Command configured to receive messages.
    */
-  private builderReceiveMessageCommand(queueUrl: string, sqsDecoratorsTypes: SqsDecoratorsTypes): ReceiveMessageCommand {
+  private builderReceiveMessageCommand(queueUrl: string, sqsDecoratorsTypes: SqsDecoratorType): ReceiveMessageCommand {
     return new ReceiveMessageCommand({
       QueueUrl: queueUrl,
       MaxNumberOfMessages: sqsDecoratorsTypes.batchSize || 10,

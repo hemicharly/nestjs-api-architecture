@@ -1,14 +1,14 @@
-import { OrderRepositoryProvider } from '@core/providers/repositories';
+import { OrderRepositoryProviderInterface } from '@core/providers/repositories';
 import { OrderCoordsCoreEntity, OrderEndCoreEntity } from '@core/domain/entities/orders';
 import { ValidateDatesCoreEntity } from '@core/domain/entities/shared';
-import { OrderEndUsecase } from '@core/usecases/orders';
-import { NotificationOrderRegisterUsecase } from '@core/usecases/notification';
+import { OrderEndUsecaseInterface } from '@core/usecases/orders';
+import { NotificationOrderRegisterUsecaseInterface } from '@core/usecases/notification';
 import { NotificationOrderCoreEntity } from '@core/domain/entities/notifications';
 
-export class OrderEndUsecaseImpl implements OrderEndUsecase {
+export class OrderEndUsecaseImpl implements OrderEndUsecaseInterface {
   constructor(
-    private readonly repositoryProvider: OrderRepositoryProvider,
-    private readonly notificationOrderRegisterUsecase: NotificationOrderRegisterUsecase,
+    private readonly repositoryProvider: OrderRepositoryProviderInterface,
+    private readonly notificationOrderRegisterUsecase: NotificationOrderRegisterUsecaseInterface,
   ) {}
 
   public async execute(orderEndCoreEntity: OrderEndCoreEntity): Promise<void> {

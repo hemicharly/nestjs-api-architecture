@@ -42,7 +42,7 @@ describe('orders.controller.ts', () => {
     expect(controller).toBeDefined();
   });
 
-  it('should call OrderCreationUseCase.execute with correct parameters', async () => {
+  it('should call OrderCreationUsecaseInterface.execute with correct parameters', async () => {
     const mockRequest = { headers: { 'x-api-key': '8c2e7d525bd34adfb52bb1fb24357a2d' }, body: {} } as any;
     const mockDto: OrderCreationRequest = {
       serviceDescription: 'BHUT serviço',
@@ -63,7 +63,7 @@ describe('orders.controller.ts', () => {
     expect(result).toEqual(expect.anything());
   });
 
-  it('should call OrderQueryUsecase.execute with correct parameters', async () => {
+  it('should call OrderQueryUsecaseInterface.execute with correct parameters', async () => {
     const mockRequest = { headers: { 'x-api-key': '8c2e7d525bd34adfb52bb1fb24357a2d' }, body: {} } as any;
     const mockDto: OrderQueryRequest = {
       page: 0,
@@ -88,7 +88,7 @@ describe('orders.controller.ts', () => {
     expect(result).toEqual(expect.anything());
   });
 
-  it('should call OrderQueryQuantityStatusUsecase.execute with correct parameters', async () => {
+  it('should call OrderQueryQuantityStatusUsecaseInterface.execute with correct parameters', async () => {
     const mockRequest = { headers: { 'x-api-key': '8c2e7d525bd34adfb52bb1fb24357a2d' }, body: {} } as any;
     const mockDto: OrderQueryQuantityStatusRequest = {
       startDate: '2024-12-01',
@@ -110,7 +110,7 @@ describe('orders.controller.ts', () => {
     expect(result).toEqual(expect.anything());
   });
 
-  it('should call OrderFindByIdUsecase.execute with correct parameters', async () => {
+  it('should call OrderFindByIdUsecaseInterface.execute with correct parameters', async () => {
     const mockRequest = { headers: { 'x-api-key': '8c2e7d525bd34adfb52bb1fb24357a2d' }, body: {} } as any;
     const mockDto: string = '6773205c93b1daa335239f03';
     const mockResponse: OrderItemsResponse = {
@@ -129,7 +129,7 @@ describe('orders.controller.ts', () => {
     expect(result).toEqual(expect.anything());
   });
 
-  it('should call OrderStartUsecase.execute with correct parameters', async () => {
+  it('should call OrderStartUsecaseInterface.execute with correct parameters', async () => {
     const mockRequest = { headers: { 'x-api-key': '8c2e7d525bd34adfb52bb1fb24357a2d' }, body: {} } as any;
     const mockDto: OrderStartRequest = {
       startDatetime: '2024-12-29T22:59:41.255Z',
@@ -140,7 +140,7 @@ describe('orders.controller.ts', () => {
     expect(mockOrderStartUsecase.execute).toHaveBeenCalledWith(expect.anything());
   });
 
-  it('should call OrderEndUsecase.execute with correct parameters', async () => {
+  it('should call OrderEndUsecaseInterface.execute with correct parameters', async () => {
     const mockRequest = { headers: { 'x-api-key': '8c2e7d525bd34adfb52bb1fb24357a2d' }, body: {} } as any;
     const mockDto: OrderEndRequest = {
       endDatetime: '2024-12-29T23:59:41.255Z',

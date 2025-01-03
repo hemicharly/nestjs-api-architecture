@@ -1,4 +1,4 @@
-export interface SqsDecoratorsTypes {
+export interface SqsDecoratorType {
   /**
    * The environment variable name of the SQS queue to use.
    * - Required.

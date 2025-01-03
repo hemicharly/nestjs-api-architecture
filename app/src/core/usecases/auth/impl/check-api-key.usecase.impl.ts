@@ -1,10 +1,10 @@
-import { CheckApiKeyUsecase } from '@core/usecases/auth';
-import { ApiKeyApplicationRepositoryProvider } from '@core/providers/repositories';
+import { CheckApiKeyUsecaseInterface } from '@core/usecases/auth';
+import { ApikeyapplicationRepositoryProviderInterface } from '@core/providers/repositories';
 import { ApikeyApplicationCoreEntity } from '@core/domain/entities/auth';
 import { CustomForbiddenException, CustomUnauthorizedException } from '@core/domain/exceptions';
 
-export class CheckApiKeyUsecaseImpl implements CheckApiKeyUsecase {
-  constructor(private readonly repositoryProvider: ApiKeyApplicationRepositoryProvider) {}
+export class CheckApiKeyUsecaseImpl implements CheckApiKeyUsecaseInterface {
+  constructor(private readonly repositoryProvider: ApikeyapplicationRepositoryProviderInterface) {}
 
   public async execute(apiKey: string, path: string): Promise<ApikeyApplicationCoreEntity> {
     if (!apiKey || apiKey === '') {

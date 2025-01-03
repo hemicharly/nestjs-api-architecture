@@ -1,1 +1,1 @@
-export * from './producer.queue.provider';
+export * from './producer.queue.provider.interface';

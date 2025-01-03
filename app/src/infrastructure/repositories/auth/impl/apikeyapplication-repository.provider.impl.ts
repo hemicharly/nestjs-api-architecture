@@ -1,4 +1,4 @@
-import { ApiKeyApplicationRepositoryProvider } from '@core/providers/repositories';
+import { ApikeyapplicationRepositoryProviderInterface } from '@core/providers/repositories';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
@@ -7,7 +7,7 @@ import { ApiKeyApplication } from '@infrastructure/repositories/auth/entity';
 import { ApikeyApplicationInfraTransformer } from '@infrastructure/repositories/auth/transformers';
 
 @Injectable()
-export class ApiKeyApplicationRepositoryProviderImpl implements ApiKeyApplicationRepositoryProvider {
+export class ApiKeyApplicationRepositoryProviderImpl implements ApikeyapplicationRepositoryProviderInterface {
   constructor(
     @InjectRepository(ApiKeyApplication)
     private readonly repository: Repository<ApiKeyApplication>,

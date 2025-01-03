@@ -1,5 +1,5 @@
 import { OrderStartCoreEntity } from '@core/domain/entities/orders';
 
-export interface OrderStartUsecase {
+export interface OrderStartUsecaseInterface {
   execute(orderStartCoreEntity: OrderStartCoreEntity): Promise<void>;
 }
