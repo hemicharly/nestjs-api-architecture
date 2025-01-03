@@ -11,27 +11,27 @@ import { TracerContextAudit } from '@shared/audit';
  * @example
  *
  * ```typescript
- * import { WebhookIntegrationClientProvider } from '@core/providers/integrations';
+ * import { WebhookIntegrationClientProviderInterface } from '@core/providers/integrations';
  * import { Injectable, Logger } from '@nestjs/common';
  * import { firstValueFrom } from 'rxjs';
  * import { HttpService } from '@nestjs/axios';
- * import { IntegrationAuditCommon } from '@shared/audit/integrations';
+ * import { IntegrationAuditInterceptor } from '@shared/audit/integrations';
  *
  * @Injectable()
- * export class WebhookIntegrationClientProviderImpl implements WebhookIntegrationClientProvider {
+ * export class WebhookIntegrationClientProviderImpl implements WebhookIntegrationClientProviderInterface {
  *   private readonly logger = new Logger(WebhookIntegrationClientProviderImpl.name);
  *
  *   constructor(private readonly httpService: HttpService) {
  *     // Instantiate the class
- *     new IntegrationAuditCommon('webhook-notification', this.logger, httpService);
+ *     new IntegrationAuditInterceptor('webhook-notification', this.logger, httpService);
  *   }
  *
  * }
  * ```
  *
- * @class IntegrationAuditCommon
+ * @class IntegrationAuditInterceptor
  */
-export class IntegrationAuditCommon {
+export class IntegrationAuditInterceptor {
   /**
    * Defines the HTTP status code for internal server errors.
    * Used as the default value in case of request failures.
@@ -40,7 +40,7 @@ export class IntegrationAuditCommon {
   private readonly HTTP_STATUS_ERROR: number = 500;
 
   /**
-   * Constructor of the `IntegrationAuditCommon` class.
+   * Constructor of the `IntegrationAuditInterceptor` class.
    * Initializes the necessary parameters for auditing HTTP requests.
    *
    * @param application - The name or identifier of the application making the integration.

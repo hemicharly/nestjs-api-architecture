@@ -12,7 +12,26 @@ const categories = {
   Shared: ['/src/shared/', '/src/shared/audit', '/src/shared/config']
 };
 
+/**
+ * Loads the coverage data from a JSON file.
+ * @returns {Object} The coverage data object.
+ * @throws {Error} If there is an error reading or parsing the file.
+ */
+const loadCoverageData = () => {
+  try {
+    return JSON.parse(readFileSync(coverageDataPath, 'utf8'));
+  } catch (error) {
+    console.error('Error reading or parsing the coverage file:', error);
+    process.exit(1);
+  }
+};
 
+/**
+ * Calculates the coverage metrics for a category of files based on the provided data.
+ * @param {Object} files The coverage data object for each file.
+ * @param {string[]} patterns An array of path patterns for files that belong to a category.
+ * @returns {Object} The total metrics (lines, statements, functions, branches) with coverage percentages.
+ */
 const calculateCategoryMetrics = (files, patterns) => {
   let totalMetrics = {
     lines: { total: 0, covered: 0, skipped: 0, pct: 0 },
@@ -49,29 +68,47 @@ const calculateCategoryMetrics = (files, patterns) => {
   return totalMetrics;
 };
 
+/**
+ * Generates coverage badges for the specified categories and saves the SVG files.
+ * @param {Object} coverageData The coverage data object.
+ * @throws {Error} If there is an error saving a badge file.
+ */
 const generateBadges = (coverageData) => {
   const { total, ...files } = coverageData;
 
+  /**
+   * Generates a badge for a specific category based on the coverage metrics.
+   * @param {string} category The name of the category (e.g., 'Entrypoints', 'Core').
+   * @param {string[]} patterns The file path patterns for the category files.
+   * @param {string} outputPath The path where the badge SVG file will be saved.
+   */
   const generateBadgeForCategory = (category, patterns, outputPath) => {
     const metrics = calculateCategoryMetrics(files, patterns);
+
     const format = {
       label: category,
-      message: `${metrics.statements.pct.toFixed(2)}%`,
+      message: `${metrics.statements.pct.toFixed(2)}%`, // Using the statements coverage percentage
       color: metrics.statements.pct > 80 ? 'green' : metrics.statements.pct > 50 ? 'yellow' : 'red'
     };
+
     const badge = makeBadge(format);
-    writeFileSync(outputPath, badge);
+
+    try {
+      writeFileSync(outputPath, badge);
+    } catch (error) {
+      console.error(`Error saving the badge for category ${category}:`, error);
+    }
   };
 
-  generateBadgeForCategory('Entrypoints', categories.Entrypoints, path.join(badgesDir, 'entrypoints.svg'));
-  generateBadgeForCategory('Core', categories.Core, path.join(badgesDir, 'core.svg'));
-  generateBadgeForCategory('Infrastructure', categories.Infrastructure, path.join(badgesDir, 'infrastructure.svg'));
-  generateBadgeForCategory('Shared', categories.Shared, path.join(badgesDir, 'shared.svg'));
+  // Generate badges for each category
+  Object.entries(categories).forEach(([category, patterns]) => {
+    const outputPath = path.join(badgesDir, `${category.toLowerCase()}.svg`);
+    generateBadgeForCategory(category, patterns, outputPath);
+  });
 };
 
-
-const coverageData = JSON.parse(readFileSync(coverageDataPath, 'utf8'));
-
+// Load the coverage data and generate badges
+const coverageData = loadCoverageData();
 generateBadges(coverageData);
 
 console.log('Badges generated and saved to', badgesDir);

@@ -8,7 +8,7 @@ import {
   OrderStartCoreEntity,
 } from '@core/domain/entities/orders';
 
-export interface OrderRepositoryProvider {
+export interface OrderRepositoryProviderInterface {
   save(entityCore: Partial<OrderCoreEntity>): Promise<OrderCoreEntity>;
 
   updateStart(id: string, entityCore: OrderStartCoreEntity): Promise<void>;

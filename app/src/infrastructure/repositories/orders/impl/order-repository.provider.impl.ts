@@ -1,4 +1,4 @@
-import { OrderRepositoryProvider } from '@core/providers/repositories';
+import { OrderRepositoryProviderInterface } from '@core/providers/repositories';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
@@ -15,10 +15,10 @@ import {
 import { MongoRepository } from 'typeorm/repository/MongoRepository';
 import { OrderEntity } from '@infrastructure/repositories/orders/entity';
 import { OrderInfraMapper } from '@infrastructure/repositories/orders/mappers';
-import { OrderAggregationResult } from '@infrastructure/repositories/orders/types';
+import { OrderAggregationResultType } from '@infrastructure/repositories/orders/types';
 
 @Injectable()
-export class OrderRepositoryProviderImpl implements OrderRepositoryProvider {
+export class OrderRepositoryProviderImpl implements OrderRepositoryProviderInterface {
   protected readonly mongoRepository: MongoRepository<OrderEntity>;
 
   constructor(
@@ -62,7 +62,7 @@ export class OrderRepositoryProviderImpl implements OrderRepositoryProvider {
     const aggregateQuery = OrderInfraMapper.builderAggregateQuery(queryCore);
     const aggregationResult = await this.mongoRepository
       .aggregate(aggregateQuery)
-      .project<OrderAggregationResult>({
+      .project<OrderAggregationResultType>({
         status: '$status',
         year: '$year',
         month: '$month',

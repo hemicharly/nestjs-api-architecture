@@ -1,5 +1,5 @@
 import { NotificationOrderCoreEntity } from '@core/domain/entities/notifications';
 
-export interface NotificationOrderRegisterUsecase {
+export interface NotificationOrderRegisterUsecaseInterface {
   execute(notificationOrderCoreEntity: Partial<NotificationOrderCoreEntity>): Promise<void>;
 }

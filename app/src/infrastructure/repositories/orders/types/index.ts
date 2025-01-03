@@ -1,1 +1,1 @@
-export * from './order-aggregation.result';
+export * from './order-aggregation.result.type';

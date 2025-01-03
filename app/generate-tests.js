@@ -1,5 +1,5 @@
 const path = require('path');
-const { existsSync, mkdirSync, writeFileSync, readdirSync, rmdirSync } = require('node:fs');
+const { existsSync, mkdirSync, writeFileSync, readdirSync, rmdirSync, readFileSync } = require('node:fs');
 
 /**
  * Source folder path (where the source code files are).
@@ -22,7 +22,6 @@ const FILE_EXTENSION = '.ts';
  * Paths to ignore
  */
 const IGNORE_PATHS = [
-  'src/shared/audit',
   'src/core/providers',
   'src/core/domain/exceptions',
   'src/core/domain/enums',
@@ -44,7 +43,7 @@ const IGNORE_PATHS_PATTERNS = IGNORE_PATHS.map(pattern => {
 /**
  * Files or patterns to ignore
  */
-const IGNORE_FILES = ['express.d.ts', 'main.ts', 'app.module.ts', 'index.ts', 'module', 'seed', 'decorator', 'decorators', 'exception', 'config', 'request', 'response', 'dto'];
+const IGNORE_FILES = ['express.d.ts', 'main.ts', 'app.module.ts', '.pipe.ts', '.guard.ts', '.filter.ts,', '.doc.ts', 'tracer.context.audit.ts', 'index.ts', 'module', 'seed', 'decorator', 'decorators', 'type.ts', 'exception', 'config', 'request', 'response', 'dto'];
 
 /**
  * Converts the IGNORE_FILES list into a regular expression array.
@@ -77,6 +76,20 @@ function ensureDirSync(dirPath) {
 }
 
 /**
+ * Function to check if the file is just a type definition (interface or type).
+ */
+function isInterfaceOrType(filePath) {
+  const fileContent = readFileSync(filePath, 'utf-8');
+
+  // Check if the content includes only TypeScript declarations (interface, type, enum)
+  const interfacePattern = /interface\s+\w+/;
+  const typePattern = /type\s+\w+/;
+  const enumPattern = /enum\s+\w+/;
+
+  return interfacePattern.test(fileContent) || typePattern.test(fileContent) || enumPattern.test(fileContent);
+}
+
+/**
  * Recursive function to traverse source folders and create test files.
  */
 function processDirectory(sourceDir, testDir) {
@@ -101,6 +114,11 @@ function processDirectory(sourceDir, testDir) {
       ensureDirSync(testPath);
       processDirectory(sourcePath, testPath);
     } else if (entry.isFile() && path.extname(entry.name) === FILE_EXTENSION) {
+      if (isInterfaceOrType(sourcePath)) {
+        console.warn(`Skipping interface/type file: ${sourcePath}`);
+        return;
+      }
+
       const testFileName = entry.name.replace(FILE_EXTENSION, `.spec${FILE_EXTENSION}`);
       const testFilePath = path.join(testDir, testFileName);
       if (!existsSync(testFilePath)) {

@@ -1,1 +1,1 @@
-export * from './webhook.integration.client.provider';
+export * from './webhook.integration.client.provider.interface';

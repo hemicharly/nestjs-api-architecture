@@ -1,4 +1,4 @@
-export interface ConfigEnvProvider {
+export interface ConfigEnvProviderInterface {
   /**
    * Gets a configuration value by name of type generic.
    * @param key Key name of env

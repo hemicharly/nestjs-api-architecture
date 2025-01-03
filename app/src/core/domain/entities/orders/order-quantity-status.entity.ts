@@ -9,11 +9,11 @@ export class OrderQuantityStatusEntity {
     readonly day: number,
     readonly status: OrderStatus,
   ) {
-    this.count = count || 0;
-    this.year = year || null;
-    this.month = month || null;
-    this.week = week || null;
-    this.day = day || null;
-    this.status = status || null;
+    this.count = count;
+    this.year = year;
+    this.month = month;
+    this.week = week;
+    this.day = day;
+    this.status = status;
   }
 }

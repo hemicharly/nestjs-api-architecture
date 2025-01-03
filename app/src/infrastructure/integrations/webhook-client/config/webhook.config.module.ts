@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
-import { ConfigEnvProvider } from '@core/providers/config-env';
+import { ConfigEnvProviderInterface } from '@core/providers/config-env';
 import { ConfigEnvModule } from '@infrastructure/config-env';
 import { ConfigEnvProviderImpl } from '@infrastructure/config-env/impl';
 
@@ -8,7 +8,7 @@ import { ConfigEnvProviderImpl } from '@infrastructure/config-env/impl';
   imports: [
     HttpModule.registerAsync({
       imports: [ConfigEnvModule],
-      useFactory: async (configEnvProvider: ConfigEnvProvider) => ({
+      useFactory: async (configEnvProvider: ConfigEnvProviderInterface) => ({
         baseURL: configEnvProvider.getString('WEBHOOK_BASE_URL'),
         timeout: 60 * 1000,
         maxRedirects: 5,
