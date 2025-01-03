@@ -1,6 +1,6 @@
 import { ErrorItemCoreEntity } from '@core/domain/entities/shared';
 
-export abstract class CustomBaseException extends Error {
+export abstract class AbstractBaseException extends Error {
   protected constructor(
     public readonly statusCode: number,
     public readonly errors: ErrorItemCoreEntity[],

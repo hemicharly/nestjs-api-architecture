@@ -2,6 +2,7 @@ import { applyDecorators, Type } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiConflictResponse,
+  ApiForbiddenResponse,
   ApiInternalServerErrorResponse,
   ApiNoContentResponse,
   ApiNotFoundResponse,
@@ -25,6 +26,7 @@ export function ApiDocGenericPatch(value: string, description?: string, modelTyp
     ApiBadRequestResponse({ description: `Bad request.`, type: ErrorResponse }),
     ApiConflictResponse({ description: 'Conflict of resource.', type: ErrorResponse }),
     ApiUnauthorizedResponse({ description: 'Unauthorized.', type: ErrorResponse }),
+    ApiForbiddenResponse({ description: 'Forbidden.', type: ErrorResponse }),
     ApiNotFoundResponse({ description: 'Resource not found.', type: ErrorResponse }),
     ApiInternalServerErrorResponse({ description: 'Internal server error.', type: ErrorResponse }),
   );

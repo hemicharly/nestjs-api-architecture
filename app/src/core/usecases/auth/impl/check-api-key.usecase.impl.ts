@@ -1,12 +1,12 @@
 import { CheckApiKeyUsecase } from '@core/usecases/auth';
 import { ApiKeyApplicationRepositoryProvider } from '@core/providers/repositories';
 import { ApikeyApplicationCoreEntity } from '@core/domain/entities/auth';
-import { CustomUnauthorizedException } from '@core/domain/exceptions';
+import { CustomForbiddenException, CustomUnauthorizedException } from '@core/domain/exceptions';
 
 export class CheckApiKeyUsecaseImpl implements CheckApiKeyUsecase {
   constructor(private readonly repositoryProvider: ApiKeyApplicationRepositoryProvider) {}
 
-  public async execute(apiKey: string): Promise<ApikeyApplicationCoreEntity> {
+  public async execute(apiKey: string, path: string): Promise<ApikeyApplicationCoreEntity> {
     if (!apiKey || apiKey === '') {
       throw new CustomUnauthorizedException();
     }
@@ -20,6 +20,22 @@ export class CheckApiKeyUsecaseImpl implements CheckApiKeyUsecase {
       throw new CustomUnauthorizedException();
     }
 
+    if (!this.canAccessPath(path, apiKeyApplication?.rulesPaths || [])) {
+      throw new CustomForbiddenException();
+    }
+
     return apiKeyApplication;
+  }
+
+  private canAccessPath(path: string, rulesPaths: string[]): boolean {
+    if (rulesPaths.length === 0) {
+      return false;
+    }
+
+    if (rulesPaths.length === 1 && rulesPaths.includes('*')) {
+      return true;
+    }
+
+    return path && rulesPaths.includes(path);
   }
 }

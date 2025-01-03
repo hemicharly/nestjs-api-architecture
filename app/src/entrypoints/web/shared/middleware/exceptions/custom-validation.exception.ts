@@ -1,7 +1,7 @@
 import { ValidationError } from 'class-validator';
-import { CustomBaseException } from '@core/domain/exceptions';
+import { AbstractBaseException } from '@core/domain/exceptions';
 
-export class CustomValidationException extends CustomBaseException {
+export class CustomValidationException extends AbstractBaseException {
   constructor(protected readonly validationErrors: ValidationError[]) {
     super(
       400,

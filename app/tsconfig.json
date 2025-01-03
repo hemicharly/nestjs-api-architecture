@@ -21,24 +21,12 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@packageJson": [
-        "package.json"
-      ],
-      "@entrypoints/*": [
-        "src/entrypoints/*"
-      ],
-      "@core/*": [
-        "src/core/*"
-      ],
-      "@infrastructure/*": [
-        "src/infrastructure/*"
-      ],
-      "@shared/*": [
-        "src/shared/*"
-      ],
-      "@src/*": [
-        "src/*"
-      ],
+      "@packageJson": ["package.json"],
+      "@entrypoints/*": ["src/entrypoints/*"],
+      "@core/*": ["src/core/*"],
+      "@infrastructure/*": ["src/infrastructure/*"],
+      "@shared/*": ["src/shared/*"],
+      "@src/*": ["src/*"]
     }
   }
 }

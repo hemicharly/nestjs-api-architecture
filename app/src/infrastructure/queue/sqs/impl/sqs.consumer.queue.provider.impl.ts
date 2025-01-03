@@ -1,5 +1,5 @@
 import { Inject, Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
-import { ChangeMessageVisibilityCommand, DeleteMessageCommand, ReceiveMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
+import { ChangeMessageVisibilityCommand, DeleteMessageCommand, Message, ReceiveMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
 import { DiscoveryService, MetadataScanner } from '@nestjs/core';
 import { SQS_HANDLER_METADATA } from '@shared/config/sqs/decorators';
 import { SqsDecoratorsTypes } from '@shared/config/sqs/decorators/types';
@@ -104,6 +104,22 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
   }
 
   /**
+   * Builds the command to receive messages from an SQS queue.
+   * @param queueUrl - queue URL.
+   * @param sqsDecoratorsTypes - Configuration of the handler associated with the queue.
+   * @returns Command configured to receive messages.
+   */
+  private builderReceiveMessageCommand(queueUrl: string, sqsDecoratorsTypes: SqsDecoratorsTypes): ReceiveMessageCommand {
+    return new ReceiveMessageCommand({
+      QueueUrl: queueUrl,
+      MaxNumberOfMessages: sqsDecoratorsTypes.batchSize || 10,
+      WaitTimeSeconds: sqsDecoratorsTypes.waitTimeSeconds || 20,
+      VisibilityTimeout: sqsDecoratorsTypes.visibilityTimeout || 30,
+      MessageAttributeNames: ['All'],
+    });
+  }
+
+  /**
    * Starts polling for messages from all registered SQS queues.
    * - Implements exponential backoff in case of errors.
    */
@@ -118,30 +134,19 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
         const queueName = this.configEnvProvider.getString(queueNameEnv);
         const queueUrl = SqsBuilderConfig.builderQueueUrl(queueName, this.configEnvProvider);
         try {
-          const command = new ReceiveMessageCommand({
-            QueueUrl: queueUrl,
-            MaxNumberOfMessages: batchSize || 10,
-            WaitTimeSeconds: waitTimeSeconds || 20,
-            VisibilityTimeout: visibilityTimeout || 30,
-            MessageAttributeNames: ['All'],
+          const command = this.builderReceiveMessageCommand(queueUrl, {
+            queueNameEnv,
+            batchSize,
+            waitTimeSeconds,
+            visibilityTimeout,
+            enabledVisibilityTimeout,
           });
 
           const response = await this.sqsClient.send(command);
           const messages = response.Messages;
           if (messages && messages.length > 0) {
             this.logger.log(`[QueueName: ${queueName}] Received ${messages.length} messages.`);
-            for (const message of messages) {
-              try {
-                TracerContextAudit.setContextTracerId(message?.MessageAttributes?.TracerId?.StringValue);
-                await handler(message);
-                await this.deleteMessage(queueUrl, message.ReceiptHandle!);
-              } catch (error) {
-                this.logger.error(`[QueueName: ${queueName}] Error processing message: ${error.message}`, error.stack);
-                if (enabledVisibilityTimeout === true) {
-                  await this.extendVisibilityTimeout(queueUrl, message.ReceiptHandle!, visibilityTimeout || 60);
-                }
-              }
-            }
+            await this.handlerMessage(messages, handler, queueUrl, queueName, enabledVisibilityTimeout, visibilityTimeout);
             backoffTime = 1000;
           }
         } catch (error) {
@@ -159,6 +164,30 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
     };
 
     poll();
+  }
+
+  /**
+   * Processes incoming messages and runs the associated handler.
+   * @param messages - Messages received.
+   * @param handler - Function that will process messages.
+   * @param queueUrl - Queue URL.
+   * @param queueName - Name of the queue.
+   * @param enabledVisibilityTimeout - Flag indicating whether the timeout should be adjusted.
+   * @param visibilityTimeout - Configured visibility timeout.
+   */
+  private async handlerMessage(messages: Message[], handler: Function, queueUrl: string, queueName: string, enabledVisibilityTimeout: boolean, visibilityTimeout: number) {
+    for (const message of messages) {
+      try {
+        TracerContextAudit.setContextTracerId(message?.MessageAttributes?.TracerId?.StringValue);
+        await handler(message);
+        await this.deleteMessage(queueUrl, message.ReceiptHandle!);
+      } catch (error) {
+        this.logger.error(`[QueueName: ${queueName}] Error processing message: ${error.message}`, error.stack);
+        if (enabledVisibilityTimeout === true) {
+          await this.extendVisibilityTimeout(queueUrl, message.ReceiptHandle!, visibilityTimeout || 60);
+        }
+      }
+    }
   }
 
   /**
