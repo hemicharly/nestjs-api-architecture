@@ -56,6 +56,8 @@ jobs:
 
   tag:
     if: contains(github.head_ref, 'release/') && contains(github.base_ref, 'main')
+    needs:
+      - test-coverage
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.tag.outputs.tag }}
@@ -94,9 +96,14 @@ jobs:
     if: contains(github.head_ref, 'release/') && contains(github.base_ref, 'main')
     needs:
       - test-coverage
-      - tag
+      - update-version
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
     steps:
+      - name: Check out code
+        uses: actions/checkout@v4
       - name: Download coverage files
         uses: actions/download-artifact@v4
         with:
