@@ -1,11 +1,11 @@
 # TIMESHEET-IN-TRANSIT-API
 
-<p style="text-align: center">
+<p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
 
 
-<p style="text-align: center">
+<p align="center">
   <img src="app/test/badges/entrypoints.svg" alt="Entrypoints" style="margin: 2px">
   <img src="app/test/badges/core.svg" alt="Core" style="margin: 2px">
   <img src="app/test/badges/infrastructure.svg" alt="Infrastructure" style="margin: 2px">
@@ -24,7 +24,7 @@ It serves as a practical study for the "adaptation" of concepts such as **Clean 
 **Hexagonal Architecture**, with the goal of promoting the best software design practices, ensuring clear separation of
 responsibilities, and abstracting external dependencies.
 
-<p style="text-align: center">
+<p align="center">
   <img src="diagram/architecture-timesheet-in-transit-api.png" alt="architecture-timesheet-in-transit-api">
 </p>
 
