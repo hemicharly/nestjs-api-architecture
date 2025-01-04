@@ -1,24 +1,21 @@
-# timesheet-in-transit-api (NestJs)
+# TIMESHEET-IN-TRANSIT-API
 
-<p align="center">
+<p style="text-align: center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
 
+
+<p style="text-align: center">
+  <img src="app/test/badges/entrypoints.svg" alt="Entrypoints" style="margin: 2px">
+  <img src="app/test/badges/core.svg" alt="Core" style="margin: 2px">
+  <img src="app/test/badges/infrastructure.svg" alt="Infrastructure" style="margin: 2px">
+  <img src="app/test/badges/shared.svg" alt="Shared" style="margin: 2px">
+</p>
 
 ### Documentation available in languages
 
 [![en](https://img.shields.io/badge/lang-en-blue.svg)](README.md)
 [![pt-br](https://img.shields.io/badge/lang-pt--br-green.svg)](README.pt-br.md)
-
-### Test Coverage
-
-<p align="center">
-  <img src="app/test/badges/entrypoints.svg" alt="Entrypoints" hspace="3">
-  <img src="app/test/badges/core.svg" alt="Core" hspace="3">
-  <img src="app/test/badges/infrastructure.svg" alt="Infrastructure" hspace="3">
-  <img src="app/test/badges/shared.svg" alt="Shared" hspace="3">
-</p>
-
 
 ## Introduction
 
@@ -27,7 +24,9 @@ It serves as a practical study for the "adaptation" of concepts such as **Clean 
 **Hexagonal Architecture**, with the goal of promoting the best software design practices, ensuring clear separation of
 responsibilities, and abstracting external dependencies.
 
-![architecture-timesheet-in-transit-api](diagram/architecture-timesheet-in-transit-api.png)
+<p style="text-align: center">
+  <img src="diagram/architecture-timesheet-in-transit-api.png" alt="architecture-timesheet-in-transit-api">
+</p>
 
 ## 1. Installation Requirements
 
@@ -134,7 +133,43 @@ The `shared` module is used to share common functionality/utilities.
 
 Follow the steps below to run the project in development mode.
 
-#### 2.1.1. **Copy the configuration file**:
+#### 2.1.1. Copy the configuration file:
+
+- We recommend creating an **alias** `dcli` to execute the command:  `docker compose -f docker-compose.cli.yml run --rm`
+```bash
+  chmod +x ./add_alias_cli.sh && ./add_alias_cli.sh
+```
+
+#### 2.1.2. Installing aws cli:
+
+- Install and configure [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html):
+```bash
+  curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+  unzip awscliv2.zip
+  sudo ./aws/install
+```
+
+- Configuring AWS region:
+```bash
+  nano ~/.aws/config
+```
+```textmate
+[default]
+region = us-east-1
+output = json
+```
+
+- Configuring AWS credentials (optional):
+```bash
+  nano ~/.aws/credentials
+```
+```textmate
+[default]
+aws_access_key_id = <aws_access_key_id>
+aws_secret_access_key =  <aws_secret_access_key>
+```
+
+#### 2.1.3. Copy the configuration file:
 
 - Copy the `.env.dist` file to `.env` using the command:
 
@@ -142,7 +177,7 @@ Follow the steps below to run the project in development mode.
   cp .env.dist .env
 ```
 
-#### 2.1.2. **Start the project with Docker using the commands**:
+#### 2.1.2. Start the project with Docker using the commands:
 
 - Creates the necessary Docker network:
 ```bash
@@ -214,6 +249,10 @@ Follow the steps below to run the project in development mode.
   make test-coverage
 ```
 
+- Run to add new dependency with `yarn`:
+```bash
+  dcli yarn add <your_dependency>
+```
 
 ### 2.2. Documentation
 

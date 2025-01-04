@@ -1,24 +1,21 @@
-# timesheet-in-transit-api (NestJs)
+# TIMESHEET-IN-TRANSIT-API
 
-<p align="center">
+<p style="text-align: center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+</p>
+
+
+<p style="text-align: center">
+  <img src="app/test/badges/entrypoints.svg" alt="Entrypoints" style="margin: 2px">
+  <img src="app/test/badges/core.svg" alt="Core" style="margin: 2px">
+  <img src="app/test/badges/infrastructure.svg" alt="Infrastructure" style="margin: 2px">
+  <img src="app/test/badges/shared.svg" alt="Shared" style="margin: 2px">
 </p>
 
 ### Documentação disponível em idiomas
 
 [![en](https://img.shields.io/badge/lang-en-blue.svg)](README.md)
 [![pt-br](https://img.shields.io/badge/lang-pt--br-green.svg)](README.pt-br.md)
-
-
-### Cobertura de teste
-
-<p align="center">
-  <img src="app/test/badges/entrypoints.svg" alt="Entrypoints" hspace="3">
-  <img src="app/test/badges/core.svg" alt="Core" hspace="3">
-  <img src="app/test/badges/infrastructure.svg" alt="Infrastructure" hspace="3">
-  <img src="app/test/badges/shared.svg" alt="Shared" hspace="3">
-</p>
-
 
 
 ## Introdução
@@ -28,7 +25,9 @@ Ele funciona como um estudo prático para a "adaptação" de conceitos como **Cl
 **Hexagonal Architecture**, visando promover boas práticas de design de software, garantindo uma clara
 separação de responsabilidadese a abstração de dependências externas.
 
-![architecture-timesheet-in-transit-api](diagram/architecture-timesheet-in-transit-api.png)
+<p style="text-align: center">
+  <img src="diagram/architecture-timesheet-in-transit-api.png" alt="architecture-timesheet-in-transit-api">
+</p>
 
 ## 1. Requisitos de Instalação
 
@@ -135,14 +134,51 @@ O módulo `shared` é usado para compartilhar funcionalidades/utilitários comun
 
 Siga os passos abaixo para rodar o projeto em modo desenvolvimento.
 
-#### 2.1.1. **Copiar o arquivo de configuração**:
+#### 2.1.1. Criar alias comando docker compose cli:
+
+- Recomendamos criar uma **alias** `dcli` para executar o comando:  `docker compose -f docker-compose.cli.yml run --rm`
+```bash
+  chmod +x ./add_alias_cli.sh && ./add_alias_cli.sh
+```
+
+#### 2.1.2. Configurando aws cli:
+
+- Instale e configure o [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html):
+```bash
+   curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+   unzip awscliv2.zip
+   sudo ./aws/install
+```
+    
+- Configurando região da aws:
+```bash
+  nano ~/.aws/config
+```
+```textmate
+[default]
+region = us-east-1
+output = json
+```
+
+- Configurando credenciais da aws (opcional):
+```bash
+  nano ~/.aws/credentials
+```
+```textmate
+[default]
+aws_access_key_id = <aws_access_key_id>
+aws_secret_access_key =  <aws_secret_access_key>
+```
+
+
+#### 2.1.3. Copiar o arquivo de configuração:
 
 - Copie o arquivo `.env.dist` para `.env` com o comando:
 ```bash
   cp .env.dist .env
 ```
 
-#### 2.1.2. **Iniciar o projeto com Docker usando os comandos**:
+#### 2.1.2. Iniciar o projeto com Docker usando os comandos:
 
 - Cria a rede Docker necessária para o projeto:
 ```bash
@@ -212,6 +248,11 @@ Siga os passos abaixo para rodar o projeto em modo desenvolvimento.
 - Executa testes de cobertura:
 ```bash
   make test-coverage
+```
+
+- Executa para adicionar nova dependência com o `yarn`:
+```bash
+  dcli yarn add <your_dependency>
 ```
 
 
