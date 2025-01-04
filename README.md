@@ -12,10 +12,13 @@
 
 ### Test Coverage
 
-![Entrypoints](app/test/badges/entrypoints.svg)
-![Core](app/test/badges/core.svg)
-![Infrastructure](app/test/badges/infrastructure.svg)
-![Shared](app/test/badges/shared.svg)
+<p align="center">
+  <img src="app/test/badges/entrypoints.svg" alt="Entrypoints" hspace="10">
+  <img src="app/test/badges/core.svg" alt="Core" hspace="10">
+  <img src="app/test/badges/infrastructure.svg" alt="Infrastructure" hspace="10">
+  <img src="app/test/badges/shared.svg" alt="Shared" hspace="10">
+</p>
+
 
 ## Introduction
 
