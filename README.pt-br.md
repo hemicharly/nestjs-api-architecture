@@ -178,7 +178,7 @@ aws_secret_access_key =  <aws_secret_access_key>
   cp .env.dist .env
 ```
 
-#### 2.1.2. Iniciar o projeto com Docker usando os comandos:
+### 2.2. Iniciar o projeto com Docker usando os comandos:
 
 - Cria a rede Docker necessária para o projeto:
 ```bash
@@ -256,7 +256,7 @@ aws_secret_access_key =  <aws_secret_access_key>
 ```
 
 
-### 2.2. Documentação
+### 2.3. Documentação
 
 O projeto inclui várias formas de documentação acessíveis localmente:
 
@@ -265,7 +265,7 @@ O projeto inclui várias formas de documentação acessíveis localmente:
 - [Redoc - Documentação Alternativa](http://localhost:3000/docs)
 - [Health Check - Verificação de Saúde da Aplicação](http://localhost:3000/health)
 
-### 2.3. Diagramas
+#### 2.3.1. Diagramas
 
 Para melhor compreensão do fluxo da aplicação, consulte os diagramas abaixo:
 
