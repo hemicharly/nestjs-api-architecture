@@ -110,8 +110,6 @@ module.exports = [
       '@typescript-eslint/explicit-module-boundary-types': 'error',
       // Allows usage of the 'any' type in TypeScript
       '@typescript-eslint/no-explicit-any': 'off',
-      // Allows namespaces in TypeScript
-      '@typescript-eslint/no-namespace': 'off',
       // Prevents duplicate cases in switch statements
       'no-duplicate-case': 'error',
       // Prevents duplicate imports in files
