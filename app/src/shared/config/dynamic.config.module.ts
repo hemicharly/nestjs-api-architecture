@@ -43,12 +43,12 @@ export class DynamicConfigModule {
       return {
         provide: useClass,
         useFactory: (...args: any[]) => new useClass(...args),
-        inject: injects,
+        inject: injects
       };
     }
     return {
       provide: useClass,
-      useClass: useClass,
+      useClass: useClass
     };
   }
 
@@ -85,10 +85,12 @@ export class DynamicConfigModule {
    * ```
    */
   static forProviderRegister(options: OptionProviderRegister[]): Partial<DynamicModule> {
-    const providers: Provider[] = options.map(({ useClass, injects }) => this.forProvider(useClass, injects));
+    const providers: Provider[] = options.map(({ useClass, injects }) =>
+      this.forProvider(useClass, injects)
+    );
     return {
       providers: [...providers],
-      exports: [...providers],
+      exports: [...providers]
     };
   }
 
@@ -112,7 +114,7 @@ export class DynamicConfigModule {
   static forModules(modules: Type[]): Partial<DynamicModule> {
     return {
       imports: [...modules],
-      exports: [...modules],
+      exports: [...modules]
     };
   }
 }

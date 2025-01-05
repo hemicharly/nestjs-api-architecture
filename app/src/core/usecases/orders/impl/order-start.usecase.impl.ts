@@ -7,21 +7,37 @@ import { NotificationOrderCoreEntity } from '@core/domain/entities/notifications
 export class OrderStartUsecaseImpl implements OrderStartUsecaseInterface {
   constructor(
     private readonly repositoryProvider: OrderRepositoryProviderInterface,
-    private readonly notificationOrderRegisterUsecase: NotificationOrderRegisterUsecaseInterface,
+    private readonly notificationOrderRegisterUsecase: NotificationOrderRegisterUsecaseInterface
   ) {}
 
   public async execute(orderStartCoreEntity: OrderStartCoreEntity): Promise<void> {
-    OrderCoordsCoreEntity.validateCoordinates(orderStartCoreEntity.recordedLatitude, orderStartCoreEntity.recordedLongitude);
+    OrderCoordsCoreEntity.validateCoordinates(
+      orderStartCoreEntity.recordedLatitude,
+      orderStartCoreEntity.recordedLongitude
+    );
 
-    const entityCore = await this.repositoryProvider.findByIdAndEmployeeId(orderStartCoreEntity.id, orderStartCoreEntity.employeeId);
+    const entityCore = await this.repositoryProvider.findByIdAndEmployeeId(
+      orderStartCoreEntity.id,
+      orderStartCoreEntity.employeeId
+    );
 
     OrderStartCoreEntity.validateOrderStart(entityCore);
 
-    OrderCoordsCoreEntity.validateDistance(entityCore.companyAddressLatitude, entityCore.companyAddressLongitude, orderStartCoreEntity.recordedLatitude, orderStartCoreEntity.recordedLongitude);
+    OrderCoordsCoreEntity.validateDistance(
+      entityCore.companyAddressLatitude,
+      entityCore.companyAddressLongitude,
+      orderStartCoreEntity.recordedLatitude,
+      orderStartCoreEntity.recordedLongitude
+    );
 
     await this.repositoryProvider.updateStart(orderStartCoreEntity.id, orderStartCoreEntity);
 
-    const notificationOrderCoreEntity = NotificationOrderCoreEntity.fromOrderStartCoreEntity(orderStartCoreEntity, entityCore.companyName, 'A ordem foi iniciada.', orderStartCoreEntity.startDatetime);
+    const notificationOrderCoreEntity = NotificationOrderCoreEntity.fromOrderStartCoreEntity(
+      orderStartCoreEntity,
+      entityCore.companyName,
+      'A ordem foi iniciada.',
+      orderStartCoreEntity.startDatetime
+    );
     await this.notificationOrderRegisterUsecase.execute(notificationOrderCoreEntity);
   }
 }

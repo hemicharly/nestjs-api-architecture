@@ -13,7 +13,7 @@ export class SqsProducerQueueProviderImpl implements ProducerQueueProviderInterf
 
   constructor(
     @Inject(ConfigEnvProviderImpl)
-    private readonly configEnvProvider: ConfigEnvProviderInterface,
+    private readonly configEnvProvider: ConfigEnvProviderInterface
   ) {
     this.sqsClient = SqsBuilderConfig.builderClient(this.configEnvProvider);
   }
@@ -27,9 +27,9 @@ export class SqsProducerQueueProviderImpl implements ProducerQueueProviderInterf
         MessageAttributes: {
           TracerId: {
             DataType: 'String',
-            StringValue: TracerContextAudit.getContextTracerId(),
-          },
-        },
+            StringValue: TracerContextAudit.getContextTracerId()
+          }
+        }
       });
       this.logger.log(`[QueueName: ${queueName}] Send message to SQS.`);
       await this.sqsClient.send(sendMessageCommand);
@@ -39,7 +39,12 @@ export class SqsProducerQueueProviderImpl implements ProducerQueueProviderInterf
     }
   }
 
-  public async sendMessageWithDelayAndAttempt(queueName: string, message: string, delaySeconds: number, attempt: number): Promise<void> {
+  public async sendMessageWithDelayAndAttempt(
+    queueName: string,
+    message: string,
+    delaySeconds: number,
+    attempt: number
+  ): Promise<void> {
     try {
       const queueUrl = SqsBuilderConfig.builderQueueUrl(queueName, this.configEnvProvider);
       const sendMessageCommand = new SendMessageCommand({
@@ -47,20 +52,23 @@ export class SqsProducerQueueProviderImpl implements ProducerQueueProviderInterf
         MessageAttributes: {
           TracerId: {
             DataType: 'String',
-            StringValue: TracerContextAudit.getContextTracerId(),
+            StringValue: TracerContextAudit.getContextTracerId()
           },
           AttemptCount: {
             DataType: 'String',
-            StringValue: String(attempt),
-          },
+            StringValue: String(attempt)
+          }
         },
         QueueUrl: queueUrl,
-        DelaySeconds: delaySeconds || 0,
+        DelaySeconds: delaySeconds || 0
       });
       this.logger.log(`[QueueName: ${queueName}] Send message to SQS with delay and attempt.`);
       await this.sqsClient.send(sendMessageCommand);
     } catch (e) {
-      this.logger.error(`[QueueName: ${queueName}] Failed to send message to SQS with delay and attempt.`, e.stack);
+      this.logger.error(
+        `[QueueName: ${queueName}] Failed to send message to SQS with delay and attempt.`,
+        e.stack
+      );
       throw e;
     }
   }

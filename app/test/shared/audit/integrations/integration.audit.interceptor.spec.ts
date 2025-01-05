@@ -24,14 +24,14 @@ describe('integration.audit.interceptor.ts', () => {
         // @ts-ignore
         request: { use: jest.fn() },
         // @ts-ignore
-        response: { use: jest.fn() },
-      },
+        response: { use: jest.fn() }
+      }
     };
 
     httpServiceMock = {
       get axiosRef() {
         return axiosMock as AxiosInstance;
-      },
+      }
     } as HttpService;
 
     interceptor = new IntegrationAuditInterceptor('test-application', logger, httpServiceMock);
@@ -56,7 +56,7 @@ describe('integration.audit.interceptor.ts', () => {
     const mockResponse = {
       config: { headers: {}, method: 'GET' },
       status: 200,
-      data: 'mockData',
+      data: 'mockData'
     };
 
     const result = interceptor['handleResponseSuccess'](mockResponse as any);

@@ -8,7 +8,7 @@ export class OrderQueryCoreEntity {
 
   constructor(
     readonly pagination: PaginationCoreEntity,
-    readonly employeeId: string,
+    readonly employeeId: string
   ) {
     this.pagination = pagination;
     this.employeeId = employeeId;

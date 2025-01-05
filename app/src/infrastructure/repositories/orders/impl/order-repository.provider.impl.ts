@@ -10,7 +10,7 @@ import {
   OrderQuantityStatusEntity,
   OrderQueryCoreEntity,
   OrderQueryQuantityStatusCoreEntity,
-  OrderStartCoreEntity,
+  OrderStartCoreEntity
 } from '@core/domain/entities/orders';
 import { MongoRepository } from 'typeorm/repository/MongoRepository';
 import { OrderEntity } from '@infrastructure/repositories/orders/entity';
@@ -23,7 +23,7 @@ export class OrderRepositoryProviderImpl implements OrderRepositoryProviderInter
 
   constructor(
     @InjectRepository(OrderEntity)
-    private readonly repository: Repository<OrderEntity>,
+    private readonly repository: Repository<OrderEntity>
   ) {
     this.mongoRepository = this.repository.manager.getMongoRepository(OrderEntity);
   }
@@ -47,7 +47,7 @@ export class OrderRepositoryProviderImpl implements OrderRepositoryProviderInter
   public async findByIdAndEmployeeId(id: string, employeeId: string): Promise<OrderCoreEntity> {
     const entity = await this.repository.findOneBy({
       _id: new ObjectId(id),
-      employeeId,
+      employeeId
     });
     return OrderInfraMapper.toCoreEntity(entity);
   }
@@ -58,7 +58,9 @@ export class OrderRepositoryProviderImpl implements OrderRepositoryProviderInter
     return OrderInfraMapper.toPaginationCoreEntity(entityList, total, queryCore.pagination);
   }
 
-  public async countByEmployeeIdAndDateAndStatus(queryCore: OrderQueryQuantityStatusCoreEntity): Promise<OrderQuantityStatusEntity[]> {
+  public async countByEmployeeIdAndDateAndStatus(
+    queryCore: OrderQueryQuantityStatusCoreEntity
+  ): Promise<OrderQuantityStatusEntity[]> {
     const aggregateQuery = OrderInfraMapper.builderAggregateQuery(queryCore);
     const aggregationResult = await this.mongoRepository
       .aggregate(aggregateQuery)
@@ -68,7 +70,7 @@ export class OrderRepositoryProviderImpl implements OrderRepositoryProviderInter
         month: '$month',
         week: '$week',
         day: '$day',
-        count: 1,
+        count: 1
       })
       .toArray();
     return OrderInfraMapper.fromAggregationResult(aggregationResult);

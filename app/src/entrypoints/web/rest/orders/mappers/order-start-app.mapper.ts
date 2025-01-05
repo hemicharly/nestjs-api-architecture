@@ -3,7 +3,11 @@ import { OrderStartCoreEntity } from '@core/domain/entities/orders';
 import { OrderStartRequest } from '@src/entrypoints/web/rest/orders/request';
 
 export class OrderStartAppMapper {
-  public static fromApi(id: string, object: OrderStartRequest, { userId }: Request): OrderStartCoreEntity {
+  public static fromApi(
+    id: string,
+    object: OrderStartRequest,
+    { userId }: Request
+  ): OrderStartCoreEntity {
     const entity = new OrderStartCoreEntity(id, userId);
     entity.startDatetime = object.startDatetime;
     entity.recordedLatitude = String(object.recordedLatitude);

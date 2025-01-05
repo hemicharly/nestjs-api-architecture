@@ -4,7 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class OrderCreationRequest {
   @ApiProperty({
     description: 'Order Service description.',
-    example: 'Prestação de Serviços',
+    example: 'Prestação de Serviços'
   })
   @IsString()
   @IsNotEmpty()
@@ -17,7 +17,7 @@ export class OrderCreationRequest {
 
   @ApiProperty({
     description: "Latitude of the customer's address.",
-    example: '-22.897140306896276',
+    example: '-22.897140306896276'
   })
   @IsNumber()
   @IsNotEmpty()
@@ -25,7 +25,7 @@ export class OrderCreationRequest {
 
   @ApiProperty({
     description: "Longitude of the customer's address.",
-    example: '-47.06153484719727',
+    example: '-47.06153484719727'
   })
   @IsNumber()
   @IsNotEmpty()
@@ -33,10 +33,10 @@ export class OrderCreationRequest {
 
   @ApiProperty({
     description: 'Order Service scheduling date.',
-    format: 'date',
+    format: 'date'
   })
   @Matches(/^\d{4}-\d{2}-\d{2}$/, {
-    message: 'schedulingDate must be a valid date in the format YYYY-MM-DD',
+    message: 'schedulingDate must be a valid date in the format YYYY-MM-DD'
   })
   @IsNotEmpty()
   readonly schedulingDate: string;

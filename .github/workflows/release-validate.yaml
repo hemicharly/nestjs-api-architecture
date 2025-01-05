@@ -34,10 +34,10 @@ jobs:
           key: ${{ runner.os }}-node-${{ steps.node-version.outputs.node-version }}-modules-${{ hashFiles('**/yarn.lock') }}
       - name: Install dependencies
         run: yarn install
-      - name: Lint
-        run: yarn lint
       - name: Format
         run: yarn format
+      - name: Lint
+        run: yarn lint
       - name: Build
         run: yarn build
       - name: Test Coverage
@@ -91,7 +91,6 @@ jobs:
         with:
           name: updated-package-json
           path: app/package.json
-
   commit-push:
     if: contains(github.head_ref, 'release/') && contains(github.base_ref, 'main')
     needs:

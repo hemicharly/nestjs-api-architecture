@@ -15,7 +15,9 @@ export class OrderCoordsCoreEntity {
    * @throws {CustomBusinessException} - Thrown if the latitude or longitude is invalid.
    */
   public static validateCoordinates(latitude: string, longitude: string): void {
-    if (!(this.isValidLatitude(parseFloat(latitude)) && this.isValidLongitude(parseFloat(longitude)))) {
+    if (
+      !(this.isValidLatitude(parseFloat(latitude)) && this.isValidLongitude(parseFloat(longitude)))
+    ) {
       throw new CustomBusinessException(CodeError.ORDER_INVALID_GEOLOCATION);
     }
   }
@@ -30,7 +32,12 @@ export class OrderCoordsCoreEntity {
    * @param {string} longitude2 - Longitude of the second point.
    * @throws {CustomBusinessException} - Thrown if the distance between the points exceeds 200 meters.
    */
-  public static validateDistance(latitude1: string, longitude1: string, latitude2: string, longitude2: string): void {
+  public static validateDistance(
+    latitude1: string,
+    longitude1: string,
+    latitude2: string,
+    longitude2: string
+  ): void {
     const lat1 = parseFloat(latitude1);
     const lat2 = parseFloat(latitude2);
     const lon1 = parseFloat(longitude1);
@@ -41,7 +48,12 @@ export class OrderCoordsCoreEntity {
     const dLat = this.degreesToRadians(lat2 - lat1);
     const dLon = this.degreesToRadians(lon2 - lon1);
 
-    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(this.degreesToRadians(lat1)) * Math.cos(this.degreesToRadians(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(this.degreesToRadians(lat1)) *
+        Math.cos(this.degreesToRadians(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
 
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const distance = earthRadiusKm * c;

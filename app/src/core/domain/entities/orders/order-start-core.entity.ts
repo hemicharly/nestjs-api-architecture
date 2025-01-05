@@ -35,7 +35,7 @@ export class OrderStartCoreEntity {
    */
   constructor(
     readonly id: string,
-    readonly employeeId: string,
+    readonly employeeId: string
   ) {
     this.id = id;
     this.employeeId = employeeId;

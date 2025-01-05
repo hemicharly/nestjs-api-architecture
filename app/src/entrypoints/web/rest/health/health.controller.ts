@@ -1,6 +1,11 @@
 import { Controller, Get, HttpCode } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { HealthCheck, HealthCheckService, TypeOrmHealthIndicator } from '@nestjs/terminus';
+import {
+  HealthCheck,
+  HealthCheckService,
+  TypeOrmHealthIndicator,
+  HealthIndicatorResult
+} from '@nestjs/terminus';
 import { ApiDocGenericGet } from '@src/entrypoints/web/config/swagger/decorators';
 import { HealthCheckResultResponse } from '@src/entrypoints/web/rest/health/response';
 import { HealthCheckResultMapper } from '@src/entrypoints/web/rest/health/mappers';
@@ -11,7 +16,7 @@ import packageJson from '@packageJson';
 export class HealthController {
   constructor(
     private readonly healthCheckService: HealthCheckService,
-    private readonly dbHealthIndicator: TypeOrmHealthIndicator,
+    private readonly dbHealthIndicator: TypeOrmHealthIndicator
   ) {}
 
   @Get()
@@ -19,12 +24,15 @@ export class HealthController {
   @ApiDocGenericGet('health', HealthCheckResultResponse)
   @HealthCheck()
   async check(): Promise<HealthCheckResultResponse> {
-    const healthCheckResult = await this.healthCheckService.check([async () => this.dbHealthIndicator.pingCheck('database', { timeout: 3000 })]);
+    const healthCheckResult = await this.healthCheckService.check([
+      async (): Promise<HealthIndicatorResult> =>
+        this.dbHealthIndicator.pingCheck('database', { timeout: 3000 })
+    ]);
     const info = { ...healthCheckResult.info };
     info['application'] = {
       status: 'up',
       version: packageJson.version,
-      uptime: process.uptime(),
+      uptime: process.uptime()
     };
     return HealthCheckResultMapper.toApi({ ...healthCheckResult, info: info });
   }

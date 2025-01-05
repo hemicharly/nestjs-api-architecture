@@ -9,8 +9,8 @@ import { InfrastructureModule } from '@src/infrastructure';
   ...DynamicConfigModule.forProviderRegister([
     {
       useClass: CheckApiKeyUsecaseImpl,
-      injects: [ApiKeyApplicationRepositoryProviderImpl],
-    },
-  ]),
+      injects: [ApiKeyApplicationRepositoryProviderImpl]
+    }
+  ])
 })
 export class AuthConfigModule {}

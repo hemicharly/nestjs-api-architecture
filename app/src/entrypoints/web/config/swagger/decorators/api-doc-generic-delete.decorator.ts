@@ -7,25 +7,32 @@ import {
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
-  ApiUnauthorizedResponse,
+  ApiUnauthorizedResponse
 } from '@nestjs/swagger';
 import { ErrorResponse } from '@entrypoints/web/shared/response/error';
 
-export function ApiDocGenericDelete(value: string, modelType?: Type) {
+export function ApiDocGenericDelete(
+  value: string,
+  modelType?: Type
+): <TFunction extends Function, Y>(
+  target: object | TFunction,
+  propertyKey?: string | symbol,
+  descriptor?: TypedPropertyDescriptor<Y>
+) => void {
   return applyDecorators(
     ApiOperation({ summary: `Delete a ${value}` }),
     modelType
       ? ApiOkResponse({
           description: `Data from ${value} deleted.`,
-          type: modelType,
+          type: modelType
         })
       : ApiNoContentResponse({
-          description: `Data from ${value} deleted.`,
+          description: `Data from ${value} deleted.`
         }),
     ApiBadRequestResponse({ description: 'Bad request.', type: ErrorResponse }),
     ApiUnauthorizedResponse({ description: 'Unauthorized.', type: ErrorResponse }),
     ApiForbiddenResponse({ description: 'Forbidden.', type: ErrorResponse }),
     ApiNotFoundResponse({ description: 'Resource not found.', type: ErrorResponse }),
-    ApiInternalServerErrorResponse({ description: 'Internal server error.', type: ErrorResponse }),
+    ApiInternalServerErrorResponse({ description: 'Internal server error.', type: ErrorResponse })
   );
 }

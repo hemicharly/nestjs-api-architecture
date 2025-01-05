@@ -6,6 +6,11 @@ import { DynamicConfigModule } from '@shared/config';
 import { IntegrationsModule } from '@infrastructure/integrations';
 
 @Module({
-  ...DynamicConfigModule.forModules([ConfigEnvModule, IntegrationsModule, QueueInfraModule, RepositoryModule]),
+  ...DynamicConfigModule.forModules([
+    ConfigEnvModule,
+    IntegrationsModule,
+    QueueInfraModule,
+    RepositoryModule
+  ])
 })
 export class InfrastructureModule {}

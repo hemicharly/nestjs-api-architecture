@@ -8,7 +8,10 @@ export class OrderFindByIdUsecaseImpl implements OrderFindByIdUsecaseInterface {
   constructor(private readonly repositoryProvider: OrderRepositoryProviderInterface) {}
 
   public async execute(orderFindByIdCoreEntity: OrderFindByIdCoreEntity): Promise<OrderCoreEntity> {
-    const entityCore = await this.repositoryProvider.findByIdAndEmployeeId(orderFindByIdCoreEntity.id, orderFindByIdCoreEntity.employeeId);
+    const entityCore = await this.repositoryProvider.findByIdAndEmployeeId(
+      orderFindByIdCoreEntity.id,
+      orderFindByIdCoreEntity.employeeId
+    );
     if (!entityCore) {
       throw new CustomResourceNotFoundException(CodeError.ORDER_NOT_FOUND);
     }

@@ -5,6 +5,6 @@ import { AuthConfigModule } from '@shared/config/auth';
 
 @Module({
   imports: [OrdersWebConfigModule, AuthConfigModule],
-  controllers: [OrdersController],
+  controllers: [OrdersController]
 })
 export class OrdersWebModule {}

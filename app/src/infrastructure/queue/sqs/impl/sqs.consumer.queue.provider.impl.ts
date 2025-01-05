@@ -1,5 +1,11 @@
 import { Inject, Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
-import { ChangeMessageVisibilityCommand, DeleteMessageCommand, Message, ReceiveMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
+import {
+  ChangeMessageVisibilityCommand,
+  DeleteMessageCommand,
+  Message,
+  ReceiveMessageCommand,
+  SQSClient
+} from '@aws-sdk/client-sqs';
 import { DiscoveryService, MetadataScanner } from '@nestjs/core';
 import { SQS_HANDLER_METADATA } from '@shared/config/sqs/decorators';
 import { SqsDecoratorType } from '@shared/config/sqs/decorators/types';
@@ -40,7 +46,7 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
     private readonly discoveryService: DiscoveryService,
     private readonly metadataScanner: MetadataScanner,
     @Inject(ConfigEnvProviderImpl)
-    private readonly configEnvProvider: ConfigEnvProviderInterface,
+    private readonly configEnvProvider: ConfigEnvProviderInterface
   ) {
     this.sqsClient = SqsBuilderConfig.builderClient(this.configEnvProvider);
   }
@@ -50,7 +56,7 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
    * - Registers message handlers.
    * - Starts the polling process for SQS messages.
    */
-  async onModuleInit() {
+  async onModuleInit(): Promise<void> {
     this.logger.log('SQS Consumer initialized.');
     this.registerHandlers();
     this.startPolling();
@@ -61,11 +67,13 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
    * - Stops all polling processes.
    * - Marks the consumer as shutting down.
    */
-  async onModuleDestroy() {
+  async onModuleDestroy(): Promise<void> {
     this.isShuttingDown = true;
     this.logger.log('Shutting down SQS Consumer...');
     this.stopAllPolling();
-    await Promise.all([...this.pollingIntervals.values()].map((interval) => clearTimeout(interval)));
+    await Promise.all(
+      [...this.pollingIntervals.values()].map((interval) => clearTimeout(interval))
+    );
     this.logger.log('All polling operations stopped.');
   }
 
@@ -73,7 +81,7 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
    * Registers all available handlers for SQS queues.
    * - Scans through discovered providers and extracts methods annotated with specific metadata.
    */
-  private registerHandlers() {
+  private registerHandlers(): void {
     const providers = this.discoveryService.getProviders();
     for (const provider of providers) {
       const { instance } = provider;
@@ -87,16 +95,22 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
         const method = prototype[methodName];
         const metadata = Reflect.getMetadata(SQS_HANDLER_METADATA, method);
         if (metadata) {
-          const { queueNameEnv, batchSize, waitTimeSeconds, visibilityTimeout, enabledVisibilityTimeout } = metadata;
+          const {
+            queueNameEnv,
+            batchSize,
+            waitTimeSeconds,
+            visibilityTimeout,
+            enabledVisibilityTimeout
+          } = metadata;
           this.handlers.set(
             {
               queueNameEnv,
               batchSize,
               waitTimeSeconds,
               visibilityTimeout,
-              enabledVisibilityTimeout,
+              enabledVisibilityTimeout
             },
-            method.bind(instance),
+            method.bind(instance)
           );
         }
       }
@@ -109,13 +123,16 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
    * @param sqsDecoratorsTypes - Configuration of the handler associated with the queue.
    * @returns Command configured to receive messages.
    */
-  private builderReceiveMessageCommand(queueUrl: string, sqsDecoratorsTypes: SqsDecoratorType): ReceiveMessageCommand {
+  private builderReceiveMessageCommand(
+    queueUrl: string,
+    sqsDecoratorsTypes: SqsDecoratorType
+  ): ReceiveMessageCommand {
     return new ReceiveMessageCommand({
       QueueUrl: queueUrl,
       MaxNumberOfMessages: sqsDecoratorsTypes.batchSize || 10,
       WaitTimeSeconds: sqsDecoratorsTypes.waitTimeSeconds || 20,
       VisibilityTimeout: sqsDecoratorsTypes.visibilityTimeout || 30,
-      MessageAttributeNames: ['All'],
+      MessageAttributeNames: ['All']
     });
   }
 
@@ -127,10 +144,13 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
     let backoffTime = 1000; // Start with 1s
     const maxBackoffTime = 30000; // Maximum backoff time is 30s
 
-    const poll = async () => {
+    const poll = async (): Promise<void> => {
       if (this.isShuttingDown) return;
 
-      for (const [{ queueNameEnv, batchSize, waitTimeSeconds, visibilityTimeout, enabledVisibilityTimeout }, handler] of this.handlers.entries()) {
+      for (const [
+        { queueNameEnv, batchSize, waitTimeSeconds, visibilityTimeout, enabledVisibilityTimeout },
+        handler
+      ] of this.handlers.entries()) {
         const queueName = this.configEnvProvider.getString(queueNameEnv);
         const queueUrl = SqsBuilderConfig.builderQueueUrl(queueName, this.configEnvProvider);
         try {
@@ -139,24 +159,34 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
             batchSize,
             waitTimeSeconds,
             visibilityTimeout,
-            enabledVisibilityTimeout,
+            enabledVisibilityTimeout
           });
 
           const response = await this.sqsClient.send(command);
           const messages = response.Messages;
           if (messages && messages.length > 0) {
             this.logger.log(`[QueueName: ${queueName}] Received ${messages.length} messages.`);
-            await this.handlerMessage(messages, handler, queueUrl, queueName, enabledVisibilityTimeout, visibilityTimeout);
+            await this.handlerMessage(
+              messages,
+              handler,
+              queueUrl,
+              queueName,
+              enabledVisibilityTimeout,
+              visibilityTimeout
+            );
             backoffTime = 1000;
           }
         } catch (error) {
-          this.logger.error(`[QueueName: ${queueName}] Unhandled error: ${error.message}`, error.stack);
+          this.logger.error(
+            `[QueueName: ${queueName}] Unhandled error: ${error.message}`,
+            error.stack
+          );
         } finally {
           if (!this.isShuttingDown) {
             backoffTime = Math.min(backoffTime * 2, maxBackoffTime);
             this.pollingIntervals.set(
               queueUrl,
-              setTimeout(() => poll(), backoffTime),
+              setTimeout(() => poll(), backoffTime)
             );
           }
         }
@@ -175,16 +205,30 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
    * @param enabledVisibilityTimeout - Flag indicating whether the timeout should be adjusted.
    * @param visibilityTimeout - Configured visibility timeout.
    */
-  private async handlerMessage(messages: Message[], handler: Function, queueUrl: string, queueName: string, enabledVisibilityTimeout: boolean, visibilityTimeout: number) {
+  private async handlerMessage(
+    messages: Message[],
+    handler: Function,
+    queueUrl: string,
+    queueName: string,
+    enabledVisibilityTimeout: boolean,
+    visibilityTimeout: number
+  ): Promise<void> {
     for (const message of messages) {
       try {
         TracerContextAudit.setContextTracerId(message?.MessageAttributes?.TracerId?.StringValue);
         await handler(message);
         await this.deleteMessage(queueUrl, message.ReceiptHandle!);
       } catch (error) {
-        this.logger.error(`[QueueName: ${queueName}] Error processing message: ${error.message}`, error.stack);
+        this.logger.error(
+          `[QueueName: ${queueName}] Error processing message: ${error.message}`,
+          error.stack
+        );
         if (enabledVisibilityTimeout === true) {
-          await this.extendVisibilityTimeout(queueUrl, message.ReceiptHandle!, visibilityTimeout || 60);
+          await this.extendVisibilityTimeout(
+            queueUrl,
+            message.ReceiptHandle!,
+            visibilityTimeout || 60
+          );
         }
       }
     }
@@ -195,7 +239,7 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
    * @param queueUrl - The URL of the SQS queue.
    * @param receiptHandle - The receipt handle of the message.
    */
-  private async deleteMessage(queueUrl: string, receiptHandle: string) {
+  private async deleteMessage(queueUrl: string, receiptHandle: string): Promise<void> {
     if (!receiptHandle) {
       this.logger.warn(`[QueueUrl: ${queueUrl}] Invalid receipt handle for queue.`);
       return;
@@ -204,12 +248,15 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
     try {
       const command = new DeleteMessageCommand({
         QueueUrl: queueUrl,
-        ReceiptHandle: receiptHandle,
+        ReceiptHandle: receiptHandle
       });
       await this.sqsClient.send(command);
       this.logger.debug(`[QueueUrl: ${queueUrl}] Message deleted from queue.`);
     } catch (error) {
-      this.logger.error(`[QueueUrl: ${queueUrl}] Error deleting message from queue. Error: ${error.message}`, error.stack);
+      this.logger.error(
+        `[QueueUrl: ${queueUrl}] Error deleting message from queue. Error: ${error.message}`,
+        error.stack
+      );
     }
   }
 
@@ -219,7 +266,11 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
    * @param receiptHandle - The receipt handle of the message.
    * @param visibilityTimeout - The new visibility timeout in seconds.
    */
-  private async extendVisibilityTimeout(queueUrl: string, receiptHandle: string, visibilityTimeout: number) {
+  private async extendVisibilityTimeout(
+    queueUrl: string,
+    receiptHandle: string,
+    visibilityTimeout: number
+  ): Promise<void> {
     if (!receiptHandle) {
       this.logger.warn(`[QueueUrl: ${queueUrl}] Invalid receipt handle for queue.`);
       return;
@@ -229,12 +280,17 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
       const command = new ChangeMessageVisibilityCommand({
         QueueUrl: queueUrl,
         ReceiptHandle: receiptHandle,
-        VisibilityTimeout: visibilityTimeout,
+        VisibilityTimeout: visibilityTimeout
       });
       await this.sqsClient.send(command);
-      this.logger.debug(`[QueueUrl: ${queueUrl}] Extended visibility timeout for message in queue: ${queueUrl}`);
+      this.logger.debug(
+        `[QueueUrl: ${queueUrl}] Extended visibility timeout for message in queue: ${queueUrl}`
+      );
     } catch (error) {
-      this.logger.error(`[QueueUrl: ${queueUrl}] Error extending visibility timeout for queue: ${queueUrl}, Error: ${error.message}`, error.stack);
+      this.logger.error(
+        `[QueueUrl: ${queueUrl}] Error extending visibility timeout for queue: ${queueUrl}, Error: ${error.message}`,
+        error.stack
+      );
     }
   }
 
@@ -242,7 +298,7 @@ export class SqsConsumerQueueProviderImpl implements OnModuleInit, OnModuleDestr
    * Stops all ongoing polling processes.
    * - Clears all registered intervals for polling.
    */
-  private stopAllPolling() {
+  private stopAllPolling(): void {
     for (const [url, interval] of this.pollingIntervals) {
       clearTimeout(interval);
       this.logger.log(`Stopped polling for queue: ${url}`);

@@ -12,7 +12,7 @@ createHook({
     if (storeContext.has(asyncId)) {
       storeContext.delete(asyncId);
     }
-  },
+  }
 }).enable();
 
 export class TracerContextAudit {

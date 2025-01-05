@@ -6,7 +6,7 @@ import { AbstractBaseException } from '@core/domain/exceptions';
 export class HttpExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(HttpExceptionFilter.name);
 
-  catch(exception: AbstractBaseException | HttpException, host: ArgumentsHost) {
+  catch(exception: AbstractBaseException | HttpException, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
 
@@ -21,9 +21,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
       errors: [
         {
           code: 'INTERNAL_SERVICE',
-          message: 'Internal Server Error',
-        },
-      ],
+          message: 'Internal Server Error'
+        }
+      ]
     });
   }
 }

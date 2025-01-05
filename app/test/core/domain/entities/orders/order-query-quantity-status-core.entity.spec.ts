@@ -1,6 +1,9 @@
 import { OrderQueryQuantityStatusRequest } from '@src/entrypoints/web/rest/orders/request';
 import { Request } from 'express';
-import { OrderQuantityStatusEntity, OrderQueryQuantityStatusCoreEntity } from '@core/domain/entities/orders';
+import {
+  OrderQuantityStatusEntity,
+  OrderQueryQuantityStatusCoreEntity
+} from '@core/domain/entities/orders';
 import { OrderStatus, PeriodGroup } from '@core/domain/enums';
 import { OrderQuantityStatusResponse } from '@src/entrypoints/web/rest/orders/response';
 import { OrderQueryQuantityStatusAppMapper } from '@entrypoints/web/rest/orders/mappers';
@@ -14,7 +17,7 @@ describe('order-query-quantity-status-core.entity.ts', () => {
       groupingPeriod: PeriodGroup.MONTHLY,
       startDate: '2024-01-01',
       endDate: '2024-01-31',
-      status: OrderStatus.FINISHED,
+      status: OrderStatus.FINISHED
     };
 
     const requestMock: Request = { userId: 'user123' } as Request;
@@ -32,7 +35,7 @@ describe('order-query-quantity-status-core.entity.ts', () => {
   it('should set default groupingPeriod to WEEKLY if not provided', () => {
     const apiRequest: OrderQueryQuantityStatusRequest = {
       startDate: '2024-01-01',
-      endDate: '2024-01-31',
+      endDate: '2024-01-31'
     };
 
     const requestMock: Request = { userId: 'user123' } as Request;
@@ -46,7 +49,7 @@ describe('order-query-quantity-status-core.entity.ts', () => {
     const apiRequest: OrderQueryQuantityStatusRequest = {
       groupingPeriod: PeriodGroup.MONTHLY,
       startDate: '2024-01-01',
-      endDate: '2024-01-31',
+      endDate: '2024-01-31'
     };
 
     const requestMock: Request = { userId: 'user123' } as Request;
@@ -57,9 +60,12 @@ describe('order-query-quantity-status-core.entity.ts', () => {
   });
 
   it('should correctly map from OrderQuantityStatusEntity to OrderQuantityStatusResponse', () => {
-    const entity: OrderQuantityStatusEntity[] = [new OrderQuantityStatusEntity(100, 2024, 1, 1, 1, OrderStatus.FINISHED)];
+    const entity: OrderQuantityStatusEntity[] = [
+      new OrderQuantityStatusEntity(100, 2024, 1, 1, 1, OrderStatus.FINISHED)
+    ];
 
-    const apiResponse: OrderQuantityStatusResponse[] = OrderQueryQuantityStatusAppMapper.toApi(entity);
+    const apiResponse: OrderQuantityStatusResponse[] =
+      OrderQueryQuantityStatusAppMapper.toApi(entity);
 
     expect(apiResponse.length).toBe(1);
     expect(apiResponse[0].quantity).toBe(100);
@@ -73,15 +79,19 @@ describe('order-query-quantity-status-core.entity.ts', () => {
   it('should return an empty array if no entities are provided', () => {
     const entity: OrderQuantityStatusEntity[] = [];
 
-    const apiResponse: OrderQuantityStatusResponse[] = OrderQueryQuantityStatusAppMapper.toApi(entity);
+    const apiResponse: OrderQuantityStatusResponse[] =
+      OrderQueryQuantityStatusAppMapper.toApi(entity);
 
     expect(apiResponse).toEqual([]);
   });
 
   it('should handle null status when mapping to OrderQuantityStatusResponse', () => {
-    const entity: OrderQuantityStatusEntity[] = [new OrderQuantityStatusEntity(100, 2024, 1, 1, 1, null)];
+    const entity: OrderQuantityStatusEntity[] = [
+      new OrderQuantityStatusEntity(100, 2024, 1, 1, 1, null)
+    ];
 
-    const apiResponse: OrderQuantityStatusResponse[] = OrderQueryQuantityStatusAppMapper.toApi(entity);
+    const apiResponse: OrderQuantityStatusResponse[] =
+      OrderQueryQuantityStatusAppMapper.toApi(entity);
 
     expect(apiResponse[0].status).toBeNull();
   });

@@ -25,7 +25,8 @@ describe('order-creation-core.entity.ts', () => {
     orderCreationCoreEntity.schedulingDate = '2025-01-01';
 
     // Mapeia a entidade para OrderCoreEntity
-    const mappedOrder: Partial<OrderCoreEntity> = OrderCreationCoreEntity.toOrderCoreEntity(orderCreationCoreEntity);
+    const mappedOrder: Partial<OrderCoreEntity> =
+      OrderCreationCoreEntity.toOrderCoreEntity(orderCreationCoreEntity);
 
     // Verificar se as propriedades foram mapeadas corretamente
     expect(mappedOrder.employeeId).toBe('employee123');

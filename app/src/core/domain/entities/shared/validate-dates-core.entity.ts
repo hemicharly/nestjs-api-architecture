@@ -2,7 +2,7 @@ import { CustomBusinessException } from '@core/domain/exceptions';
 import { CodeError } from '@core/domain/exceptions/error';
 
 export class ValidateDatesCoreEntity {
-  public static validateBetweenDates(startDate: string, endDate: string) {
+  public static validateBetweenDates(startDate: string, endDate: string): void {
     if (!startDate || !endDate) {
       throw new CustomBusinessException(CodeError.INVALID_BETWEEN_DATES);
     }
