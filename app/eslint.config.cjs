@@ -87,7 +87,15 @@ module.exports = [
       'prettier/prettier': [
         'error',
         {
-          endOfLine: 'lf'
+          printWidth: 100,
+          arrowParens: 'always',
+          singleQuote: true,
+          semi: true,
+          tabWidth: 2,
+          trailingComma: 'none',
+          endOfLine: 'lf',
+          bracketSpacing: true,
+          proseWrap: 'preserve'
         }
       ],
       'boundaries/element-types': [2, {
@@ -101,7 +109,8 @@ module.exports = [
   {
     ignores: [
       'eslint.config.cjs',
-      'dist/**/*'
+      'dist/**/*',
+      'node_modules/**/*'
     ]
   }
 ];
