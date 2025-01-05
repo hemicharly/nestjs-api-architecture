@@ -17,13 +17,12 @@
 [![en](https://img.shields.io/badge/lang-en-blue.svg)](README.md)
 [![pt-br](https://img.shields.io/badge/lang-pt--br-green.svg)](README.pt-br.md)
 
-
 ## Introdução
 
-Este projeto foi desenvolvido com fins didáticos, visando explorar e aprofundar o conhecimento no framework **NestJS**.
-Ele funciona como um estudo prático para a "adaptação" de conceitos como **Clean Architecture** e
-**Hexagonal Architecture**, visando promover boas práticas de design de software, garantindo uma clara
-separação de responsabilidadese a abstração de dependências externas.
+Este projeto foi desenvolvido com fins didáticos para explorar o framework **NestJS**. Ele serve como um estudo prático
+para "*adaptar*" conceitos como **Clean Architecture** e **Hexagonal Architecture**, promovendo **boas práticas de design de
+software**, com uma clara separação de responsabilidades e abstração das dependências externas.
+
 
 <p align="center">
   <img src="diagram/architecture-timesheet-in-transit-api.png" alt="architecture-timesheet-in-transit-api">
@@ -108,7 +107,7 @@ de objetos de requests.
 O módulo `core` gerencia todas as regras de negócio da aplicação. Algumas diretrizes importantes:
 
 - Este módulo deve ser **autônomo** e **sem dependências externas**.
-- Não use framework ou bibliotecas.
+- Não utilize **frameworks** ou **bibliotecas externas** diretamente no `core`.
 - A pasta **domain** dentro do módulo contém as entidades e regras de negócio em nível mais granular.
 - **Comunicação de saída** para sistemas externos deve ser feita através das interfaces definidas no módulo `providers`.
 - **Comunicação de entrada** deve ocorrer através das interfaces do módulo `usecases`.
@@ -125,7 +124,12 @@ O módulo `infrastructure` gerencia a comunicação externa da aplicação, como
 
 ### **shared**
 
-O módulo `shared` é usado para compartilhar funcionalidades/utilitários comuns.
+O módulo `shared` contém funcionalidades e utilitários que são compartilhados entre as camadas **entrypoints** e
+**infrastructure**. Ele deve ser usado para incluir funcionalidades que não envolvem regras de negócios, como validações
+de entrada, manipulação de erros comuns, e outras utilidades de integração externa.
+
+**Importante**: A camada **core** não deve fazer uso do módulo `shared`, pois a lógica de negócio deve permanecer
+independente de funcionalidades externas.
 
 
 ## 2. Passos para Rodar o Projeto
@@ -137,6 +141,7 @@ Siga os passos abaixo para rodar o projeto em modo desenvolvimento.
 #### 2.1.1. Criar alias comando docker compose cli:
 
 - Recomendamos criar uma **alias** `dcli` para executar o comando:  `docker compose -f docker-compose.cli.yml run --rm`
+
 ```bash
   chmod +x ./add_alias_cli.sh && ./add_alias_cli.sh
 ```
@@ -144,16 +149,19 @@ Siga os passos abaixo para rodar o projeto em modo desenvolvimento.
 #### 2.1.2. Configurando aws cli:
 
 - Instale e configure o [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html):
+
 ```bash
    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
    unzip awscliv2.zip
    sudo ./aws/install
 ```
-    
+
 - Configurando região da aws:
+
 ```bash
   nano ~/.aws/config
 ```
+
 ```textmate
 [default]
 region = us-east-1
@@ -161,19 +169,21 @@ output = json
 ```
 
 - Configurando credenciais da aws (opcional):
+
 ```bash
   nano ~/.aws/credentials
 ```
+
 ```textmate
 [default]
 aws_access_key_id = <aws_access_key_id>
 aws_secret_access_key =  <aws_secret_access_key>
 ```
 
-
 #### 2.1.3. Copiar o arquivo de configuração:
 
 - Copie o arquivo `.env.dist` para `.env` com o comando:
+
 ```bash
   cp .env.dist .env
 ```
@@ -181,80 +191,94 @@ aws_secret_access_key =  <aws_secret_access_key>
 ### 2.2. Iniciar o projeto com Docker usando os comandos:
 
 - Cria a rede Docker necessária para o projeto:
+
 ```bash
   make create-network
 ```
 
 - Constrói as imagens Docker:
+
 ```bash
   make build
 ```
 
 - Instala as dependências do projeto:
+
 ```bash
   make install
 ```
 
 - Atualiza as dependências do projeto:
+
 ```bash
   make upgrade-lib
 ```
 
 - Popula o banco de dados com dados iniciais:
+
 ```bash
   make seed
 ```
 
 - Inicia container docker do mongodb:
+
 ```bash
   make mongodb
 ```
 
 - Inicia container docker do localstack:
+
 ```bash
   make localstack-dev
 ```
 
 - Cria filas no localstack:
+
 ```bash
   make create-queue-local
 ```
 
 - Inicia a aplicação no modo desenvolvimento:
+
 ```bash
   make dev
 ```
 
 - Executa lint e formatação do código:
+
 ```bash
   make lint-format
 ```
 
 - Gera índices automaticamente (se necessário):
+
 ```bash
   make generate-index
 ```
 
 - Gera arquivos de teste automaticamente:
+
 ```bash
   make generate-test-file
 ```
 
 - Executa testes:
+
 ```bash
   make test
 ```
 
 - Executa testes de cobertura:
+
 ```bash
   make test-coverage
 ```
 
 - Executa para adicionar nova dependência com o `yarn`:
+
 ```bash
   dcli yarn add <your_dependency>
 ```
-
 
 ### 2.3. Documentação
 
