@@ -7,20 +7,20 @@ export class OrderQueryQuantityStatusRequest {
   @ApiProperty({
     description: 'Order scheduling start date.',
     required: true,
-    format: 'date',
+    format: 'date'
   })
   @Matches(/^\d{4}-\d{2}-\d{2}$/, {
-    message: 'startDate must be a valid date in the format YYYY-MM-DD',
+    message: 'startDate must be a valid date in the format YYYY-MM-DD'
   })
   readonly startDate: string;
 
   @ApiProperty({
     description: 'Order scheduling end date.',
     required: true,
-    format: 'date',
+    format: 'date'
   })
   @Matches(/^\d{4}-\d{2}-\d{2}$/, {
-    message: 'endDate must be a valid date in the format YYYY-MM-DD',
+    message: 'endDate must be a valid date in the format YYYY-MM-DD'
   })
   readonly endDate: string;
 
@@ -29,7 +29,7 @@ export class OrderQueryQuantityStatusRequest {
     required: false,
     example: 'WEEKLY',
     enum: PeriodGroup,
-    default: 'WEEKLY',
+    default: 'WEEKLY'
   })
   @IsEnum(PeriodGroup)
   @IsOptional()
@@ -39,7 +39,7 @@ export class OrderQueryQuantityStatusRequest {
     description: 'Order Service status.',
     required: false,
     example: 'OPEN',
-    enum: OrderStatus,
+    enum: OrderStatus
   })
   @IsEnum(OrderStatus)
   @IsOptional()

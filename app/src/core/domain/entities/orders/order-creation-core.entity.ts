@@ -22,7 +22,7 @@ export class OrderCreationCoreEntity {
       companyAddressLatitude: entityCore.companyAddressLatitude,
       companyAddressLongitude: entityCore.companyAddressLongitude,
       schedulingDate: entityCore.schedulingDate,
-      status: entityCore.status,
+      status: entityCore.status
     };
   }
 }

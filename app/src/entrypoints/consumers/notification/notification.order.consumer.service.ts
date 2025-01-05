@@ -9,8 +9,12 @@ export class NotificationOrderConsumerService {
   @Inject(NotificationSendWebhookUsecaseImpl)
   private readonly notificationSendWebhookUsecase: NotificationSendWebhookUsecaseInterface;
 
-  @SqsMessageHandler({ queueNameEnv: 'QUEUE_NOTIFICATION_ORDER', waitTimeSeconds: 5, batchSize: 10 })
-  async handleMessage(message: Message) {
+  @SqsMessageHandler({
+    queueNameEnv: 'QUEUE_NOTIFICATION_ORDER',
+    waitTimeSeconds: 5,
+    batchSize: 10
+  })
+  async handleMessage(message: Message): Promise<void> {
     await this.notificationSendWebhookUsecase.execute(message.Body);
   }
 }

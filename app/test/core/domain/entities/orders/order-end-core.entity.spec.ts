@@ -38,7 +38,7 @@ describe('order-end-core.entity.ts', () => {
         status: OrderStatus.FINISHED,
         schedulingDate: '',
         serviceDescription: '',
-        createdAt: '',
+        createdAt: ''
       };
 
       expect(() => {
@@ -56,7 +56,7 @@ describe('order-end-core.entity.ts', () => {
         status: OrderStatus.IN_PROGRESS,
         schedulingDate: '',
         serviceDescription: '',
-        createdAt: '',
+        createdAt: ''
       };
 
       expect(() => {

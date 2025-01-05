@@ -6,6 +6,40 @@ const importPlugin = require('eslint-plugin-import');
 const boundariesPlugin = require('eslint-plugin-boundaries');
 
 
+const LAYER_TYPES = {
+  CORE: 'core',
+  ENTRYPOINTS: 'entrypoints',
+  INFRASTRUCTURE: 'infrastructure',
+  SHARED: 'shared',
+};
+
+const LAYER_RULES = [
+  {
+    from: [LAYER_TYPES.ENTRYPOINTS],
+    allow: [LAYER_TYPES.ENTRYPOINTS, LAYER_TYPES.CORE, LAYER_TYPES.SHARED],
+    importKind: 'value',
+  },
+  {
+    from: [LAYER_TYPES.CORE],
+    allow: [LAYER_TYPES.CORE],
+    importKind: 'value',
+  },
+  {
+    from: [LAYER_TYPES.INFRASTRUCTURE],
+    allow: [
+      LAYER_TYPES.INFRASTRUCTURE,
+      LAYER_TYPES.CORE,
+      LAYER_TYPES.SHARED,
+    ],
+    importKind: 'value',
+  },
+  {
+    from: [LAYER_TYPES.SHARED],
+    allow: [LAYER_TYPES.SHARED, LAYER_TYPES.CORE, LAYER_TYPES.INFRASTRUCTURE],
+    importKind: 'value',
+  },
+];
+
 module.exports = [
   {
     files: ['**/*.ts'],
@@ -25,7 +59,7 @@ module.exports = [
       '@typescript-eslint': typescriptPlugin,
       prettier: prettierPlugin,
       'unused-imports': unusedImports,
-      'import': importPlugin,
+      import: importPlugin,
       boundaries: boundariesPlugin
     },
     settings: {
@@ -35,17 +69,16 @@ module.exports = [
         }
       },
       'boundaries/elements': [
-        { type: 'core', pattern: 'src/core/**' },
-        { type: 'entrypoints', pattern: 'src/entrypoints/**' },
-        { type: 'infrastructure', pattern: 'src/infrastructure/**' },
-        { type: 'shared', pattern: 'src/shared/**' }
+        { type: LAYER_TYPES.CORE, pattern: 'src/core/**' },
+        { type: LAYER_TYPES.ENTRYPOINTS, pattern: 'src/entrypoints/**' },
+        { type: LAYER_TYPES.INFRASTRUCTURE, pattern: 'src/infrastructure/**' },
+        { type: LAYER_TYPES.SHARED, pattern: 'src/shared/**' },
       ],
     },
     rules: {
       'complexity': ['error', { max: 10 }],
       'unused-imports/no-unused-imports': 'error',
-      '@typescript-eslint/interface-name-prefix': 'off',
-      '@typescript-eslint/explicit-function-return-type': 'off',
+      '@typescript-eslint/explicit-function-return-type': 'error',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-namespace': 'off',
@@ -54,34 +87,14 @@ module.exports = [
       'prettier/prettier': [
         'error',
         {
-          endOfLine: 'auto'
+          endOfLine: 'lf'
         }
       ],
-      "boundaries/element-types": [2, {
-        default: "disallow",
-        message: "The '${file.type}' layer is not allowed to import the '${dependency.type}'. Because it violates the principle of responsibility.",
-        rules: [
-          {
-            from: ["entrypoints"],
-            allow: ["entrypoints", "core", "shared"],
-            importKind: "value",
-          },
-          {
-            from: ["core"],
-            allow: ["core"],
-            importKind: "value",
-          },
-          {
-            from: ["infrastructure"],
-            allow: ["infrastructure", "core", "shared"],
-            importKind: "value",
-          },
-          {
-            from: ["shared"],
-            allow: ["shared", "core", "infrastructure"],
-            importKind: "value",
-          },
-        ]
+      'boundaries/element-types': [2, {
+        default: 'disallow',
+        message:
+          "Imports from '${file.type}' to '${dependency.type}' are not allowed. Please review the architecture rules.",
+        rules: LAYER_RULES,
       }]
     }
   },

@@ -2,7 +2,9 @@ import { NotificationSendWebhookUsecaseInterface } from '@core/usecases/notifica
 import { WebhookIntegrationClientProviderInterface } from '@core/providers/integrations';
 
 export class NotificationSendWebhookUsecaseImpl implements NotificationSendWebhookUsecaseInterface {
-  constructor(private readonly webhookIntegrationClientProvider: WebhookIntegrationClientProviderInterface) {}
+  constructor(
+    private readonly webhookIntegrationClientProvider: WebhookIntegrationClientProviderInterface
+  ) {}
 
   public async execute(message: string): Promise<void> {
     const requestBody: any = JSON.parse(message);

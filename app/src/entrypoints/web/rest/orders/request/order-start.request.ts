@@ -4,7 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class OrderStartRequest {
   @ApiProperty({
     description: 'Start date time of order.',
-    format: 'date-time',
+    format: 'date-time'
   })
   @IsDateString()
   @IsNotEmpty()
@@ -12,7 +12,7 @@ export class OrderStartRequest {
 
   @ApiProperty({
     description: 'Latitude recorded at customer address.',
-    example: '-22.897140306896276',
+    example: '-22.897140306896276'
   })
   @IsNumber()
   @IsNotEmpty()
@@ -20,7 +20,7 @@ export class OrderStartRequest {
 
   @ApiProperty({
     description: 'Longitude recorded at customer address.',
-    example: '-47.06153484719727',
+    example: '-47.06153484719727'
   })
   @IsNumber()
   @IsNotEmpty()

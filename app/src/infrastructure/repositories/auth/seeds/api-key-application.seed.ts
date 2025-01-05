@@ -4,13 +4,20 @@ import { Injectable } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
 import { ApiKeyApplication } from '@infrastructure/repositories/auth/entity/api-key-application.entity';
 
-const RULES_PATHS = ['POST /v1/orders', 'PATCH /v1/orders/:id/start', 'PATCH /v1/orders/:id/end', 'GET /v1/orders/:id', 'GET /v1/orders/quantity', 'GET /v1/orders'];
+const RULES_PATHS = [
+  'POST /v1/orders',
+  'PATCH /v1/orders/:id/start',
+  'PATCH /v1/orders/:id/end',
+  'GET /v1/orders/:id',
+  'GET /v1/orders/quantity',
+  'GET /v1/orders'
+];
 
 @Injectable()
 export class ApiKeyApplicationSeed {
   constructor(
     @InjectRepository(ApiKeyApplication)
-    private readonly repository: Repository<ApiKeyApplication>,
+    private readonly repository: Repository<ApiKeyApplication>
   ) {}
 
   public async seed(): Promise<void> {
@@ -46,10 +53,15 @@ export class ApiKeyApplicationSeed {
       apiKeyApplication1,
       apiKeyApplication2,
       apiKeyApplication3,
-      apiKeyApplication4,
+      apiKeyApplication4
     });
 
-    await this.repository.save([apiKeyApplication1, apiKeyApplication2, apiKeyApplication3, apiKeyApplication4]);
+    await this.repository.save([
+      apiKeyApplication1,
+      apiKeyApplication2,
+      apiKeyApplication3,
+      apiKeyApplication4
+    ]);
   }
 
   private genApiKey(): string {

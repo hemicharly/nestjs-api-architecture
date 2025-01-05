@@ -7,10 +7,12 @@ import { ApiKeyApplication } from '@infrastructure/repositories/auth/entity';
 import { ApikeyApplicationInfraTransformer } from '@infrastructure/repositories/auth/transformers';
 
 @Injectable()
-export class ApiKeyApplicationRepositoryProviderImpl implements ApikeyapplicationRepositoryProviderInterface {
+export class ApiKeyApplicationRepositoryProviderImpl
+  implements ApikeyapplicationRepositoryProviderInterface
+{
   constructor(
     @InjectRepository(ApiKeyApplication)
-    private readonly repository: Repository<ApiKeyApplication>,
+    private readonly repository: Repository<ApiKeyApplication>
   ) {}
 
   public async save(entityCore: ApikeyApplicationCoreEntity): Promise<ApikeyApplicationCoreEntity> {

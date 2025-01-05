@@ -4,7 +4,10 @@ import { OrderCoreEntity, OrderCreationCoreEntity } from '@core/domain/entities/
 import { Request } from 'express';
 
 export class OrderCreationAppMapper {
-  public static fromApi(object: OrderCreationRequest, { userId }: Request): OrderCreationCoreEntity {
+  public static fromApi(
+    object: OrderCreationRequest,
+    { userId }: Request
+  ): OrderCreationCoreEntity {
     const entity = new OrderCreationCoreEntity(userId);
     entity.serviceDescription = object.serviceDescription;
     entity.companyName = object.companyName;
@@ -19,7 +22,7 @@ export class OrderCreationAppMapper {
       id: entity.id,
       employeeId: entity.employeeId,
       status: entity.status,
-      createdAt: entity.createdAt,
+      createdAt: entity.createdAt
     };
   }
 }

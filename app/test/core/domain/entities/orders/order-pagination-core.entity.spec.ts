@@ -1,5 +1,9 @@
 import { PaginationCoreEntity } from '@core/domain/entities/shared';
-import { OrderCoreEntity, OrderPaginationCoreEntity, OrderTotalHoursCoreEntity } from '@core/domain/entities/orders';
+import {
+  OrderCoreEntity,
+  OrderPaginationCoreEntity,
+  OrderTotalHoursCoreEntity
+} from '@core/domain/entities/orders';
 import { OrderStatus } from '@core/domain/enums';
 
 /**
@@ -16,7 +20,7 @@ describe('order-pagination-core.entity.ts', () => {
         schedulingDate: '',
         serviceDescription: '',
         status: OrderStatus.FINISHED,
-        totalHours: { hours: 2, minutes: 30, seconds: 0 },
+        totalHours: { hours: 2, minutes: 30, seconds: 0 }
       },
       {
         createdAt: '',
@@ -25,8 +29,8 @@ describe('order-pagination-core.entity.ts', () => {
         schedulingDate: '',
         serviceDescription: '',
         status: OrderStatus.FINISHED,
-        totalHours: { hours: 1, minutes: 15, seconds: 0 },
-      },
+        totalHours: { hours: 1, minutes: 15, seconds: 0 }
+      }
     ];
 
     const entity = new OrderPaginationCoreEntity(pagination, orderCoreEntities);

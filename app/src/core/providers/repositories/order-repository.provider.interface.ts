@@ -5,7 +5,7 @@ import {
   OrderQuantityStatusEntity,
   OrderQueryCoreEntity,
   OrderQueryQuantityStatusCoreEntity,
-  OrderStartCoreEntity,
+  OrderStartCoreEntity
 } from '@core/domain/entities/orders';
 
 export interface OrderRepositoryProviderInterface {
@@ -19,5 +19,7 @@ export interface OrderRepositoryProviderInterface {
 
   find(queryCore: OrderQueryCoreEntity): Promise<OrderPaginationCoreEntity>;
 
-  countByEmployeeIdAndDateAndStatus(queryCore: OrderQueryQuantityStatusCoreEntity): Promise<OrderQuantityStatusEntity[]>;
+  countByEmployeeIdAndDateAndStatus(
+    queryCore: OrderQueryQuantityStatusCoreEntity
+  ): Promise<OrderQuantityStatusEntity[]>;
 }

@@ -56,7 +56,7 @@ describe('order-total-hours-core.entity.ts', () => {
         schedulingDate: '',
         serviceDescription: '',
         status: OrderStatus.FINISHED,
-        totalHours: { hours: 2, minutes: 30, seconds: 0 },
+        totalHours: { hours: 2, minutes: 30, seconds: 0 }
       };
       const order2: OrderCoreEntity = {
         createdAt: '',
@@ -65,7 +65,7 @@ describe('order-total-hours-core.entity.ts', () => {
         schedulingDate: '',
         serviceDescription: '',
         status: OrderStatus.FINISHED,
-        totalHours: { hours: 1, minutes: 15, seconds: 30 },
+        totalHours: { hours: 1, minutes: 15, seconds: 30 }
       };
       const order3: OrderCoreEntity = {
         createdAt: '',
@@ -74,7 +74,7 @@ describe('order-total-hours-core.entity.ts', () => {
         schedulingDate: '',
         serviceDescription: '',
         status: OrderStatus.FINISHED,
-        totalHours: { hours: 0, minutes: 45, seconds: 15 },
+        totalHours: { hours: 0, minutes: 45, seconds: 15 }
       };
 
       const items = [order1, order2, order3];
@@ -99,7 +99,11 @@ describe('order-total-hours-core.entity.ts', () => {
     it('should correctly convert seconds to hours, minutes, and seconds', () => {
       const totalSeconds = 5555; // 1 hour, 32 minutes, 35 seconds
 
-      const result = Reflect.apply(OrderTotalHoursCoreEntity['secondsToHoursMinutesSeconds'], null, [totalSeconds]);
+      const result = Reflect.apply(
+        OrderTotalHoursCoreEntity['secondsToHoursMinutesSeconds'],
+        null,
+        [totalSeconds]
+      );
 
       expect(result.hours).toBe(1);
       expect(result.minutes).toBe(32);
@@ -110,7 +114,9 @@ describe('order-total-hours-core.entity.ts', () => {
       const totalSeconds = -100;
 
       expect(() => {
-        Reflect.apply(OrderTotalHoursCoreEntity['secondsToHoursMinutesSeconds'], null, [totalSeconds]);
+        Reflect.apply(OrderTotalHoursCoreEntity['secondsToHoursMinutesSeconds'], null, [
+          totalSeconds
+        ]);
       }).toThrowError('Invalid totalSeconds value. It must be a non-negative number.');
     });
 
@@ -118,7 +124,9 @@ describe('order-total-hours-core.entity.ts', () => {
       const totalSeconds = NaN;
 
       expect(() => {
-        Reflect.apply(OrderTotalHoursCoreEntity['secondsToHoursMinutesSeconds'], null, [totalSeconds]);
+        Reflect.apply(OrderTotalHoursCoreEntity['secondsToHoursMinutesSeconds'], null, [
+          totalSeconds
+        ]);
       }).toThrowError('Invalid totalSeconds value. It must be a non-negative number.');
     });
   });

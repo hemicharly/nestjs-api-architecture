@@ -8,9 +8,9 @@ export class CustomValidationException extends AbstractBaseException {
       validationErrors.map((el) => {
         return {
           code: 'INVALID_FIELD',
-          message: Object.values(el.constraints).join(', '),
+          message: Object.values(el.constraints).join(', ')
         };
-      }),
+      })
     );
   }
 }

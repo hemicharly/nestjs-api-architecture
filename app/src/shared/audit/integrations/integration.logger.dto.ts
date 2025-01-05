@@ -17,7 +17,7 @@ const SENSITIVE_FIELDS = new Set([
   'Token',
   'token',
   'Key',
-  'key',
+  'key'
 ]);
 
 /**
@@ -96,7 +96,17 @@ export class IntegrationLoggerDto {
    * @param {number} statusCode The HTTP status code of the response.
    * @param {[number, number]} startTime The start time of the request for calculating duration.
    */
-  constructor(tracerId: string, application: string, endpoint: string, headers: any, queryParameters: any, requestBody: any, responseBody: any, statusCode: number, startTime: [number, number]) {
+  constructor(
+    tracerId: string,
+    application: string,
+    endpoint: string,
+    headers: any,
+    queryParameters: any,
+    requestBody: any,
+    responseBody: any,
+    statusCode: number,
+    startTime: [number, number]
+  ) {
     this.tracerId = tracerId; // Sets the tracerId
     this.timestamp = new Date().toJSON(); // Marks the timestamp of the log
     this.application = application; // Sets the application name

@@ -9,12 +9,12 @@ import compression from 'compression';
 import helmet from 'helmet';
 import { SetupRedoc, SwaggerDoc } from '@src/entrypoints/web/config/swagger';
 
-async function bootstrap() {
+async function bootstrap(): Promise<void> {
   const HOST = '0.0.0.0';
   const PORT = 3000;
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    cors: true,
+    cors: true
   });
 
   SwaggerDoc(app);

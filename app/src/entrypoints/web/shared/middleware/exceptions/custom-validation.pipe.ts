@@ -8,7 +8,7 @@ export class CustomValidationPipe extends ValidationPipe {
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
-      exceptionFactory: (errors: ValidationError[]) => new CustomValidationException(errors),
+      exceptionFactory: (errors: ValidationError[]) => new CustomValidationException(errors)
     });
   }
 }

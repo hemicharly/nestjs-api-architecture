@@ -13,7 +13,16 @@ export class WebLoggerDto {
   duration: number;
   startTime?: [number, number];
 
-  constructor(tracerId: string, startTime: [number, number], ip: string, useId: string, endpoint: string, headers: any, queryParameters: any, requestBody: any) {
+  constructor(
+    tracerId: string,
+    startTime: [number, number],
+    ip: string,
+    useId: string,
+    endpoint: string,
+    headers: any,
+    queryParameters: any,
+    requestBody: any
+  ) {
     this.tracerId = tracerId;
     this.timestamp = new Date().toJSON();
     this.application = 'timesheet-in-transit-api';
@@ -52,7 +61,7 @@ export class WebLoggerDto {
       'Token',
       'token',
       'Key',
-      'key',
+      'key'
     ]);
 
     const maskedObj = { ...obj };

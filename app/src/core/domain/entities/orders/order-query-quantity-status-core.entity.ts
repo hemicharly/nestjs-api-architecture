@@ -7,7 +7,7 @@ export class OrderQueryQuantityStatusCoreEntity {
     readonly groupingPeriod: PeriodGroup,
     readonly startDate: string,
     readonly endDate: string,
-    readonly employeeId: string,
+    readonly employeeId: string
   ) {
     this.groupingPeriod = groupingPeriod;
     this.startDate = startDate;

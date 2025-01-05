@@ -3,6 +3,6 @@ import { WebhookIntegrationClientModule } from '@infrastructure/integrations/web
 import { DynamicConfigModule } from '@shared/config';
 
 @Module({
-  ...DynamicConfigModule.forModules([WebhookIntegrationClientModule]),
+  ...DynamicConfigModule.forModules([WebhookIntegrationClientModule])
 })
 export class IntegrationsModule {}

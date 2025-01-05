@@ -1,7 +1,7 @@
 {
   "name": "timesheet-in-transit-api",
   "version": "1.0.2",
-  "description": "timesheet-in-transit-api",
+  "description": "This project was developed for educational purposes, aiming to explore and deepen knowledge of the **NestJS** framework.\nIt serves as a practical study for the \"adaptation\" of concepts such as **Clean Architecture** and\n**Hexagonal Architecture**, with the goal of promoting the best software design practices, ensuring clear separation of\nresponsibilities, and abstracting external dependencies.",
   "author": "Hemicharly Thiago",
   "private": true,
   "type": "commonjs",

@@ -7,7 +7,7 @@ import {
   OrderQuantityStatusEntity,
   OrderQueryCoreEntity,
   OrderQueryQuantityStatusCoreEntity,
-  OrderStartCoreEntity,
+  OrderStartCoreEntity
 } from '@core/domain/entities/orders';
 import { PaginationCoreEntity } from '@core/domain/entities/shared';
 import { OrderEntity } from '@infrastructure/repositories/orders/entity';
@@ -29,7 +29,7 @@ export class OrderInfraMapper {
       schedulingDate: entityCore.schedulingDate,
       status: entityCore.status.toString(),
       createdAt: new Date().toJSON(),
-      updatedAt: new Date().toJSON(),
+      updatedAt: new Date().toJSON()
     };
   }
 
@@ -42,7 +42,7 @@ export class OrderInfraMapper {
       recordedLatitude: entityCore.recordedLatitude,
       recordedLongitude: entityCore.recordedLongitude,
       status: entityCore.status.toString(),
-      updatedAt: new Date().toJSON(),
+      updatedAt: new Date().toJSON()
     };
   }
 
@@ -56,7 +56,7 @@ export class OrderInfraMapper {
       recordedLongitude: entityCore.recordedLongitude,
       endComment: entityCore?.endComment || null,
       status: entityCore.status.toString(),
-      updatedAt: new Date().toJSON(),
+      updatedAt: new Date().toJSON()
     };
   }
 
@@ -89,7 +89,11 @@ export class OrderInfraMapper {
     return entityList.map((item) => this.toCoreEntity(item));
   }
 
-  public static toPaginationCoreEntity(entityList: OrderEntity[], total: number, paginationCore: PaginationCoreEntity): OrderPaginationCoreEntity {
+  public static toPaginationCoreEntity(
+    entityList: OrderEntity[],
+    total: number,
+    paginationCore: PaginationCoreEntity
+  ): OrderPaginationCoreEntity {
     const items = this.toCoreEntityList(entityList);
     return new OrderPaginationCoreEntity({ ...paginationCore, total }, items);
   }
@@ -100,14 +104,14 @@ export class OrderInfraMapper {
       startDate,
       endDate,
       status,
-      pagination: { page, pageSize },
+      pagination: { page, pageSize }
     } = queryCore;
 
     const where: FindOptionsWhere<any> = { employeeId };
     if (startDate && endDate) {
       where.schedulingDate = {
         $gte: startDate,
-        $lte: endDate,
+        $lte: endDate
       };
     }
 
@@ -123,21 +127,23 @@ export class OrderInfraMapper {
       where,
       order: {
         schedulingDate: 'DESC',
-        createdAt: 'DESC',
+        createdAt: 'DESC'
       },
       skip,
-      take: limitNum,
+      take: limitNum
     };
   }
 
-  public static builderAggregateQuery(queryCore: OrderQueryQuantityStatusCoreEntity): ObjectLiteral[] {
+  public static builderAggregateQuery(
+    queryCore: OrderQueryQuantityStatusCoreEntity
+  ): ObjectLiteral[] {
     const { employeeId, groupingPeriod, startDate, endDate, status } = queryCore;
     const match: any = {
       employeeId,
       schedulingDate: {
         $gte: startDate,
-        $lte: endDate,
-      },
+        $lte: endDate
+      }
     };
 
     if (status) {
@@ -148,20 +154,20 @@ export class OrderInfraMapper {
 
     return [
       {
-        $match: match,
+        $match: match
       },
       {
         $addFields: {
           schedulingDate: {
             $dateFromString: {
               dateString: '$schedulingDate',
-              format: '%Y-%m-%d',
-            },
-          },
-        },
+              format: '%Y-%m-%d'
+            }
+          }
+        }
       },
       {
-        $group: group,
+        $group: group
       },
       {
         $project: {
@@ -171,20 +177,32 @@ export class OrderInfraMapper {
           month: '$_id.month',
           week: '$_id.week',
           day: '$_id.day',
-          count: 1,
-        },
+          count: 1
+        }
       },
       {
-        $sort: { year: 1, month: 1, week: 1, day: 1, status: 1 },
-      },
+        $sort: { year: 1, month: 1, week: 1, day: 1, status: 1 }
+      }
     ];
   }
 
-  public static fromAggregationResult(aggregationResult: OrderAggregationResultType[]): OrderQuantityStatusEntity[] {
+  public static fromAggregationResult(
+    aggregationResult: OrderAggregationResultType[]
+  ): OrderQuantityStatusEntity[] {
     if (aggregationResult?.length === 0) {
       return [];
     }
-    return aggregationResult.map((item) => new OrderQuantityStatusEntity(item.count, item.year, item.month, item.week, item.day, item.status as OrderStatus));
+    return aggregationResult.map(
+      (item) =>
+        new OrderQuantityStatusEntity(
+          item.count,
+          item.year,
+          item.month,
+          item.week,
+          item.day,
+          item.status as OrderStatus
+        )
+    );
   }
 
   private static builderGroup(groupingPeriod: PeriodGroup): any {
@@ -192,26 +210,26 @@ export class OrderInfraMapper {
       YEARLY: {
         _id: {
           status: '$status',
-          year: { $year: '$schedulingDate' },
+          year: { $year: '$schedulingDate' }
         },
-        count: { $sum: 1 },
+        count: { $sum: 1 }
       },
       MONTHLY: {
         _id: {
           status: '$status',
           year: { $year: '$schedulingDate' },
-          month: { $month: '$schedulingDate' },
+          month: { $month: '$schedulingDate' }
         },
-        count: { $sum: 1 },
+        count: { $sum: 1 }
       },
       WEEKLY: {
         _id: {
           status: '$status',
           year: { $year: '$schedulingDate' },
           month: { $month: '$schedulingDate' },
-          week: { $week: '$schedulingDate' },
+          week: { $week: '$schedulingDate' }
         },
-        count: { $sum: 1 },
+        count: { $sum: 1 }
       },
       DAILY: {
         _id: {
@@ -219,10 +237,10 @@ export class OrderInfraMapper {
           year: { $year: '$schedulingDate' },
           month: { $month: '$schedulingDate' },
           week: { $week: '$schedulingDate' },
-          day: { $dayOfMonth: '$schedulingDate' },
+          day: { $dayOfMonth: '$schedulingDate' }
         },
-        count: { $sum: 1 },
-      },
+        count: { $sum: 1 }
+      }
     };
 
     return options[groupingPeriod];

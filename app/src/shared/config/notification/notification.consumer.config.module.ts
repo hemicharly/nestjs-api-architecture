@@ -9,8 +9,8 @@ import { WebhookIntegrationClientProviderImpl } from '@infrastructure/integratio
   ...DynamicConfigModule.forProviderRegister([
     {
       useClass: NotificationSendWebhookUsecaseImpl,
-      injects: [WebhookIntegrationClientProviderImpl],
-    },
-  ]),
+      injects: [WebhookIntegrationClientProviderImpl]
+    }
+  ])
 })
 export class NotificationConsumerConfigModule {}

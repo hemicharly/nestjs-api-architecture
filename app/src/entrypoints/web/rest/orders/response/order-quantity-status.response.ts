@@ -20,11 +20,18 @@ export class OrderQuantityStatusResponse {
   @ApiProperty({
     description: 'Order Service status.',
     example: 'OPEN',
-    enum: OrderStatus,
+    enum: OrderStatus
   })
   readonly status: OrderStatus;
 
-  constructor(quantity: number, year: number, month: number, week: number, day: number, status: OrderStatus) {
+  constructor(
+    quantity: number,
+    year: number,
+    month: number,
+    week: number,
+    day: number,
+    status: OrderStatus
+  ) {
     this.quantity = quantity || 0;
     this.year = year || 0;
     this.month = month || 0;

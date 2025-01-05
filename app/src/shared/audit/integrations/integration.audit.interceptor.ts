@@ -52,7 +52,7 @@ export class IntegrationAuditInterceptor {
   constructor(
     private readonly application: string,
     private readonly logger: Logger,
-    private readonly httpService: HttpService,
+    private readonly httpService: HttpService
   ) {
     this.setupInterceptors();
   }
@@ -64,11 +64,11 @@ export class IntegrationAuditInterceptor {
   private setupInterceptors(): void {
     this.httpService.axiosRef.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => this.handleRequest(config),
-      (error) => this.handleError(error),
+      (error) => this.handleError(error)
     );
     this.httpService.axiosRef.interceptors.response.use(
       (response) => this.handleResponseSuccess(response),
-      (error) => this.handleResponseError(error),
+      (error) => this.handleResponseError(error)
     );
   }
 
@@ -126,8 +126,19 @@ export class IntegrationAuditInterceptor {
    * @param startTime - The request start time.
    * @param isError - Flag indicating if it's an error log.
    */
-  private logAudit(config: AxiosRequestConfig, responseData: any, status: number, startTime: [number, number], isError: boolean = false): void {
-    const integrationLoggerDto = this.createIntegrationLoggerDto(config, responseData, status, startTime);
+  private logAudit(
+    config: AxiosRequestConfig,
+    responseData: any,
+    status: number,
+    startTime: [number, number],
+    isError: boolean = false
+  ): void {
+    const integrationLoggerDto = this.createIntegrationLoggerDto(
+      config,
+      responseData,
+      status,
+      startTime
+    );
     const logMessage = JSON.stringify(integrationLoggerDto);
     if (isError) {
       this.logger.error(logMessage);
@@ -145,10 +156,25 @@ export class IntegrationAuditInterceptor {
    * @param startTime - The request start time.
    * @returns An `IntegrationLoggerDto` object containing the audit information.
    */
-  private createIntegrationLoggerDto(config: AxiosRequestConfig, responseData: any, status: number, startTime: [number, number]): IntegrationLoggerDto {
+  private createIntegrationLoggerDto(
+    config: AxiosRequestConfig,
+    responseData: any,
+    status: number,
+    startTime: [number, number]
+  ): IntegrationLoggerDto {
     const tracerId = <string>config.headers['x-tracer-id'];
     const method = `${config.method?.toUpperCase()} ${config.url}`;
-    return new IntegrationLoggerDto(tracerId, this.application, method, config.headers, config.params, config.data, responseData, status, startTime);
+    return new IntegrationLoggerDto(
+      tracerId,
+      this.application,
+      method,
+      config.headers,
+      config.params,
+      config.data,
+      responseData,
+      status,
+      startTime
+    );
   }
 
   /**

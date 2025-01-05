@@ -1,4 +1,9 @@
-import { OrderCoreEntity, OrderEndCoreEntity, OrderPaginationCoreEntity, OrderStartCoreEntity } from '@core/domain/entities/orders';
+import {
+  OrderCoreEntity,
+  OrderEndCoreEntity,
+  OrderPaginationCoreEntity,
+  OrderStartCoreEntity
+} from '@core/domain/entities/orders';
 import { PaginationCoreEntity } from '@core/domain/entities/shared';
 import { OrderStatus, PeriodGroup } from '@core/domain/enums';
 import { ObjectId } from 'mongodb';
@@ -18,7 +23,7 @@ describe('order-infra.mapper.ts', () => {
         companyAddressLatitude: '45.0',
         companyAddressLongitude: '-93.0',
         schedulingDate: '2023-01-01',
-        status: OrderStatus.FINISHED,
+        status: OrderStatus.FINISHED
       };
 
       const result = OrderInfraMapper.toDbEntity(coreEntity);
@@ -31,8 +36,8 @@ describe('order-infra.mapper.ts', () => {
           companyAddressLatitude: '45.0',
           companyAddressLongitude: '-93.0',
           schedulingDate: '2023-01-01',
-          status: OrderStatus.FINISHED,
-        }),
+          status: OrderStatus.FINISHED
+        })
       );
     });
 
@@ -49,7 +54,7 @@ describe('order-infra.mapper.ts', () => {
         recordedLongitude: '-93.0',
         status: OrderStatus.IN_PROGRESS,
         id: '1',
-        employeeId: '123456',
+        employeeId: '123456'
       };
 
       const result = OrderInfraMapper.fromOrderStartCoreEntity(coreEntity);
@@ -59,8 +64,8 @@ describe('order-infra.mapper.ts', () => {
           startDatetime: '2023-01-01T10:00:00Z',
           recordedLatitude: '45.0',
           recordedLongitude: '-93.0',
-          status: 'IN_PROGRESS',
-        }),
+          status: 'IN_PROGRESS'
+        })
       );
     });
 
@@ -78,7 +83,7 @@ describe('order-infra.mapper.ts', () => {
         endComment: 'Completed successfully',
         status: OrderStatus.FINISHED,
         employeeId: '123',
-        id: '',
+        id: ''
       };
 
       const result = OrderInfraMapper.fromOrderEndCoreEntity(coreEntity);
@@ -89,8 +94,8 @@ describe('order-infra.mapper.ts', () => {
           recordedLatitude: '45.0',
           recordedLongitude: '-93.0',
           endComment: 'Completed successfully',
-          status: OrderStatus.FINISHED,
-        }),
+          status: OrderStatus.FINISHED
+        })
       );
     });
 
@@ -114,7 +119,7 @@ describe('order-infra.mapper.ts', () => {
         endComment: 'Completed successfully',
         status: OrderStatus.FINISHED,
         createdAt: '2023-01-01T09:00:00Z',
-        updatedAt: '2023-01-01T10:00:00Z',
+        updatedAt: '2023-01-01T10:00:00Z'
       };
 
       const result = OrderInfraMapper.toCoreEntity(entity);
@@ -126,8 +131,8 @@ describe('order-infra.mapper.ts', () => {
           employeeId: '123',
           serviceDescription: 'Delivery',
           companyName: 'Company A',
-          status: OrderStatus.FINISHED,
-        }),
+          status: OrderStatus.FINISHED
+        })
       );
     });
 
@@ -152,8 +157,8 @@ describe('order-infra.mapper.ts', () => {
           schedulingDate: '2023-01-01',
           endComment: 'Completed successfully',
           createdAt: '2023-01-01T09:00:00Z',
-          updatedAt: '2023-01-01T10:00:00Z',
-        },
+          updatedAt: '2023-01-01T10:00:00Z'
+        }
       ];
 
       const result = OrderInfraMapper.toCoreEntityList(entities);
@@ -183,8 +188,8 @@ describe('order-infra.mapper.ts', () => {
           schedulingDate: '2023-01-01',
           endComment: 'Completed successfully',
           createdAt: '2023-01-01T09:00:00Z',
-          updatedAt: '2023-01-01T10:00:00Z',
-        },
+          updatedAt: '2023-01-01T10:00:00Z'
+        }
       ];
       const paginationCore = new PaginationCoreEntity(1, 10);
 
@@ -205,7 +210,7 @@ describe('order-infra.mapper.ts', () => {
         startDate: '2023-01-01',
         endDate: '2023-01-31',
         status: OrderStatus.FINISHED,
-        pagination: { page: 1, pageSize: 10 },
+        pagination: { page: 1, pageSize: 10 }
       };
 
       const result = OrderInfraMapper.builderFindQuery(queryCore);
@@ -215,9 +220,9 @@ describe('order-infra.mapper.ts', () => {
           where: expect.objectContaining({
             employeeId: '123',
             schedulingDate: expect.objectContaining({ $gte: '2023-01-01', $lte: '2023-01-31' }),
-            status: OrderStatus.FINISHED,
-          }),
-        }),
+            status: OrderStatus.FINISHED
+          })
+        })
       );
     });
   });
@@ -229,7 +234,7 @@ describe('order-infra.mapper.ts', () => {
         groupingPeriod: PeriodGroup.MONTHLY,
         startDate: '2023-01-01',
         endDate: '2023-01-31',
-        status: OrderStatus.FINISHED,
+        status: OrderStatus.FINISHED
       };
 
       const result = OrderInfraMapper.builderAggregateQuery(queryCore);

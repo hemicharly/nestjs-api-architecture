@@ -10,13 +10,13 @@ export class OrderPaginationResponse {
   @ApiProperty({
     description: 'Shows order items.',
     type: OrderItemsResponse,
-    isArray: true,
+    isArray: true
   })
   items: OrderItemsResponse[];
 
   @ApiProperty({
     description: 'Shows the total calculation in hours, minutes and seconds.',
-    type: OrderTotalHoursResponse,
+    type: OrderTotalHoursResponse
   })
   totalHours?: OrderTotalHoursResponse;
 }

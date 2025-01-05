@@ -6,7 +6,7 @@ export class OrderPaginationCoreEntity extends GenericPaginationCoreEntity<Order
 
   constructor(
     readonly pagination: PaginationCoreEntity,
-    readonly orderCoreEntities: OrderCoreEntity[],
+    readonly orderCoreEntities: OrderCoreEntity[]
   ) {
     super(pagination, orderCoreEntities);
     this.totalHours = OrderTotalHoursCoreEntity.calculateTotal(orderCoreEntities);

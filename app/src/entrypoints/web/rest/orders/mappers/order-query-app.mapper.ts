@@ -2,12 +2,18 @@ import { Request } from 'express';
 import { OrderPaginationCoreEntity, OrderQueryCoreEntity } from '@core/domain/entities/orders';
 import { PaginationCoreEntity } from '@core/domain/entities/shared';
 import { OrderQueryRequest } from '@src/entrypoints/web/rest/orders/request';
-import { OrderPaginationResponse, OrderTotalHoursResponse } from '@src/entrypoints/web/rest/orders/response';
+import {
+  OrderPaginationResponse,
+  OrderTotalHoursResponse
+} from '@src/entrypoints/web/rest/orders/response';
 import { PaginationResponse } from '@entrypoints/web/shared/response/pagination';
 
 export class OrderQueryAppMapper {
   public static fromApi(object: OrderQueryRequest, { userId }: Request): OrderQueryCoreEntity {
-    const entity = new OrderQueryCoreEntity(new PaginationCoreEntity(object.page, object.pageSize), userId);
+    const entity = new OrderQueryCoreEntity(
+      new PaginationCoreEntity(object.page, object.pageSize),
+      userId
+    );
     entity.status = object?.status || null;
     entity.startDate = object?.startDate || null;
     entity.endDate = object?.endDate || null;
@@ -16,7 +22,11 @@ export class OrderQueryAppMapper {
 
   public static toApi(entity: OrderPaginationCoreEntity): OrderPaginationResponse {
     return {
-      pagination: new PaginationResponse(entity?.pagination?.page, entity?.pagination?.pageSize, entity?.pagination?.total),
+      pagination: new PaginationResponse(
+        entity?.pagination?.page,
+        entity?.pagination?.pageSize,
+        entity?.pagination?.total
+      ),
       items: entity.items.map((item) => {
         return {
           id: item.id,
@@ -30,10 +40,14 @@ export class OrderQueryAppMapper {
           totalHours: item.totalHours,
           status: item.status,
           updatedAt: item.updatedAt,
-          createdAt: item.createdAt,
+          createdAt: item.createdAt
         };
       }),
-      totalHours: new OrderTotalHoursResponse(entity.totalHours.hours, entity.totalHours.minutes, entity.totalHours.seconds),
+      totalHours: new OrderTotalHoursResponse(
+        entity.totalHours.hours,
+        entity.totalHours.minutes,
+        entity.totalHours.seconds
+      )
     };
   }
 }

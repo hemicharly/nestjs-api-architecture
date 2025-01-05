@@ -1,10 +1,17 @@
 import { OrderQueryRequest } from '@src/entrypoints/web/rest/orders/request';
 import { Request } from 'express';
-import { OrderCoreEntity, OrderPaginationCoreEntity, OrderQueryCoreEntity } from '@core/domain/entities/orders';
+import {
+  OrderCoreEntity,
+  OrderPaginationCoreEntity,
+  OrderQueryCoreEntity
+} from '@core/domain/entities/orders';
 import { PaginationCoreEntity } from '@core/domain/entities/shared';
 import { OrderQueryAppMapper } from '@entrypoints/web/rest/orders/mappers';
 import { OrderStatus } from '@core/domain/enums';
-import { OrderPaginationResponse, OrderTotalHoursResponse } from '@entrypoints/web/rest/orders/response';
+import {
+  OrderPaginationResponse,
+  OrderTotalHoursResponse
+} from '@entrypoints/web/rest/orders/response';
 
 /**
  * Implementation of test to 'order-query-app.mapper.ts'
@@ -16,7 +23,7 @@ describe('order-query-app.mapper.ts', () => {
       pageSize: 10,
       status: OrderStatus.OPEN,
       startDate: '2024-01-01',
-      endDate: '2024-01-31',
+      endDate: '2024-01-31'
     };
 
     const requestMock: Request = { userId: 'user123' } as Request;
@@ -36,7 +43,7 @@ describe('order-query-app.mapper.ts', () => {
   it('should map null values to null for optional fields', () => {
     const apiRequest: OrderQueryRequest = {
       page: 1,
-      pageSize: 10,
+      pageSize: 10
     };
 
     const requestMock: Request = { userId: 'user123' } as Request;
@@ -63,8 +70,8 @@ describe('order-query-app.mapper.ts', () => {
         totalHours: { hours: 2, minutes: 0, seconds: 0 },
         status: OrderStatus.FINISHED,
         updatedAt: '2024-01-01T12:00:00Z',
-        createdAt: '2024-01-01T10:00:00Z',
-      },
+        createdAt: '2024-01-01T10:00:00Z'
+      }
     ];
 
     const entity = new OrderPaginationCoreEntity(pagination, orderCoreEntities);
