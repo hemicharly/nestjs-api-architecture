@@ -19,10 +19,10 @@
 
 ## Introduction
 
-This project was developed for educational purposes, aiming to explore and deepen knowledge of the **NestJS** framework.
-It serves as a practical study for the "adaptation" of concepts such as **Clean Architecture** and
-**Hexagonal Architecture**, with the goal of promoting the best software design practices, ensuring clear separation of
-responsibilities, and abstracting external dependencies.
+This project was developed for educational purposes to explore the **NestJS** framework. It serves as a practical study
+to "*adapt**" concepts like **Clean Architecture** and **Hexagonal Architecture**, promoting **good software design
+practices**, with a clear separation of responsibilities and abstraction of external dependencies.
+
 
 <p align="center">
   <img src="diagram/architecture-timesheet-in-transit-api.png" alt="architecture-timesheet-in-transit-api">
@@ -107,7 +107,7 @@ objects.
 The `core` module manages all the application's business logic. Key guidelines include:
 
 - This module must be **autonomous** and **free of external dependencies**.
-- Do not use framework or libraries.
+  Do not use **external frameworks** or **libraries** directly in `core`.
 - The **domain** folder within the module contains the entities and granular business logic.
 - **Outgoing communication** to external systems must be handled through interfaces defined in the `providers` module.
 - **Incoming communication** must occur through interfaces in the `usecases` module.
@@ -124,7 +124,12 @@ The `infrastructure` module manages the application's external communication, su
 
 ### **shared**
 
-The `shared` module is used to share common functionality/utilities.
+The `shared` module contains functionality and utilities that are shared between the **entrypoints** and
+**infrastructure**. It should be used to include functionality that does not involve business rules, such as validations
+input, common error handling, and other external integration utilities.
+
+**Important**: The **core** layer must not use the `shared` module, as the business logic must remain
+independent of external functionalities.
 
 
 ## 2. Steps to Run the Project
@@ -136,6 +141,7 @@ Follow the steps below to run the project in development mode.
 #### 2.1.1. Copy the configuration file:
 
 - We recommend creating an **alias** `dcli` to execute the command:  `docker compose -f docker-compose.cli.yml run --rm`
+
 ```bash
   chmod +x ./add_alias_cli.sh && ./add_alias_cli.sh
 ```
@@ -143,6 +149,7 @@ Follow the steps below to run the project in development mode.
 #### 2.1.2. Installing aws cli:
 
 - Install and configure [aws cli](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html):
+
 ```bash
   curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
   unzip awscliv2.zip
@@ -150,9 +157,11 @@ Follow the steps below to run the project in development mode.
 ```
 
 - Configuring AWS region:
+
 ```bash
   nano ~/.aws/config
 ```
+
 ```textmate
 [default]
 region = us-east-1
@@ -160,9 +169,11 @@ output = json
 ```
 
 - Configuring AWS credentials (optional):
+
 ```bash
   nano ~/.aws/credentials
 ```
+
 ```textmate
 [default]
 aws_access_key_id = <aws_access_key_id>
@@ -180,76 +191,91 @@ aws_secret_access_key =  <aws_secret_access_key>
 ### 2.2. Start the project with Docker using the commands:
 
 - Creates the necessary Docker network:
+
 ```bash
   make create-network
 ```
 
 - Builds Docker images:
+
 ```bash
   make build
 ```
 
 - Installs project dependencies:
+
 ```bash
   make install
 ```
 
 - Updates project dependencies:
+
 ```bash
   make upgrade-lib
 ```
 
 - Seeds the database with initial data:
+
 ```bash
   make seed
 ```
 
 - Starts the MongoDB container:
+
 ```bash
   make mongodb
 ```
 
 - Starts the LocalStack container:
+
 ```bash
   make localstack-dev
 ```
 
 - Creates queues in LocalStack:
+
 ```bash
   make create-queue-local
 ```
 
 - Starts the application in development mode:
+
 ```bash
   make dev
 ```
 
 - Runs lint and code formatting:
+
 ```bash
   make lint-format
 ```
 
 - Automatically generates indices (if needed):
+
 ```bash
   make generate-index
 ```
 
 - Automatically generates test file:
+
 ```bash
   make generate-test-file
 ```
 
 - Runs test:
+
 ```bash
   make test
 ```
 
 - Runs test with coverage:
+
 ```bash
   make test-coverage
 ```
 
 - Run to add new dependency with `yarn`:
+
 ```bash
   dcli yarn add <your_dependency>
 ```
