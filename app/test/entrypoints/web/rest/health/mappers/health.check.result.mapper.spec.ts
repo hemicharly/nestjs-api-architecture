@@ -15,14 +15,14 @@ describe('health.check.result.mapper.ts', () => {
         application: {
           status: 'up',
           version: packageJson.version,
-          uptime: process.uptime(),
-        },
+          uptime: process.uptime()
+        }
       },
       details: {
         database: {
-          status: 'up',
-        },
-      },
+          status: 'up'
+        }
+      }
     };
 
     const apiResponse: HealthCheckResultResponse = HealthCheckResultMapper.toApi(healthCheckResult);
@@ -39,11 +39,11 @@ describe('health.check.result.mapper.ts', () => {
       error: {
         application: {
           status: 'down',
-          error: 'Database unreachable',
-        },
+          error: 'Database unreachable'
+        }
       },
       info: null,
-      details: null,
+      details: null
     };
 
     const apiResponse: HealthCheckResultResponse = HealthCheckResultMapper.toApi(healthCheckResult);

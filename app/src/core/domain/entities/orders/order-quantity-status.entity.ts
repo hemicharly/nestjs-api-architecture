@@ -7,7 +7,7 @@ export class OrderQuantityStatusEntity {
     readonly month: number,
     readonly week: number,
     readonly day: number,
-    readonly status: OrderStatus,
+    readonly status: OrderStatus
   ) {
     this.count = count;
     this.year = year;

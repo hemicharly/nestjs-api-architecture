@@ -39,7 +39,7 @@ describe('order-start-core.entity.ts', () => {
         status: OrderStatus.FINISHED,
         schedulingDate: '',
         serviceDescription: '',
-        createdAt: '',
+        createdAt: ''
       };
 
       expect(() => {
@@ -57,7 +57,7 @@ describe('order-start-core.entity.ts', () => {
         status: OrderStatus.OPEN,
         schedulingDate: '',
         serviceDescription: '',
-        createdAt: '',
+        createdAt: ''
       };
 
       expect(() => {

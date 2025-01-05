@@ -1,4 +1,9 @@
-import { OrderCoreEntity, OrderEndCoreEntity, OrderStartCoreEntity, OrderTotalHoursCoreEntity } from '@core/domain/entities/orders';
+import {
+  OrderCoreEntity,
+  OrderEndCoreEntity,
+  OrderStartCoreEntity,
+  OrderTotalHoursCoreEntity
+} from '@core/domain/entities/orders';
 
 export class NotificationOrderCoreEntity {
   readonly orderId: string;
@@ -9,37 +14,54 @@ export class NotificationOrderCoreEntity {
   readonly updatedAt: string;
   readonly totalHours?: OrderTotalHoursCoreEntity;
 
-  public static fromOrderCoreEntity(entityCore: OrderCoreEntity, message: string, updatedAt: string): Partial<NotificationOrderCoreEntity> {
+  public static fromOrderCoreEntity(
+    entityCore: OrderCoreEntity,
+    message: string,
+    updatedAt: string
+  ): Partial<NotificationOrderCoreEntity> {
     return {
       orderId: entityCore.id,
       employeeId: entityCore.employeeId,
       companyName: entityCore.companyName,
       status: entityCore.status,
       message: message,
-      updatedAt: updatedAt,
+      updatedAt: updatedAt
     };
   }
 
-  public static fromOrderStartCoreEntity(entityCore: OrderStartCoreEntity, companyName: string, message: string, updatedAt: string): Partial<NotificationOrderCoreEntity> {
+  public static fromOrderStartCoreEntity(
+    entityCore: OrderStartCoreEntity,
+    companyName: string,
+    message: string,
+    updatedAt: string
+  ): Partial<NotificationOrderCoreEntity> {
     return {
       orderId: entityCore.id,
       employeeId: entityCore.employeeId,
       companyName: companyName,
       status: entityCore.status,
       message: message,
-      updatedAt: updatedAt,
+      updatedAt: updatedAt
     };
   }
 
-  public static fromOrderEndCoreEntity(entityCore: OrderEndCoreEntity, orderCoreEntity: OrderCoreEntity, message: string, updatedAt: string): Partial<NotificationOrderCoreEntity> {
+  public static fromOrderEndCoreEntity(
+    entityCore: OrderEndCoreEntity,
+    orderCoreEntity: OrderCoreEntity,
+    message: string,
+    updatedAt: string
+  ): Partial<NotificationOrderCoreEntity> {
     return {
       orderId: entityCore.id,
       employeeId: entityCore.employeeId,
       companyName: orderCoreEntity.companyName,
       status: entityCore.status,
       message: `${message} ${entityCore?.endComment || ''}`,
-      totalHours: OrderTotalHoursCoreEntity.calculate(orderCoreEntity.startDatetime, entityCore.endDatetime),
-      updatedAt: updatedAt,
+      totalHours: OrderTotalHoursCoreEntity.calculate(
+        orderCoreEntity.startDatetime,
+        entityCore.endDatetime
+      ),
+      updatedAt: updatedAt
     };
   }
 }

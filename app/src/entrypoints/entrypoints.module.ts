@@ -4,6 +4,6 @@ import { WebModule } from '@entrypoints/web';
 import { ConsumerModule } from '@entrypoints/consumers';
 
 @Module({
-  ...DynamicConfigModule.forModules([WebModule, ConsumerModule]),
+  ...DynamicConfigModule.forModules([WebModule, ConsumerModule])
 })
 export class EntrypointsModule {}

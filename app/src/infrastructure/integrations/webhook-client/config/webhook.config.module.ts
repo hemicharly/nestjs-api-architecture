@@ -11,11 +11,11 @@ import { ConfigEnvProviderImpl } from '@infrastructure/config-env/impl';
       useFactory: async (configEnvProvider: ConfigEnvProviderInterface) => ({
         baseURL: configEnvProvider.getString('WEBHOOK_BASE_URL'),
         timeout: 60 * 1000,
-        maxRedirects: 5,
+        maxRedirects: 5
       }),
-      inject: [ConfigEnvProviderImpl],
-    }),
+      inject: [ConfigEnvProviderImpl]
+    })
   ],
-  exports: [HttpModule],
+  exports: [HttpModule]
 })
 export class WebhookConfigModule {}

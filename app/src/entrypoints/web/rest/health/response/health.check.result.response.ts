@@ -4,7 +4,7 @@ import type { HealthIndicatorResult, HealthCheckStatus } from '@nestjs/terminus/
 export class HealthCheckResultResponse {
   @ApiProperty({
     description: 'Health check show status.',
-    example: 'ok',
+    example: 'ok'
   })
   status: HealthCheckStatus;
 
@@ -12,17 +12,17 @@ export class HealthCheckResultResponse {
     description: 'Health check show information.',
     example: {
       database: {
-        status: 'up',
-      },
-    },
+        status: 'up'
+      }
+    }
   })
   info?: HealthIndicatorResult;
 
   @ApiProperty({
     description: 'Health check show error.',
     example: {
-      error: {},
-    },
+      error: {}
+    }
   })
   error?: HealthIndicatorResult;
 
@@ -30,9 +30,9 @@ export class HealthCheckResultResponse {
     description: 'Health check show details.',
     example: {
       database: {
-        status: 'up',
-      },
-    },
+        status: 'up'
+      }
+    }
   })
   details: HealthIndicatorResult;
 }

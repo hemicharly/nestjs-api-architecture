@@ -9,7 +9,7 @@ export class OrderEndRequest {
 
   @ApiProperty({
     description: 'Latitude recorded at customer address.',
-    example: '-22.897140306896276',
+    example: '-22.897140306896276'
   })
   @IsNumber()
   @IsNotEmpty()
@@ -17,7 +17,7 @@ export class OrderEndRequest {
 
   @ApiProperty({
     description: 'Longitude recorded at customer address.',
-    example: '-47.06153484719727',
+    example: '-47.06153484719727'
   })
   @IsNumber()
   @IsNotEmpty()
@@ -26,7 +26,7 @@ export class OrderEndRequest {
   @ApiProperty({
     description: 'End comment of order.',
     example: 'Ocorreu tudo conforme o esperado',
-    required: false,
+    required: false
   })
   @IsOptional()
   readonly comment: string;

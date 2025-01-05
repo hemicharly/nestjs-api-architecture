@@ -4,6 +4,6 @@ import { NotificationOrderConsumerService } from '@entrypoints/consumers/notific
 
 @Module({
   imports: [NotificationConsumerConfigModule],
-  providers: [NotificationOrderConsumerService],
+  providers: [NotificationOrderConsumerService]
 })
 export class ConsumerModule {}

@@ -14,14 +14,14 @@ jest.mock('@nestjs/terminus', () => {
         status: 'ok',
         info: { database: { status: 'up' } },
         error: {},
-        details: { database: { status: 'up' } },
-      }),
+        details: { database: { status: 'up' } }
+      })
     })),
     TypeOrmHealthIndicator: jest.fn().mockImplementation(() => ({
       pingCheck: jest.fn().mockResolvedValue({
-        status: 'up',
-      }),
-    })),
+        status: 'up'
+      })
+    }))
   };
 });
 
@@ -35,7 +35,7 @@ describe('health.controller.ts', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [HealthController],
-      providers: [HealthCheckService, TypeOrmHealthIndicator],
+      providers: [HealthCheckService, TypeOrmHealthIndicator]
     }).compile();
 
     controller = module.get<HealthController>(HealthController);
@@ -47,7 +47,7 @@ describe('health.controller.ts', () => {
       status: 'ok',
       info: { database: { status: 'up' } },
       error: null,
-      details: {},
+      details: {}
     };
 
     // Mocking the check result from HealthCheckService
@@ -63,11 +63,11 @@ describe('health.controller.ts', () => {
         application: {
           status: 'up',
           version: packageJson.version,
-          uptime: expect.any(Number),
-        },
+          uptime: expect.any(Number)
+        }
       },
       error: null,
-      details: {},
+      details: {}
     });
 
     expect(response.status).toBe('ok');
@@ -81,7 +81,7 @@ describe('health.controller.ts', () => {
       status: 'shutting_down',
       info: { database: { status: 'down' } },
       error: null,
-      details: {},
+      details: {}
     };
 
     // Mocking the check result from HealthCheckService
@@ -98,7 +98,7 @@ describe('health.controller.ts', () => {
       status: 'ok',
       info: { database: { status: 'up' } },
       error: null,
-      details: {},
+      details: {}
     };
 
     // Mocking the check result from HealthCheckService

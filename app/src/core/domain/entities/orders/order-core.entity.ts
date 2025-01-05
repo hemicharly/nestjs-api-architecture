@@ -19,7 +19,7 @@ export class OrderCoreEntity {
 
   constructor(
     readonly startDatetime?: string,
-    readonly endDatetime?: string,
+    readonly endDatetime?: string
   ) {
     this.totalHours = OrderTotalHoursCoreEntity.calculate(startDatetime, endDatetime);
     this.startDatetime = startDatetime || null;

@@ -5,10 +5,10 @@ import { LoggingMiddleware } from '@entrypoints/web/shared/middleware/logger';
 import { DynamicConfigModule } from '@shared/config';
 
 @Module({
-  ...DynamicConfigModule.forModules([HealthWebModule, OrdersWebModule]),
+  ...DynamicConfigModule.forModules([HealthWebModule, OrdersWebModule])
 })
 export class WebModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
+  configure(consumer: MiddlewareConsumer): void {
     consumer.apply(LoggingMiddleware).forRoutes('*');
   }
 }

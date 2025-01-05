@@ -7,7 +7,7 @@ export class HealthCheckResultMapper {
       status: healthCheckResult.status,
       info: healthCheckResult.info,
       error: healthCheckResult.error,
-      details: healthCheckResult.details,
+      details: healthCheckResult.details
     };
   }
 }

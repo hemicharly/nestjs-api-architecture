@@ -70,7 +70,11 @@ export class OrderTotalHoursCoreEntity {
       return new OrderTotalHoursCoreEntity();
     }
 
-    const totalSeconds = items.reduce((acc, item) => acc + item.totalHours.hours * 3600 + item.totalHours.minutes * 60 + item.totalHours.seconds, 0);
+    const totalSeconds = items.reduce(
+      (acc, item) =>
+        acc + item.totalHours.hours * 3600 + item.totalHours.minutes * 60 + item.totalHours.seconds,
+      0
+    );
 
     return OrderTotalHoursCoreEntity.secondsToHoursMinutesSeconds(totalSeconds);
   }

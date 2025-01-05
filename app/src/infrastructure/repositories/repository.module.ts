@@ -5,6 +5,6 @@ import { DatabaseModule } from '@src/database.module';
 import { DynamicConfigModule } from '@shared/config';
 
 @Module({
-  ...DynamicConfigModule.forModules([DatabaseModule, AuthRepositoryModule, OrdersRepositoryModule]),
+  ...DynamicConfigModule.forModules([DatabaseModule, AuthRepositoryModule, OrdersRepositoryModule])
 })
 export class RepositoryModule {}

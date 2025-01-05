@@ -4,6 +4,6 @@ import { EntrypointsModule } from '@src/entrypoints';
 import { DynamicConfigModule } from '@shared/config';
 
 @Module({
-  ...DynamicConfigModule.forModules([InfrastructureModule, EntrypointsModule]),
+  ...DynamicConfigModule.forModules([InfrastructureModule, EntrypointsModule])
 })
 export class AppModule {}

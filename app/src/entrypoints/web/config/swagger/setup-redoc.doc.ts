@@ -1,7 +1,7 @@
 import redoc from 'redoc-express';
 import { INestApplication } from '@nestjs/common';
 
-export const SetupRedoc = (app: INestApplication) => {
+export const SetupRedoc = (app: INestApplication): void => {
   const redocOptions = {
     title: 'timesheet-in-transit-api',
     version: '1.0.0',
@@ -10,8 +10,8 @@ export const SetupRedoc = (app: INestApplication) => {
       theme: {
         colors: {
           primary: {
-            main: '#6EC5AB',
-          },
+            main: '#6EC5AB'
+          }
         },
         typography: {
           fontFamily: `"museo-sans", 'Helvetica Neue', Helvetica, Arial, sans-serif`,
@@ -19,14 +19,14 @@ export const SetupRedoc = (app: INestApplication) => {
           lineHeight: '1.5',
           code: {
             code: '#87E8C7',
-            backgroundColor: '#4D4D4E',
-          },
+            backgroundColor: '#4D4D4E'
+          }
         },
         menu: {
-          backgroundColor: '#ffffff',
-        },
-      },
-    },
+          backgroundColor: '#ffffff'
+        }
+      }
+    }
   };
   app.use('/swagger', redoc(redocOptions));
 };

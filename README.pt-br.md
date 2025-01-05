@@ -262,7 +262,6 @@ O projeto inclui várias formas de documentação acessíveis localmente:
 
 - [Swagger UI - Interface Interativa](http://localhost:3000/swagger-doc)
 - [Swagger JSON - Documento Swagger](http://localhost:3000/swagger-doc-json)
-- [Redoc - Documentação Alternativa](http://localhost:3000/docs)
 - [Health Check - Verificação de Saúde da Aplicação](http://localhost:3000/health)
 
 #### 2.3.1. Diagramas

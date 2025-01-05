@@ -7,6 +7,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [TypeOrmModule.forFeature([ApiKeyApplication])],
-  ...DynamicConfigModule.forProviderRegister([{ useClass: ApiKeyApplicationSeed }, { useClass: ApiKeyApplicationRepositoryProviderImpl }]),
+  ...DynamicConfigModule.forProviderRegister([
+    { useClass: ApiKeyApplicationSeed },
+    { useClass: ApiKeyApplicationRepositoryProviderImpl }
+  ])
 })
 export class AuthRepositoryModule {}

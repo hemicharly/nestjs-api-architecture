@@ -13,10 +13,10 @@ import { ConfigEnvProviderImpl } from '@infrastructure/config-env/impl';
         url: configEnvProvider.getString('MONGODB_URL'),
         entities: [__dirname + '/infrastructure/repositories/**/*.entity{.ts,.js}'],
         synchronize: configEnvProvider.getBoolean('TYPER_ORM_SYNCHRONIZE', false),
-        logging: false,
+        logging: false
       }),
-      inject: [ConfigEnvProviderImpl],
-    }),
-  ],
+      inject: [ConfigEnvProviderImpl]
+    })
+  ]
 })
 export class DatabaseModule {}

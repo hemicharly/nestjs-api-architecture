@@ -10,7 +10,8 @@ export class LoggingMiddleware implements NestMiddleware {
   private readonly logger = new Logger(LoggingMiddleware.name);
 
   public use(req: Request, res: Response, next: NextFunction): void {
-    const tracerId = <string>req.headers['x-tracer-id'] || <string>req.headers['tracer-id'] || uuid();
+    const tracerId =
+      <string>req.headers['x-tracer-id'] || <string>req.headers['tracer-id'] || uuid();
     TracerContextAudit.setContextTracerId(tracerId);
     if (!this.shouldIgnoreRoute(req.originalUrl)) {
       const startTime: [number, number] = process.hrtime();
@@ -27,7 +28,7 @@ export class LoggingMiddleware implements NestMiddleware {
     let responseBody: any = null;
     const oldSend = res.send;
 
-    res.send = (data: any) => {
+    res.send = (data: any): Response => {
       responseBody = data;
       res.send = oldSend;
       return res.send(data);
@@ -48,7 +49,13 @@ export class LoggingMiddleware implements NestMiddleware {
     });
   }
 
-  private logRequest(startTime: [number, number], req: Request, res: Response, responseBody: any, isCloseRequest: boolean): void {
+  private logRequest(
+    startTime: [number, number],
+    req: Request,
+    res: Response,
+    responseBody: any,
+    isCloseRequest: boolean
+  ): void {
     const logEntry = this.createLogEntry(startTime, req, res, responseBody, isCloseRequest);
     if (logEntry.statusCode >= 400) {
       this.logger.error(JSON.stringify(logEntry));
@@ -57,9 +64,24 @@ export class LoggingMiddleware implements NestMiddleware {
     this.logger.log(JSON.stringify(logEntry));
   }
 
-  private createLogEntry(startTime: [number, number], req: Request, res: Response, responseBody: any, isCloseRequest: boolean): WebLoggerDto {
+  private createLogEntry(
+    startTime: [number, number],
+    req: Request,
+    res: Response,
+    responseBody: any,
+    isCloseRequest: boolean
+  ): WebLoggerDto {
     const tracerId = TracerContextAudit.getContextTracerId();
-    const loggerInternal = new WebLoggerDto(tracerId, startTime, req.ip, req.userId, `${req.method} ${req.originalUrl}`, req.headers, req.query, req.body);
+    const loggerInternal = new WebLoggerDto(
+      tracerId,
+      startTime,
+      req.ip,
+      req.userId,
+      `${req.method} ${req.originalUrl}`,
+      req.headers,
+      req.query,
+      req.body
+    );
     loggerInternal.duration = this.elapsedTime(startTime);
     loggerInternal.startTime = undefined;
     loggerInternal.statusCode = isCloseRequest ? res.statusCode : 499;
