@@ -106,8 +106,8 @@ module.exports = [
       'unused-imports/no-unused-imports': 'error',
       // Enforces explicit return types for functions
       '@typescript-eslint/explicit-function-return-type': 'error',
-      // Allows modules without explicit boundary types
-      '@typescript-eslint/explicit-module-boundary-types': 'off',
+      // Prevent explicit module boundary types
+      '@typescript-eslint/explicit-module-boundary-types': 'error',
       // Allows usage of the 'any' type in TypeScript
       '@typescript-eslint/no-explicit-any': 'off',
       // Allows namespaces in TypeScript

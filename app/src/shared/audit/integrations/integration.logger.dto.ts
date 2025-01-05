@@ -89,10 +89,10 @@ export class IntegrationLoggerDto {
    * @param {string} tracerId The tracer id log.
    * @param {string} application The name of the application generating the log.
    * @param {string} endpoint The API endpoint called.
-   * @param {any} headers The request headers.
-   * @param {any} queryParameters The query parameters of the request.
-   * @param {any} requestBody The request body.
-   * @param {any} responseBody The response body.
+   * @param {Record<string, any>} headers The request headers.
+   * @param {Record<string, any>} queryParameters The query parameters of the request.
+   * @param {Record<string, any>} requestBody The request body.
+   * @param {Record<string, any>} responseBody The response body.
    * @param {number} statusCode The HTTP status code of the response.
    * @param {[number, number]} startTime The start time of the request for calculating duration.
    */
@@ -100,10 +100,10 @@ export class IntegrationLoggerDto {
     tracerId: string,
     application: string,
     endpoint: string,
-    headers: any,
-    queryParameters: any,
-    requestBody: any,
-    responseBody: any,
+    headers: Record<string, any>,
+    queryParameters: Record<string, any>,
+    requestBody: Record<string, any>,
+    responseBody: Record<string, any>,
     statusCode: number,
     startTime: [number, number]
   ) {

@@ -19,9 +19,9 @@ export class WebLoggerDto {
     ip: string,
     useId: string,
     endpoint: string,
-    headers: any,
-    queryParameters: any,
-    requestBody: any
+    headers: Record<string, any>,
+    queryParameters: Record<string, any>,
+    requestBody: Record<string, any>
   ) {
     this.tracerId = tracerId;
     this.timestamp = new Date().toJSON();

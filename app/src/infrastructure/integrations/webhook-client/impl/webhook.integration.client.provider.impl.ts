@@ -14,7 +14,7 @@ export class WebhookIntegrationClientProviderImpl
     new IntegrationAuditInterceptor('webhook-notification', this.logger, httpService);
   }
 
-  public async sendWebhook(endpoint: string, requestBody: any): Promise<void> {
+  public async sendWebhook(endpoint: string, requestBody: Record<string, any>): Promise<void> {
     await firstValueFrom(this.httpService.post(endpoint, requestBody));
   }
 }
