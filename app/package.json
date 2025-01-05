@@ -18,7 +18,7 @@
     "start:debug": "nest start --watch --debug 0.0.0.0:9229",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,test}/**/*.ts\"",
-    "lint:fix": "eslint \"{src,test}/**/*.ts\" --fix",
+    "lint:fix": "eslint \"{src,test}/**/*.ts\" --fix --cache",
     "test": "jest --config jest.config.ts",
     "test:watch": "jest --watch --config jest.config.ts",
     "test:coverage": "jest --coverage --config jest.config.ts",
