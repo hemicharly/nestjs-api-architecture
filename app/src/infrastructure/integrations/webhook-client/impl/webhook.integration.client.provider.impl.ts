@@ -2,7 +2,7 @@ import { WebhookIntegrationClientProviderInterface } from '@core/providers/integ
 import { Injectable, Logger } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
-import { IntegrationAuditInterceptor } from '@shared/audit/integrations';
+import { IntegrationInterceptor } from '@shared/config/integrations';
 
 @Injectable()
 export class WebhookIntegrationClientProviderImpl
@@ -11,7 +11,7 @@ export class WebhookIntegrationClientProviderImpl
   private readonly logger = new Logger(WebhookIntegrationClientProviderImpl.name);
 
   constructor(private readonly httpService: HttpService) {
-    new IntegrationAuditInterceptor('webhook-notification', this.logger, httpService);
+    new IntegrationInterceptor('webhook-notification', this.logger, httpService);
   }
 
   public async sendWebhook(endpoint: string, requestBody: Record<string, any>): Promise<void> {
