@@ -1,4 +1,7 @@
 // Set containing sensitive fields that should be masked.
+import { AxiosRequestConfig } from 'axios';
+import { Logger } from '@nestjs/common';
+
 const SENSITIVE_FIELDS = new Set([
   'password',
   'confirmPassword',
@@ -23,9 +26,13 @@ const SENSITIVE_FIELDS = new Set([
 /**
  * Class responsible for storing and managing API integration logs.
  * The class ensures that sensitive fields are masked before being logged.
- * @class IntegrationLoggerDto
+ * @class IntegrationLogger
  */
-export class IntegrationLoggerDto {
+export class IntegrationLogger {
+  /**
+   * TracerId of identifier operation
+   * @type {string}
+   */
   readonly tracerId: string;
 
   /**
@@ -83,7 +90,7 @@ export class IntegrationLoggerDto {
   readonly duration: number;
 
   /**
-   * Constructor for the `IntegrationLoggerDto` class.
+   * Constructor for the `IntegrationLogger` class.
    * Initializes the properties and masks sensitive fields from the provided data.
    *
    * @param {string} tracerId The tracer id log.
@@ -186,5 +193,68 @@ export class IntegrationLoggerDto {
       }
     }
     return maskedObj; // Return the object with sensitive fields masked
+  }
+
+  /**
+   * Creates an `IntegrationLogger` object for logging purposes.
+   *
+   * @param logger The logger.
+   * @param config - The HTTP request configuration.
+   * @param responseData - The response data or error message.
+   * @param status - The HTTP response status.
+   * @param isError - Flag indicating if it's an error log.
+   */
+  public static logAudit(
+    logger: Logger,
+    config: AxiosRequestConfig,
+    responseData: Record<string, any>,
+    status: number,
+    isError: boolean = false
+  ): void {
+    const startTime: [number, number] = config.headers['request-start-time'] || [0, 0];
+
+    const integrationLoggerDto = this.createIntegrationLoggerDto(
+      config,
+      responseData,
+      status,
+      startTime
+    );
+    const logMessage = JSON.stringify(integrationLoggerDto);
+    if (isError) {
+      logger.error(logMessage);
+      return;
+    }
+    logger.log(logMessage);
+  }
+
+  /**
+   * Creates the audit DTO for the integration log.
+   *
+   * @param config - The HTTP request configuration.
+   * @param responseData - The response data or error message.
+   * @param status - The HTTP response status.
+   * @param startTime - The request start time.
+   * @returns An `IntegrationLogger` object containing the audit information.
+   */
+  private static createIntegrationLoggerDto(
+    config: AxiosRequestConfig,
+    responseData: Record<string, any>,
+    status: number,
+    startTime: [number, number]
+  ): IntegrationLogger {
+    const tracerId = <string>config.headers['x-tracer-id'];
+    const applicationIdName = <string>config.headers['x-application-id-name'];
+    const method = `${config.method?.toUpperCase()} ${config.url}`;
+    return new IntegrationLogger(
+      tracerId,
+      applicationIdName,
+      method,
+      config.headers,
+      config.params,
+      config.data,
+      responseData,
+      status,
+      startTime
+    );
   }
 }

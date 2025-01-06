@@ -1,21 +1,21 @@
 import { HttpService } from '@nestjs/axios';
 import { Logger } from '@nestjs/common';
-import { AxiosError, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
-import { IntegrationLoggerDto } from '@shared/audit/integrations/index';
+import { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
+import { IntegrationLogger } from '@shared/config/integrations/audit';
 import { TracerContextAudit } from '@shared/audit';
 
 /**
- * Class responsible for managing API integration audit logs.
+ * Class responsible for managing API integration interceptor.
  *
  *
  * @example
  *
  * ```typescript
- * import { WebhookIntegrationClientProviderInterface } from '@core/providers/integrations';
+ * import { WebhookIntegrationClientProviderInterface } from '@core/providers/oauth';
  * import { Injectable, Logger } from '@nestjs/common';
  * import { firstValueFrom } from 'rxjs';
  * import { HttpService } from '@nestjs/axios';
- * import { IntegrationAuditInterceptor } from '@shared/audit/integrations';
+ * import { IntegrationInterceptor } from '@shared/config/integrations';
  *
  * @Injectable()
  * export class WebhookIntegrationClientProviderImpl implements WebhookIntegrationClientProviderInterface {
@@ -23,15 +23,15 @@ import { TracerContextAudit } from '@shared/audit';
  *
  *   constructor(private readonly httpService: HttpService) {
  *     // Instantiate the class
- *     new IntegrationAuditInterceptor('webhook-notification', this.logger, httpService);
+ *     new IntegrationInterceptor('webhook-notification', this.logger, httpService);
  *   }
  *
  * }
  * ```
  *
- * @class IntegrationAuditInterceptor
+ * @class IntegrationInterceptor
  */
-export class IntegrationAuditInterceptor {
+export class IntegrationInterceptor {
   /**
    * Defines the HTTP status code for internal server errors.
    * Used as the default value in case of request failures.
@@ -40,17 +40,17 @@ export class IntegrationAuditInterceptor {
   private readonly HTTP_STATUS_ERROR: number = 500;
 
   /**
-   * Constructor of the `IntegrationAuditInterceptor` class.
-   * Initializes the necessary parameters for auditing HTTP requests.
+   * Constructor of the `IntegrationInterceptor` class.
+   * Initializes the necessary parameters for HTTP requests.
    *
-   * @param application - The name or identifier of the application making the integration.
+   * @param applicationIdName - The name or identifier of the application making the integration.
    * @param logger - Logger instance for recording events and errors during processing.
    * @param httpService - HTTP service instance (HttpService) for request interception.
    *
    * The constructor also sets up request and response interceptors by calling the `setupInterceptors` method.
    */
   constructor(
-    private readonly application: string,
+    private readonly applicationIdName: string,
     private readonly logger: Logger,
     private readonly httpService: HttpService
   ) {
@@ -83,6 +83,8 @@ export class IntegrationAuditInterceptor {
     if (!config.headers) {
       config.headers = {};
     }
+    /*TODO: Implement logic to invoke the OAuth2 service*/
+    config.headers['x-application-id-name'] = this.applicationIdName;
     config.headers['request-start-time'] = process.hrtime();
     config.headers['x-tracer-id'] = TracerContextAudit.getContextTracerId();
     return config;
@@ -96,9 +98,8 @@ export class IntegrationAuditInterceptor {
    */
   private handleResponseSuccess(response: AxiosResponse): AxiosResponse {
     const { config, status, data } = response;
-    const startTime = config.headers['request-start-time'] || [0, 0];
     const responseData = config.method?.toUpperCase() !== 'GET' && data ? data : null;
-    this.logAudit(config, responseData, status, startTime);
+    IntegrationLogger.logAudit(this.logger, config, responseData, status);
     return response;
   }
 
@@ -110,71 +111,10 @@ export class IntegrationAuditInterceptor {
    */
   private handleResponseError(error: AxiosError): Promise<any> {
     const { config, response, message } = error;
-    const startTime = config.headers['request-start-time'] || [0, 0];
     const status = response?.status ?? this.HTTP_STATUS_ERROR;
     const responseData = response?.data ?? message;
-    this.logAudit(config, responseData, status, startTime, true);
+    IntegrationLogger.logAudit(this.logger, config, responseData, status, true);
     return Promise.reject(error);
-  }
-
-  /**
-   * Creates an `IntegrationLoggerDto` object for logging purposes.
-   *
-   * @param config - The HTTP request configuration.
-   * @param responseData - The response data or error message.
-   * @param status - The HTTP response status.
-   * @param startTime - The request start time.
-   * @param isError - Flag indicating if it's an error log.
-   */
-  private logAudit(
-    config: AxiosRequestConfig,
-    responseData: any,
-    status: number,
-    startTime: [number, number],
-    isError: boolean = false
-  ): void {
-    const integrationLoggerDto = this.createIntegrationLoggerDto(
-      config,
-      responseData,
-      status,
-      startTime
-    );
-    const logMessage = JSON.stringify(integrationLoggerDto);
-    if (isError) {
-      this.logger.error(logMessage);
-      return;
-    }
-    this.logger.log(logMessage);
-  }
-
-  /**
-   * Creates the audit DTO for the integration log.
-   *
-   * @param config - The HTTP request configuration.
-   * @param responseData - The response data or error message.
-   * @param status - The HTTP response status.
-   * @param startTime - The request start time.
-   * @returns An `IntegrationLoggerDto` object containing the audit information.
-   */
-  private createIntegrationLoggerDto(
-    config: AxiosRequestConfig,
-    responseData: any,
-    status: number,
-    startTime: [number, number]
-  ): IntegrationLoggerDto {
-    const tracerId = <string>config.headers['x-tracer-id'];
-    const method = `${config.method?.toUpperCase()} ${config.url}`;
-    return new IntegrationLoggerDto(
-      tracerId,
-      this.application,
-      method,
-      config.headers,
-      config.params,
-      config.data,
-      responseData,
-      status,
-      startTime
-    );
   }
 
   /**

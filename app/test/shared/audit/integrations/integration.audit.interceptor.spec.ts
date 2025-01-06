@@ -1,16 +1,16 @@
 import { HttpService } from '@nestjs/axios';
 import { Logger } from '@nestjs/common';
-import { IntegrationAuditInterceptor } from '@shared/audit/integrations';
 import { AxiosInstance } from 'axios';
 import { TracerContextAudit } from '@shared/audit';
+import { IntegrationInterceptor } from '@shared/config/integrations';
 
 jest.mock('@nestjs/axios');
 
 /**
- * Implementation of test to 'integration.audit.interceptor.ts'
+ * Implementation of test to 'integration.interceptor.ts'
  */
-describe('integration.audit.interceptor.ts', () => {
-  let interceptor: IntegrationAuditInterceptor;
+describe('integration.interceptor.ts', () => {
+  let interceptor: IntegrationInterceptor;
   let logger: Logger;
   let httpServiceMock: HttpService;
   let axiosMock: Partial<AxiosInstance>;
@@ -34,7 +34,7 @@ describe('integration.audit.interceptor.ts', () => {
       }
     } as HttpService;
 
-    interceptor = new IntegrationAuditInterceptor('test-application', logger, httpServiceMock);
+    interceptor = new IntegrationInterceptor('test-application', logger, httpServiceMock);
   });
 
   it('should setup request and response interceptors', () => {
