@@ -51,7 +51,7 @@ directly impacting core business rules.
 The division is organized into three main modules, each with a specific responsibility:
 
 ```lua
-timesheet-in-transit-api/
+NESTJS-API-ARCHITECTURE/
 │-- app/
 │   │-- src/
 │   │   │-- app.module.ts
