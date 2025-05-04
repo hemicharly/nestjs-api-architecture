@@ -20,7 +20,7 @@
 ## Introduction
 
 This project was developed for educational purposes to explore the **NestJS** framework. It serves as a practical study
-to "*adapt**" concepts like **Clean Architecture** and **Hexagonal Architecture**, promoting **good software design
+to "**adapt**" concepts like **Clean Architecture** and **Hexagonal Architecture**, promoting **good software design
 practices**, with a clear separation of responsibilities and abstraction of external dependencies.
 
 
